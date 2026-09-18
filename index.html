@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="SPACEWALL" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <title>SPACEWALL</title>
+  <style>
+    :root {
+      --bg: #070708;
+      --bg-tile: #0e0e11;
+      --ok: #1aff6e;
+      --ok-dim: #0a3d22;
+      --amber: #ffb020;
+      --amber-dim: #3d2a08;
+      --red: #ff1530;
+      --red-fierce: #ff0033;
+      --unknown: #3a3a42;
+      --text: #e8e8ec;
+      --muted: #6a6a74;
+      --header-h: 52px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    header {
+      height: var(--header-h);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid #151518;
+      background: #050506;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      font-size: 15px;
+      color: #f2f2f5;
+    }
+
+    .brand span {
+      color: var(--red-fierce);
+      letter-spacing: 0.22em;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+
+    #refresh {
+      color: #9a9aa4;
+    }
+
+    button#demo {
+      appearance: none;
+      border: 1px solid #3a1018;
+      background: #1a080c;
+      color: var(--red);
+      font: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button#demo.on {
+      background: var(--red-fierce);
+      color: #fff;
+      border-color: var(--red-fierce);
+      box-shadow: 0 0 18px rgba(255, 0, 51, 0.45);
+    }
+
+    main {
+      flex: 1;
+      min-height: 0;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) and (orientation: portrait) {
+      main {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+      }
+    }
+
+    .tile {
+      position: relative;
+      border-radius: 10px;
+      background: var(--bg-tile);
+      border: 1px solid #1a1a1f;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px 20px 16px;
+      overflow: hidden;
+      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      background: radial-gradient(120% 80% at 100% 0%, transparent 40%, rgba(0,0,0,0.55) 100%);
+    }
+
+    .tile .name {
+      position: relative;
+      font-size: clamp(15px, 1.7vw, 22px);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      z-index: 1;
+    }
+
+    .tile .status {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(28px, 4.2vw, 52px);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .tile .detail {
+      position: relative;
+      z-index: 1;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .tile.ok {
+      background: linear-gradient(160deg, #0b1a12 0%, #0a0e0c 100%);
+      border-color: #143d24;
+      box-shadow: inset 0 0 40px rgba(26, 255, 110, 0.04);
+    }
+    .tile.ok .status { color: var(--ok); text-shadow: 0 0 28px rgba(26, 255, 110, 0.35); }
+
+    .tile.degraded {
+      background: linear-gradient(160deg, #1f1506 0%, #100e08 100%);
+      border-color: #5a3a0a;
+      box-shadow: inset 0 0 40px rgba(255, 176, 32, 0.08);
+    }
+    .tile.degraded .status { color: var(--amber); text-shadow: 0 0 28px rgba(255, 176, 32, 0.35); }
+
+    .tile.major, .tile.critical {
+      background: linear-gradient(160deg, #2a050c 0%, #120408 55%, #0a0506 100%);
+      border-color: #ff1530;
+      box-shadow:
+        0 0 0 1px rgba(255, 21, 48, 0.35),
+        inset 0 0 60px rgba(255, 0, 51, 0.18),
+        0 0 40px rgba(255, 0, 51, 0.15);
+      animation: pulse-red 1.6s ease-in-out infinite;
+    }
+    .tile.major .status, .tile.critical .status {
+      color: var(--red-fierce);
+      text-shadow: 0 0 36px rgba(255, 0, 51, 0.65);
+    }
+
+    .tile.unknown {
+      background: #0c0c0e;
+      border-color: #222228;
+      opacity: 0.72;
+    }
+    .tile.unknown .status { color: var(--unknown); }
+    .tile.unknown .name { color: #7a7a84; }
+
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 0 1px rgba(255, 21, 48, 0.35), inset 0 0 60px rgba(255, 0, 51, 0.18), 0 0 40px rgba(255, 0, 51, 0.12); }
+      50% { box-shadow: 0 0 0 1px rgba(255, 21, 48, 0.7), inset 0 0 80px rgba(255, 0, 51, 0.28), 0 0 55px rgba(255, 0, 51, 0.28); }
+    }
+
+    .dot {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--unknown);
+      z-index: 1;
+    }
+    .tile.ok .dot { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+    .tile.degraded .dot { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+    .tile.major .dot, .tile.critical .dot { background: var(--red-fierce); box-shadow: 0 0 12px var(--red-fierce); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">SPACE<span>WALL</span></div>
+    <div class="meta">
+      <button type="button" id="demo" aria-pressed="false">Demo red</button>
+      <div id="refresh">—</div>
+    </div>
+  </header>
+  <main id="board" aria-live="polite"></main>
+  <script>
+(function () {
+  const REFRESH_MS = 60000;
+  const DEMO_TILE = "cursor";
+
+  const SERVICES = [
+    {
+      id: "cursor",
+      name: "Cursor",
+      url: "https://status.cursor.com/api/v2/summary.json",
+      parse: statuspage
+    },
+    {
+      id: "github",
+      name: "GitHub",
+      url: "https://www.githubstatus.com/api/v2/summary.json",
+      parse: statuspage
+    },
+    {
+      id: "cloudflare",
+      name: "Cloudflare",
+      url: "https://www.cloudflarestatus.com/api/v2/summary.json",
+      parse: statuspage
+    },
+    {
+      id: "openai",
+      name: "OpenAI",
+      url: "https://status.openai.com/api/v2/summary.json",
+      parse: statuspage
+    },
+    {
+      id: "discord",
+      name: "Discord",
+      url: "https://discordstatus.com/api/v2/summary.json",
+      parse: statuspage
+    },
+    {
+      id: "slack",
+      name: "Slack",
+      url: "https://slack-status.com/api/v2.0.0/current",
+      parse: slackStatus
+    },
+    {
+      id: "gws",
+      name: "Google Workspace",
+      url: "https://www.google.com/appsstatus/dashboard/incidents.json",
+      parse: googleIncidents
+    },
+    {
+      id: "gcp",
+      name: "Google Cloud",
+      url: "https://status.cloud.google.com/incidents.json",
+      parse: googleIncidents
+    }
+  ];
+
+  const state = Object.fromEntries(
+    SERVICES.map((s) => [s.id, { level: "unknown", label: "…", detail: "loading" }])
+  );
+  let demoRed = false;
+
+  function statuspage(data) {
+    const ind = (data && data.status && data.status.indicator) || "none";
+    const desc = (data && data.status && data.status.description) || "";
+    if (ind === "none") return { level: "ok", label: "OK", detail: desc || "All systems operational" };
+    if (ind === "minor") return { level: "degraded", label: "DEGRADED", detail: desc || "Minor issues" };
+    if (ind === "major") return { level: "major", label: "MAJOR", detail: desc || "Major outage" };
+    if (ind === "critical") return { level: "critical", label: "CRITICAL", detail: desc || "Critical outage" };
+    return { level: "degraded", label: String(ind).toUpperCase(), detail: desc };
+  }
+
+  function slackStatus(data) {
+    const active = (data && data.active_incidents) || [];
+    const st = (data && data.status) || "";
+    if (st === "ok" && active.length === 0) {
+      return { level: "ok", label: "OK", detail: "All systems operational" };
+    }
+    if (active.length) {
+      const worst = active.some((i) => /major|critical/i.test(JSON.stringify(i)))
+        ? "major"
+        : "degraded";
+      const title = active[0].title || active[0].name || "Active incident";
+      return {
+        level: worst,
+        label: worst === "major" ? "MAJOR" : "DEGRADED",
+        detail: title
+      };
+    }
+    if (st && st !== "ok") {
+      return { level: "degraded", label: "DEGRADED", detail: String(st) };
+    }
+    return { level: "ok", label: "OK", detail: "All systems operational" };
+  }
+
+  function googleIncidents(data) {
+    if (!Array.isArray(data)) return { level: "unknown", label: "UNKNOWN", detail: "bad payload" };
+    const open = data.filter((inc) => !inc.end);
+    if (open.length === 0) {
+      return { level: "ok", label: "OK", detail: "No open incidents" };
+    }
+    const sev = (open[0].severity || open[0].status_impact || "").toLowerCase();
+    const title =
+      (open[0].external_desc || "").split("\n")[0].replace(/^\*+/, "").trim() ||
+      open[0].service_name ||
+      "Open incident";
+    const short = title.length > 72 ? title.slice(0, 69) + "…" : title;
+    if (/high|critical/.test(sev)) {
+      return { level: "critical", label: "CRITICAL", detail: short };
+    }
+    if (/medium|low|minor/.test(sev)) {
+      return { level: "degraded", label: "DEGRADED", detail: short };
+    }
+    return { level: "major", label: "MAJOR", detail: short + " (" + open.length + " open)" };
+  }
+
+  const board = document.getElementById("board");
+  const refreshEl = document.getElementById("refresh");
+  const demoBtn = document.getElementById("demo");
+
+  function render() {
+    board.innerHTML = "";
+    for (const svc of SERVICES) {
+      let { level, label, detail } = state[svc.id];
+      if (demoRed && svc.id === DEMO_TILE) {
+        level = "critical";
+        label = "CRITICAL";
+        detail = "DEMO RED — forced for look check";
+      }
+      const tile = document.createElement("article");
+      tile.className = "tile " + level;
+      tile.dataset.id = svc.id;
+      tile.innerHTML =
+        '<div class="dot" aria-hidden="true"></div>' +
+        '<div class="name">' +
+        escapeHtml(svc.name) +
+        "</div>" +
+        '<div><div class="status">' +
+        escapeHtml(label) +
+        '</div><div class="detail">' +
+        escapeHtml(detail || "") +
+        "</div></div>";
+      board.appendChild(tile);
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function formatTime(d) {
+    try {
+      return d.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: "America/Chicago",
+        hour12: true
+      }) + " CT";
+    } catch (e) {
+      return d.toISOString();
+    }
+  }
+
+  async function pollOne(svc) {
+    try {
+      const res = await fetch(svc.url, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      state[svc.id] = svc.parse(data);
+    } catch (err) {
+      state[svc.id] = {
+        level: "unknown",
+        label: "UNKNOWN",
+        detail: "fetch failed"
+      };
+    }
+  }
+
+  async function refresh() {
+    await Promise.all(SERVICES.map(pollOne));
+    refreshEl.textContent = "Updated " + formatTime(new Date());
+    render();
+  }
+
+  demoBtn.addEventListener("click", function () {
+    demoRed = !demoRed;
+    demoBtn.classList.toggle("on", demoRed);
+    demoBtn.setAttribute("aria-pressed", demoRed ? "true" : "false");
+    render();
+  });
+
+  render();
+  refresh();
+  setInterval(refresh, REFRESH_MS);
+})();
+  </script>
+</body>
+</html>
