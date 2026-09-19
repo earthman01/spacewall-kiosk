@@ -606,7 +606,7 @@
           Browser cannot overlay Grok Bot.app. Fullscreen this page on the panel.
         </p>
         <div class="meta">
-          <div class="ver">HEARTH v2</div>
+          <div id="ver" class="ver" data-portal="HEARTH">HEARTH 26.38.4</div>
           <div class="hint">
             <a href="./">spacewall</a>
             ·
@@ -732,7 +732,7 @@
     if (!flags.hud) return;
     hudEl.hidden = false;
     hudEl.textContent = [
-      "hearth v2",
+      document.getElementById("ver") ? document.getElementById("ver").textContent : "hearth",
       "floor:" + (flags.floor ? "on" : "off"),
       "deeper:" + flags.deeper,
       "waves:" + flags.waves,
@@ -835,12 +835,20 @@
     return VERSION_CHECK_MS;
   }
 
+  function paintStamp(data) {
+    const el = document.getElementById("ver");
+    if (!el || !data || !data.label) return;
+    const name = el.getAttribute("data-portal") || "HEARTH";
+    el.textContent = name + " " + data.label;
+  }
+
   async function fetchVersion() {
     const url = "./version.json?t=" + Date.now();
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
     if (!data || typeof data.v !== "string" || !data.v) throw new Error("bad version");
+    paintStamp(data);
     return data.v;
   }
 

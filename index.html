@@ -101,6 +101,18 @@
       animation: version-flash 0.4s ease;
     }
 
+    .ver {
+      position: fixed;
+      left: calc(12px + env(safe-area-inset-left));
+      bottom: calc(8px + env(safe-area-inset-bottom));
+      z-index: 4;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #3a3a42;
+      pointer-events: none;
+    }
+
     @keyframes version-flash {
       0% { opacity: 0.3; }
       100% { opacity: 1; }
@@ -303,6 +315,7 @@
     </div>
   </header>
   <main id="board" aria-live="polite"></main>
+  <div id="ver" class="ver" data-portal="SPACEWALL">SPACEWALL 26.38.4</div>
   <script>
 (function () {
   const REFRESH_MS = 60000;
@@ -618,6 +631,13 @@
     return VERSION_CHECK_MS;
   }
 
+  function paintStamp(data) {
+    const el = document.getElementById("ver");
+    if (!el || !data || !data.label) return;
+    const name = el.getAttribute("data-portal") || "SPACEWALL";
+    el.textContent = name + " " + data.label;
+  }
+
   async function fetchVersion() {
     const url = "./version.json?t=" + Date.now();
     const res = await fetch(url, { cache: "no-store" });
@@ -626,6 +646,7 @@
     if (!data || typeof data.v !== "string" || !data.v) {
       throw new Error("bad version");
     }
+    paintStamp(data);
     return data.v;
   }
 
@@ -661,6 +682,8 @@
       document.querySelectorAll(".wave-link").forEach(function (el) {
         el.hidden = true;
       });
+      const ver = document.getElementById("ver");
+      if (ver) ver.hidden = true;
     }
   } catch (e) {}
 

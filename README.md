@@ -10,6 +10,10 @@ If Chrome already installed SPACEWALL from the site root (directory scope), unin
 
 Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes). `v` is a content hash of `index.html` (and any other client assets listed in `scripts/write_version.py`). Deploy Pages regenerates `version.json` into the Pages artifact; the committed file on `main` must match, because GitHub Pages currently publishes the branch. After changing kiosk code, run `python3 scripts/write_version.py`.
 
+**Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
+
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.38.4` · `HEARTH 26.38.4` · `WAVE 26.38.4`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
 ## iPad deck (swipe)
