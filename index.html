@@ -84,6 +84,16 @@
       color: #9a9aa4;
     }
 
+    #refresh.updating {
+      color: #e8e8ec;
+      animation: version-flash 0.4s ease;
+    }
+
+    @keyframes version-flash {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
     button#demo {
       appearance: none;
       border: 1px solid #3a1018;
@@ -256,6 +266,7 @@
   <script>
 (function () {
   const REFRESH_MS = 60000;
+  const VERSION_CHECK_MS = 3 * 60 * 1000;
   const DEMO_TILE = "cursor";
 
   const SERVICES = [
@@ -329,6 +340,8 @@
     SERVICES.map((s) => [s.id, { level: "unknown", label: "…", detail: "loading" }])
   );
   let demoRed = false;
+  let loadedVersion = null;
+  let reloadArmed = false;
 
   function statuspage(data) {
     const ind = (data && data.status && data.status.indicator) || "none";
@@ -556,6 +569,53 @@
     render();
   }
 
+  function versionCheckMs() {
+    try {
+      const raw = new URLSearchParams(location.search).get("vcheck");
+      const n = raw ? Number(raw) : NaN;
+      if (Number.isFinite(n) && n >= 1000) return n;
+    } catch (e) {}
+    return VERSION_CHECK_MS;
+  }
+
+  async function fetchVersion() {
+    const url = "./version.json?t=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data || typeof data.v !== "string" || !data.v) {
+      throw new Error("bad version");
+    }
+    return data.v;
+  }
+
+  async function captureVersion() {
+    try {
+      loadedVersion = await fetchVersion();
+    } catch (e) {
+      loadedVersion = null;
+    }
+  }
+
+  async function checkVersion() {
+    if (reloadArmed) return;
+    try {
+      const remote = await fetchVersion();
+      if (loadedVersion == null) {
+        loadedVersion = remote;
+        return;
+      }
+      if (remote !== loadedVersion) {
+        reloadArmed = true;
+        refreshEl.textContent = "Updating…";
+        refreshEl.classList.add("updating");
+        location.reload();
+      }
+    } catch (e) {
+      // Stay quiet on transient fetch errors — do not reload.
+    }
+  }
+
   demoBtn.addEventListener("click", function () {
     demoRed = !demoRed;
     demoBtn.classList.toggle("on", demoRed);
@@ -566,6 +626,8 @@
   render();
   refresh();
   setInterval(refresh, REFRESH_MS);
+  captureVersion();
+  setInterval(checkVersion, versionCheckMs());
 })();
   </script>
 </body>

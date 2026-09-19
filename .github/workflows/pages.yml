@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Write version.json
+        run: python3 scripts/write_version.py
       - uses: actions/configure-pages@v5
         with:
           enablement: true

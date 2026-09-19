@@ -4,6 +4,8 @@ Fierce dark outage kiosk — full-viewport SOC wall of live status tiles.
 
 Open on iPad Safari → Share → Add to Home Screen → Guided Access.
 
+Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes).
+
 Live: [earthman01.github.io/spacewall-kiosk](https://earthman01.github.io/spacewall-kiosk/)
 
 ## Tiles
