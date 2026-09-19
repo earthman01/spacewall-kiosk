@@ -4,7 +4,9 @@ Fierce dark outage kiosk — full-viewport SOC wall of live status tiles.
 
 Open on iPad Safari → Share → Add to Home Screen → Guided Access.
 
-Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes).
+Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes). `v` is a content hash of `index.html` (and any other client assets listed in `scripts/write_version.py`). Deploy Pages regenerates `version.json` into the Pages artifact; the committed file on `main` must match, because GitHub Pages currently publishes the branch. After changing kiosk code, run `python3 scripts/write_version.py`.
+
+The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
 Live: [earthman01.github.io/spacewall-kiosk](https://earthman01.github.io/spacewall-kiosk/)
 
