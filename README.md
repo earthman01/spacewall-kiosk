@@ -12,6 +12,23 @@ Kiosks auto-reload after deploys (they poll `version.json` every few minutes and
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
+## iPad deck (swipe)
+
+On iPad / phone, swipe left or right to move between viewing systems. Shared script: [`deck.js`](./deck.js). Each portal keeps its own URL, look, and `version.json` watcher.
+
+**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`)
+
+**Add PRESS / REEL later:** append a row to `PAGES` in `deck.js`, create the html with the same `<script src="./deck.js" defer></script>` hook, add the file to `HTML_SOURCES` in `scripts/write_version.py` and the copy list in `.github/workflows/pages.yml`, then `python3 scripts/write_version.py`.
+
+| Flag | Default | Notes |
+| --- | --- | --- |
+| `?swipe=0` / `?deck=0` | see below | Always off. OLED escape hatch — pin the living-room URL if a swipe ever leaks |
+| `?swipe=1` / `?deck=1` | see below | Always on (desktop prove-out; arrows also work) |
+
+Default is **on** for coarse-pointer / no-hover devices (iPad, phone), including iPad + Magic Keyboard. Default is **off** on a fine-pointer wide canvas or `display-mode: fullscreen` without a coarse pointer — the 55" HEARTH Mac should stay on HEARTH. Iframes and `?embed=1` (WAVE wrapping SPACEWALL) stay off so the inner board cannot swipe away.
+
+Recommended OLED URL stays bare `hearth.html`. Optional belt-and-suspenders: `hearth.html?swipe=0`.
+
 Live: [earthman01.github.io/spacewall-kiosk](https://earthman01.github.io/spacewall-kiosk/)
 
 ## OLED room: HEARTH
@@ -56,7 +73,8 @@ All kitchen-sink. Omitted = recommended default. `0` / `off` yanks that piece wi
 | `?peaks=0` | modest | `0` allows a brighter face for A/B — not for the panel |
 | `?slides=0` | on | Rotate ember → slate → wine (same charcoal-room band). `?slides=fast` or `?slidedur=12` for prove-out. `?slide=slate` starts on a phase |
 | `?apl=0` | on | Micro brightness breathe so ASBL does not lock |
-| `?hud=1` | off | Tiny flag strip on the floor |
+| `?hud=1` | off | Tiny flag strip on the floor (includes `swipe:on/off`) |
+| `?swipe=0` / `?deck=0` | off on OLED / desktop | Disable iPad deck. See [iPad deck](#ipad-deck-swipe) |
 
 Recommended living-room URL is bare `hearth.html` (all of the above on, slides included until Mark prunes).
 

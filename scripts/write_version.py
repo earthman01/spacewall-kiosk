@@ -2,14 +2,18 @@
 """Write version.json for SPACEWALL kiosk auto-reload.
 
 `v` is a content hash of kiosk client assets (index.html, wave.html,
-hearth.html, and any other files listed in SOURCES), not the latest git
-SHA. Pages also deploys when x-status.json refreshes; hashing code means
-those data-only deploys do not bounce wall iPads.
+hearth.html, deck.js, and any other files listed in SOURCES), not the
+latest git SHA. Pages also deploys when x-status.json refreshes; hashing
+code means those data-only deploys do not bounce wall iPads.
 
 Deploy Pages always regenerates this file into the artifact. The copy
 committed on main must stay in sync too: the live site is published from
 the main branch (legacy Pages), so a stale committed version.json is what
 wall iPads actually poll.
+
+Each portal loads deck.js with a content-hash query (`?h=…`) so a deck-only
+change busts the cached script after the version watcher reloads the page.
+`write` restamps those tags; `--check` verifies them.
 """
 
 from __future__ import annotations
@@ -17,17 +21,61 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCES = ("index.html", "wave.html", "hearth.html")
+# Portal html that must load deck.js. Append press.html / reel.html here.
+HTML_SOURCES = ("index.html", "wave.html", "hearth.html")
+SOURCES = HTML_SOURCES + ("deck.js",)
 DEFAULT_OUT = ROOT / "version.json"
+DECK_SCRIPT_RE = re.compile(
+    r'<script src="\./deck\.js(?:\?h=[a-f0-9]+)?" defer></script>'
+)
 
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def file_hash(path: Path, n: int = 12) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:n]
+
+
+def deck_script_tag() -> str:
+    return f'<script src="./deck.js?h={file_hash(ROOT / "deck.js")}" defer></script>'
+
+
+def stamp_deck_src() -> list[str]:
+    tag = deck_script_tag()
+    changed: list[str] = []
+    for rel in HTML_SOURCES:
+        path = ROOT / rel
+        text = path.read_text(encoding="utf-8")
+        new, n = DECK_SCRIPT_RE.subn(tag, text)
+        if n == 0:
+            raise SystemExit(
+                f"FAIL {rel} is missing a deck.js script tag "
+                f'(expected {DECK_SCRIPT_RE.pattern})'
+            )
+        if new != text:
+            path.write_text(new, encoding="utf-8")
+            changed.append(rel)
+    return changed
+
+
+def check_deck_src() -> str | None:
+    tag = deck_script_tag()
+    for rel in HTML_SOURCES:
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        if tag not in text:
+            return (
+                f"FAIL {rel} deck.js src is stale or missing "
+                f"(expected {tag})"
+            )
+    return None
 
 
 def code_version() -> str:
@@ -79,9 +127,13 @@ def main() -> int:
     )
     args = parser.parse_args()
     out = resolve_out(args.out)
-    expected = code_version()
 
     if args.check:
+        stamp_err = check_deck_src()
+        if stamp_err:
+            print(stamp_err, file=sys.stderr, flush=True)
+            return 1
+        expected = code_version()
         found = read_v(out)
         if found != expected:
             print(
@@ -94,6 +146,9 @@ def main() -> int:
         print(f"ok {out} v={expected}", flush=True)
         return 0
 
+    changed = stamp_deck_src()
+    if changed:
+        print("stamped deck.js hash in " + ", ".join(changed), flush=True)
     data = write_payload(out)
     print(f"wrote {out} v={data['v']} built_at={data['built_at']}", flush=True)
     return 0

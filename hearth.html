@@ -13,6 +13,7 @@
   <link rel="manifest" href="./hearth.webmanifest" />
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/hearth-192.png" />
   <link rel="apple-touch-icon" href="./icons/hearth-192.png" />
+  <script src="./deck.js?h=02bc13baf309" defer></script>
   <style>
     /* Palette tokens interpolate on slide change (Chrome / the TV Mac). */
     @property --bg { syntax: "<color>"; inherits: true; initial-value: #16161c; }
@@ -740,7 +741,8 @@
       "drift:" + (flags.drift ? "on" : "off"),
       "peaks:" + flags.peaks,
       "slides:" + (flags.slides ? SLIDES[slideIdx] + "/" + flags.slideDur + "s" : "off"),
-      "apl:" + (flags.apl ? "on" : "off")
+      "apl:" + (flags.apl ? "on" : "off"),
+      "swipe:" + (document.documentElement.getAttribute("data-deck") || "off")
     ].join("  ·  ");
   }
 
