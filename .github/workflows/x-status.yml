@@ -1,0 +1,36 @@
+name: Refresh X status
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: x-status
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Scrape developer.x.com/status
+        run: python3 scripts/fetch_x_status.py
+
+      - name: Commit x-status.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add x-status.json
+          if git diff --cached --quiet; then
+            echo "x-status.json unchanged"
+          else
+            git commit -m "chore: refresh X status snapshot"
+            git push
+          fi

@@ -111,16 +111,22 @@
       min-height: 0;
       padding: 12px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       grid-template-rows: repeat(2, 1fr);
       gap: 12px;
     }
 
-    @media (max-width: 900px) and (orientation: portrait) {
+    @media (max-width: 1100px) and (orientation: portrait) {
       main {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(4, 1fr);
+        grid-template-rows: repeat(5, 1fr);
       }
+    }
+
+    @media (orientation: landscape) and (max-height: 850px) {
+      .tile { padding: 14px 16px 12px; }
+      .tile .status { font-size: clamp(22px, 3.4vw, 40px); }
+      .tile .name { font-size: clamp(13px, 1.4vw, 18px); }
     }
 
     .tile {
@@ -152,7 +158,12 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       z-index: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
+
+    .tile[data-href] { cursor: pointer; }
 
     .tile .status {
       position: relative;
@@ -295,6 +306,22 @@
       name: "Google Cloud",
       url: "https://status.cloud.google.com/incidents.json",
       parse: googleIncidents
+    },
+    {
+      id: "x",
+      name: "X",
+      url: "./x-status.json",
+      href: "https://developer.x.com/status",
+      bust: true,
+      parse: xProxy
+    },
+    {
+      id: "xai",
+      name: "xAI",
+      url: "https://status.x.ai/feed.xml",
+      href: "https://status.x.ai/",
+      format: "xml",
+      parse: xaiRss
     }
   ];
 
@@ -357,6 +384,79 @@
     return { level: "major", label: "MAJOR", detail: short + " (" + open.length + " open)" };
   }
 
+  function xProxy(data) {
+    const st = data && data.status;
+    const detail = (data && data.detail) || "";
+    if (st === "ok") {
+      return { level: "ok", label: "OK", detail: detail || "All systems operational" };
+    }
+    if (st === "degraded") {
+      return { level: "degraded", label: "DEGRADED", detail: detail || "Degraded" };
+    }
+    if (st === "outage") {
+      return { level: "major", label: "OUTAGE", detail: detail || "Outage" };
+    }
+    return { level: "unknown", label: "UNKNOWN", detail: detail || "no signal" };
+  }
+
+  function textOf(el, sel) {
+    const node = el.querySelector(sel);
+    return node ? (node.textContent || "").trim() : "";
+  }
+
+  function xaiRss(xmlText) {
+    if (typeof xmlText !== "string" || !xmlText.trim()) {
+      return { level: "unknown", label: "UNKNOWN", detail: "empty feed" };
+    }
+    const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+    if (doc.querySelector("parsererror")) {
+      return { level: "unknown", label: "UNKNOWN", detail: "bad feed" };
+    }
+    const channel = doc.querySelector("channel, feed");
+    if (!channel) {
+      return { level: "unknown", label: "UNKNOWN", detail: "bad feed" };
+    }
+    const items = Array.from(doc.querySelectorAll("item, entry"));
+    const open = items.filter(function (item) {
+      const desc = textOf(item, "description") || textOf(item, "content") || textOf(item, "summary");
+      const title = textOf(item, "title");
+      const cats = Array.from(item.querySelectorAll("category")).map(function (c) {
+        return ((c.textContent || c.getAttribute("term") || "") + "").trim().toLowerCase();
+      });
+      if (cats.indexOf("resolved") !== -1) return false;
+      if (/Status:\s*RESOLVED/i.test(desc)) return false;
+      if (/^\s*\[Resolved\]/i.test(title)) return false;
+      return true;
+    });
+    if (open.length === 0) {
+      return { level: "ok", label: "OK", detail: "No open incidents" };
+    }
+    function severityOf(item) {
+      const desc = textOf(item, "description") || textOf(item, "content") || textOf(item, "summary");
+      const title = textOf(item, "title");
+      const cats = Array.from(item.querySelectorAll("category")).map(function (c) {
+        return ((c.textContent || c.getAttribute("term") || "") + "").trim().toLowerCase();
+      });
+      const sevMatch = desc.match(/Severity:\s*([A-Za-z0-9_-]+)/i);
+      return ((sevMatch && sevMatch[1]) || cats[0] || title || "").toLowerCase();
+    }
+    let worst = "degraded";
+    let title = textOf(open[0], "title") || "Open incident";
+    for (let i = 0; i < open.length; i++) {
+      const blob = severityOf(open[i]) + " " + textOf(open[i], "title");
+      if (/outage|unavailable|down|major|critical|high/.test(blob)) {
+        worst = "major";
+        title = textOf(open[i], "title") || title;
+        break;
+      }
+    }
+    const short = title.length > 72 ? title.slice(0, 69) + "…" : title;
+    if (worst === "major") {
+      return { level: "major", label: "OUTAGE", detail: short };
+    }
+    return { level: "degraded", label: "DEGRADED", detail: short };
+  }
+
   const board = document.getElementById("board");
   const refreshEl = document.getElementById("refresh");
   const demoBtn = document.getElementById("demo");
@@ -373,6 +473,12 @@
       const tile = document.createElement("article");
       tile.className = "tile " + level;
       tile.dataset.id = svc.id;
+      tile.title = svc.name;
+      if (svc.href) {
+        tile.dataset.href = svc.href;
+        tile.setAttribute("role", "link");
+        tile.tabIndex = 0;
+      }
       tile.innerHTML =
         '<div class="dot" aria-hidden="true"></div>' +
         '<div class="name">' +
@@ -383,6 +489,17 @@
         '</div><div class="detail">' +
         escapeHtml(detail || "") +
         "</div></div>";
+      if (svc.href) {
+        tile.addEventListener("click", function () {
+          window.open(svc.href, "_blank", "noopener");
+        });
+        tile.addEventListener("keydown", function (ev) {
+          if (ev.key === "Enter" || ev.key === " ") {
+            ev.preventDefault();
+            window.open(svc.href, "_blank", "noopener");
+          }
+        });
+      }
       board.appendChild(tile);
     }
   }
@@ -411,10 +528,19 @@
 
   async function pollOne(svc) {
     try {
-      const res = await fetch(svc.url, { cache: "no-store" });
+      let url = svc.url;
+      if (svc.bust) {
+        url += (url.indexOf("?") === -1 ? "?" : "&") + "_=" + Date.now();
+      }
+      const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
-      state[svc.id] = svc.parse(data);
+      if (svc.format === "xml") {
+        const text = await res.text();
+        state[svc.id] = svc.parse(text);
+      } else {
+        const data = await res.json();
+        state[svc.id] = svc.parse(data);
+      }
     } catch (err) {
       state[svc.id] = {
         level: "unknown",
