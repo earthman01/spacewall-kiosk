@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="HEARTH" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#121216" />
+  <meta name="theme-color" content="#16161c" />
   <meta name="color-scheme" content="dark" />
   <title>HEARTH</title>
   <link rel="manifest" href="./hearth.webmanifest" />
@@ -15,11 +15,13 @@
   <link rel="apple-touch-icon" href="./icons/hearth-192.png" />
   <style>
     /* Palette tokens interpolate on slide change (Chrome / the TV Mac). */
-    @property --bg { syntax: "<color>"; inherits: true; initial-value: #121216; }
-    @property --floor-mid { syntax: "<color>"; inherits: true; initial-value: #1c1a22; }
+    @property --bg { syntax: "<color>"; inherits: true; initial-value: #16161c; }
+    @property --floor-top { syntax: "<color>"; inherits: true; initial-value: #1c1c24; }
+    @property --floor-mid { syntax: "<color>"; inherits: true; initial-value: #24222c; }
+    @property --floor-bot { syntax: "<color>"; inherits: true; initial-value: #18181e; }
     @property --ember { syntax: "<color>"; inherits: true; initial-value: rgba(112, 40, 52, 0.56); }
     @property --slate { syntax: "<color>"; inherits: true; initial-value: rgba(42, 50, 68, 0.50); }
-    @property --ash { syntax: "<color>"; inherits: true; initial-value: rgba(26, 22, 26, 0.48); }
+    @property --ash { syntax: "<color>"; inherits: true; initial-value: rgba(40, 34, 40, 0.44); }
     @property --haze-a { syntax: "<color>"; inherits: true; initial-value: rgba(86, 32, 42, 0.30); }
     @property --haze-b { syntax: "<color>"; inherits: true; initial-value: rgba(36, 44, 62, 0.26); }
     @property --band-warm { syntax: "<color>"; inherits: true; initial-value: rgba(90, 30, 40, 0.42); }
@@ -31,20 +33,27 @@
     @property --apl { syntax: "<number>"; inherits: true; initial-value: 1; }
 
     :root {
-      --bg: #121216;
+      --bg: #16161c;
       --text: #c8ccd4;
       --muted: #6e7280;
       --clock: #d0d4dc;
       --orbit-nudge: 7px;
     }
 
-    /* --- slides (Apple TV album pattern; ?slides=0 freezes) --- */
+    /* Hard charcoal under the interpolating body so a wedged --bg cannot flash void. */
+    html { background: #18181e; }
+
+    /* --- slides (Apple TV album pattern; ?slides=0 freezes) ---
+       All three stay in the same charcoal-room APL band. Wine is burgundy
+       charcoal, not a near-black void — dark reds read as OFF on OLED. */
     body[data-slide="ember"] {
-      --bg: #121216;
-      --floor-mid: #1c1a22;
+      --bg: #16161c;
+      --floor-top: #1c1c24;
+      --floor-mid: #24222c;
+      --floor-bot: #18181e;
       --ember: rgba(112, 40, 52, 0.56);
       --slate: rgba(42, 50, 68, 0.50);
-      --ash: rgba(26, 22, 26, 0.48);
+      --ash: rgba(40, 34, 40, 0.44);
       --haze-a: rgba(86, 32, 42, 0.30);
       --haze-b: rgba(36, 44, 62, 0.26);
       --band-warm: rgba(90, 30, 40, 0.42);
@@ -56,43 +65,51 @@
     }
 
     body[data-slide="slate"] {
-      --bg: #10141a;
-      --floor-mid: #182028;
+      --bg: #161a22;
+      --floor-top: #1c222c;
+      --floor-mid: #222a34;
+      --floor-bot: #141820;
       --ember: rgba(46, 60, 84, 0.54);
       --slate: rgba(32, 42, 60, 0.50);
-      --ash: rgba(18, 22, 30, 0.46);
+      --ash: rgba(32, 38, 48, 0.44);
       --haze-a: rgba(40, 56, 80, 0.30);
       --haze-b: rgba(28, 36, 52, 0.26);
       --band-warm: rgba(48, 58, 78, 0.40);
       --band-cool: rgba(28, 40, 58, 0.38);
       --swell-warm: rgba(44, 58, 80, 0.38);
-      --swell-cool: rgba(24, 32, 46, 0.36);
+      --swell-cool: rgba(28, 36, 50, 0.36);
       --accent: #5a6a82;
       --ring: #3e5068;
     }
 
     body[data-slide="wine"] {
-      --bg: #161014;
-      --floor-mid: #22161c;
-      --ember: rgba(104, 32, 52, 0.56);
-      --slate: rgba(64, 30, 42, 0.46);
-      --ash: rgba(24, 16, 20, 0.50);
-      --haze-a: rgba(120, 44, 40, 0.26);
-      --haze-b: rgba(72, 28, 44, 0.28);
-      --band-warm: rgba(96, 28, 44, 0.42);
-      --band-cool: rgba(52, 28, 40, 0.34);
-      --swell-warm: rgba(108, 36, 48, 0.40);
-      --swell-cool: rgba(40, 24, 34, 0.36);
+      --bg: #1c181c;
+      --floor-top: #261e24;
+      --floor-mid: #2e242c;
+      --floor-bot: #1a161a;
+      --ember: rgba(126, 48, 64, 0.58);
+      --slate: rgba(86, 42, 58, 0.50);
+      --ash: rgba(48, 34, 42, 0.44);
+      --haze-a: rgba(134, 54, 50, 0.34);
+      --haze-b: rgba(90, 40, 58, 0.30);
+      --band-warm: rgba(116, 42, 56, 0.46);
+      --band-cool: rgba(72, 38, 52, 0.40);
+      --swell-warm: rgba(124, 48, 62, 0.44);
+      --swell-cool: rgba(58, 36, 48, 0.38);
       --accent: #9a3e48;
       --ring: #7a3040;
     }
 
     body {
       transition:
-        --bg 3.6s ease, --floor-mid 3.6s ease, --ember 3.6s ease, --slate 3.6s ease,
-        --ash 3.6s ease, --haze-a 3.6s ease, --haze-b 3.6s ease, --band-warm 3.6s ease,
-        --band-cool 3.6s ease, --swell-warm 3.6s ease, --swell-cool 3.6s ease,
-        --accent 3.6s ease, --ring 3.6s ease;
+        --bg 3.6s ease, --floor-top 3.6s ease, --floor-mid 3.6s ease, --floor-bot 3.6s ease,
+        --ember 3.6s ease, --slate 3.6s ease, --ash 3.6s ease, --haze-a 3.6s ease,
+        --haze-b 3.6s ease, --band-warm 3.6s ease, --band-cool 3.6s ease,
+        --swell-warm 3.6s ease, --swell-cool 3.6s ease, --accent 3.6s ease, --ring 3.6s ease;
+    }
+
+    body.slide-snap {
+      transition: none;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -128,7 +145,7 @@
       pointer-events: none;
       background:
         radial-gradient(92% 72% at 50% 44%, var(--floor-mid) 0%, transparent 68%),
-        linear-gradient(180deg, #16161c 0%, var(--bg) 42%, #141218 100%);
+        linear-gradient(180deg, var(--floor-top) 0%, var(--bg) 42%, var(--floor-bot) 100%);
       filter: brightness(var(--apl));
     }
 
@@ -137,8 +154,9 @@
     }
     body.floor-off .floor { display: none; }
 
-    /* --- APL micro-breathe (?apl=0 off) --- */
-    body.apl-on { animation: apl-tick 140s ease-in-out infinite; }
+    /* APL breathe lives on .floor, not body — same-element @property
+       animation + color transitions can wedge after a slide swap. */
+    body.apl-on .floor { animation: apl-tick 140s ease-in-out infinite; }
 
     .mural {
       position: absolute;
@@ -250,7 +268,7 @@
     .vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(118% 90% at 50% 48%, transparent 50%, rgba(10, 10, 14, 0.28) 100%);
+      background: radial-gradient(118% 90% at 50% 48%, transparent 52%, rgba(14, 14, 18, 0.2) 100%);
     }
 
     body.floor-off .vignette {
@@ -490,9 +508,9 @@
 
     @keyframes apl-tick {
       0%, 100% { --apl: 1; }
-      22% { --apl: 1.07; }
-      48% { --apl: 0.96; }
-      74% { --apl: 1.05; }
+      22% { --apl: 1.06; }
+      48% { --apl: 0.99; }
+      74% { --apl: 1.04; }
     }
 
     body.waves-soft .blob.a { animation-name: drift-a-soft; }
@@ -590,6 +608,61 @@
   const VERSION_CHECK_MS = 3 * 60 * 1000;
   const RING = 2 * Math.PI * 54;
   const SLIDES = ["ember", "slate", "wine"];
+  /* Keep in sync with body[data-slide] rules. JS reapplies after each swap
+     so a wedged @property interpolation cannot leave the mural on wine-void. */
+  const PALETTES = {
+    ember: {
+      "--bg": "#16161c",
+      "--floor-top": "#1c1c24",
+      "--floor-mid": "#24222c",
+      "--floor-bot": "#18181e",
+      "--ember": "rgba(112, 40, 52, 0.56)",
+      "--slate": "rgba(42, 50, 68, 0.50)",
+      "--ash": "rgba(40, 34, 40, 0.44)",
+      "--haze-a": "rgba(86, 32, 42, 0.30)",
+      "--haze-b": "rgba(36, 44, 62, 0.26)",
+      "--band-warm": "rgba(90, 30, 40, 0.42)",
+      "--band-cool": "rgba(34, 40, 56, 0.38)",
+      "--swell-warm": "rgba(98, 34, 44, 0.40)",
+      "--swell-cool": "rgba(30, 34, 48, 0.38)",
+      "--accent": "#8e3a42",
+      "--ring": "#6e3840"
+    },
+    slate: {
+      "--bg": "#161a22",
+      "--floor-top": "#1c222c",
+      "--floor-mid": "#222a34",
+      "--floor-bot": "#141820",
+      "--ember": "rgba(46, 60, 84, 0.54)",
+      "--slate": "rgba(32, 42, 60, 0.50)",
+      "--ash": "rgba(32, 38, 48, 0.44)",
+      "--haze-a": "rgba(40, 56, 80, 0.30)",
+      "--haze-b": "rgba(28, 36, 52, 0.26)",
+      "--band-warm": "rgba(48, 58, 78, 0.40)",
+      "--band-cool": "rgba(28, 40, 58, 0.38)",
+      "--swell-warm": "rgba(44, 58, 80, 0.38)",
+      "--swell-cool": "rgba(28, 36, 50, 0.36)",
+      "--accent": "#5a6a82",
+      "--ring": "#3e5068"
+    },
+    wine: {
+      "--bg": "#1c181c",
+      "--floor-top": "#261e24",
+      "--floor-mid": "#2e242c",
+      "--floor-bot": "#1a161a",
+      "--ember": "rgba(126, 48, 64, 0.58)",
+      "--slate": "rgba(86, 42, 58, 0.50)",
+      "--ash": "rgba(48, 34, 42, 0.44)",
+      "--haze-a": "rgba(134, 54, 50, 0.34)",
+      "--haze-b": "rgba(90, 40, 58, 0.30)",
+      "--band-warm": "rgba(116, 42, 56, 0.46)",
+      "--band-cool": "rgba(72, 38, 52, 0.40)",
+      "--swell-warm": "rgba(124, 48, 62, 0.44)",
+      "--swell-cool": "rgba(58, 36, 48, 0.38)",
+      "--accent": "#9a3e48",
+      "--ring": "#7a3040"
+    }
+  };
 
   const params = new URLSearchParams(location.search);
 
@@ -604,7 +677,11 @@
   let reloadArmed = false;
   let deepTimer = null;
   let slideTimer = null;
+  let slideWatch = null;
+  let slideGen = 0;
   let slideIdx = 0;
+  let slideSwaps = 0;
+  let lastSlideAt = 0;
 
   function raw(name) {
     const v = params.get(name);
@@ -692,14 +769,14 @@
     const start = raw("slide");
     const startIdx = SLIDES.indexOf(start);
     slideIdx = startIdx >= 0 ? startIdx : 0;
-    b.dataset.slide = SLIDES[slideIdx];
+    paintSlide(SLIDES[slideIdx], false);
   }
 
   function paintHud() {
     if (!flags.hud) return;
     hudEl.hidden = false;
     hudEl.textContent = [
-      "hearth v2",
+      "hearth v2.1",
       "floor:" + (flags.floor ? "on" : "off"),
       "deeper:" + flags.deeper,
       "waves:" + flags.waves,
@@ -708,25 +785,97 @@
       "drift:" + (flags.drift ? "on" : "off"),
       "peaks:" + flags.peaks,
       "slides:" + (flags.slides ? SLIDES[slideIdx] + "/" + flags.slideDur + "s" : "off"),
+      "swaps:" + slideSwaps,
       "apl:" + (flags.apl ? "on" : "off")
     ].join("  ·  ");
   }
 
+  function applyPalette(name, snap) {
+    const b = document.body;
+    const pal = PALETTES[name] || PALETTES.ember;
+    if (snap) b.classList.add("slide-snap");
+    b.dataset.slide = name;
+    Object.keys(pal).forEach(function (key) {
+      b.style.setProperty(key, pal[key]);
+    });
+    if (snap) {
+      void b.offsetWidth;
+      window.setTimeout(function () {
+        b.classList.remove("slide-snap");
+      }, 40);
+    }
+  }
+
+  function paintSlide(name, dissolve) {
+    const b = document.body;
+    applyPalette(name, !dissolve);
+    if (dissolve) {
+      b.classList.add("slide-swap");
+      window.setTimeout(function () {
+        b.classList.remove("slide-swap");
+        applyPalette(name, false);
+      }, 1600);
+      window.setTimeout(function () {
+        applyPalette(name, false);
+      }, 3700);
+    }
+    paintHud();
+  }
+
   function nextSlide() {
     if (!flags.slides) return;
-    slideIdx = (slideIdx + 1) % SLIDES.length;
-    document.body.classList.add("slide-swap");
-    document.body.dataset.slide = SLIDES[slideIdx];
-    paintHud();
-    window.setTimeout(function () {
-      document.body.classList.remove("slide-swap");
-    }, 1600);
+    try {
+      slideIdx = (slideIdx + 1) % SLIDES.length;
+      slideSwaps += 1;
+      lastSlideAt = Date.now();
+      paintSlide(SLIDES[slideIdx], true);
+    } catch (err) {
+      lastSlideAt = Date.now();
+    }
+  }
+
+  function clearSlideClocks() {
+    if (slideTimer != null) {
+      clearTimeout(slideTimer);
+      slideTimer = null;
+    }
+    if (slideWatch != null) {
+      clearInterval(slideWatch);
+      slideWatch = null;
+    }
   }
 
   function armSlides() {
     if (!flags.slides) return;
-    if (slideTimer) clearInterval(slideTimer);
-    slideTimer = setInterval(nextSlide, flags.slideDur * 1000);
+    const gen = ++slideGen;
+    const due = flags.slideDur * 1000;
+    const grace = Math.max(4000, Math.round(due * 0.25));
+    clearSlideClocks();
+    if (!lastSlideAt) lastSlideAt = Date.now();
+
+    function tick() {
+      if (gen !== slideGen) return;
+      nextSlide();
+      slideTimer = setTimeout(tick, due);
+    }
+
+    const elapsed = Date.now() - lastSlideAt;
+    const wait = elapsed >= due ? 250 : Math.max(250, due - elapsed);
+    slideTimer = setTimeout(tick, wait);
+
+    slideWatch = setInterval(function () {
+      if (gen !== slideGen || !flags.slides) return;
+      if (Date.now() - lastSlideAt > due + grace) {
+        nextSlide();
+        clearTimeout(slideTimer);
+        slideTimer = setTimeout(tick, due);
+      }
+    }, Math.min(5000, Math.max(1000, Math.round(due / 4))));
+  }
+
+  function onVisible() {
+    if (document.hidden) return;
+    armSlides();
   }
 
   function chicagoParts(d) {
@@ -825,6 +974,10 @@
       }
     } catch (e) {}
   }
+
+  document.addEventListener("visibilitychange", onVisible);
+  window.addEventListener("pageshow", onVisible);
+  window.addEventListener("focus", onVisible);
 
   applyFlags();
   paintHud();
