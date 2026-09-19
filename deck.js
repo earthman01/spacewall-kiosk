@@ -73,17 +73,17 @@
   function defaultEnabled() {
     if (framed() || embedded()) return false;
     const anyCoarse = mq("(any-pointer: coarse)");
-    const primaryFine = mq("(pointer: fine)");
     const hoverNone = mq("(hover: none)");
     const fullscreen = mq("(display-mode: fullscreen)");
     const wide = window.innerWidth >= 1400;
 
-    // OLED / desktop Mac: mouse, big canvas or Chrome fullscreen.
-    if (fullscreen && !anyCoarse) return false;
-    if (wide && primaryFine && !anyCoarse) return false;
+    // OLED / desktop: big canvas or Chrome fullscreen, no tablet pointer.
+    // Do not treat hover:none alone as "iPad" — headless and some TVs report that.
+    if (!anyCoarse && (fullscreen || wide)) return false;
 
     // iPad / phone, including iPad + Magic Keyboard (still has a coarse pointer).
-    return anyCoarse || hoverNone;
+    if (anyCoarse) return true;
+    return hoverNone && !wide;
   }
 
   function computeEnabled() {

@@ -25,7 +25,7 @@ On iPad / phone, swipe left or right to move between viewing systems. Shared scr
 | `?swipe=0` / `?deck=0` | see below | Always off. OLED escape hatch — pin the living-room URL if a swipe ever leaks |
 | `?swipe=1` / `?deck=1` | see below | Always on (desktop prove-out; arrows also work) |
 
-Default is **on** for coarse-pointer / no-hover devices (iPad, phone), including iPad + Magic Keyboard. Default is **off** on a fine-pointer wide canvas or `display-mode: fullscreen` without a coarse pointer — the 55" HEARTH Mac should stay on HEARTH. Iframes and `?embed=1` (WAVE wrapping SPACEWALL) stay off so the inner board cannot swipe away.
+Default is **on** for coarse-pointer devices (iPad, phone), including iPad + Magic Keyboard. Default is **off** on a wide canvas (≥1400px) or `display-mode: fullscreen` when there is no coarse pointer — the 55" HEARTH Mac should stay on HEARTH. Iframes and `?embed=1` (WAVE wrapping SPACEWALL) stay off so the inner board cannot swipe away.
 
 Recommended OLED URL stays bare `hearth.html`. Optional belt-and-suspenders: `hearth.html?swipe=0`.
 
