@@ -12,7 +12,7 @@ Kiosks auto-reload after deploys (they poll `version.json` every few minutes and
 
 **Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
 
-Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.38.4` · `HEARTH 26.38.4` · `WAVE 26.38.4`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.38.5` · `HEARTH 26.38.5` · `WAVE 26.38.5` · `PRESS 26.38.5`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
@@ -20,9 +20,9 @@ The first time after enabling auto-reload, force-quit the home-screen web app on
 
 On iPad / phone, swipe left or right to move between viewing systems. Shared script: [`deck.js`](./deck.js). Each portal keeps its own URL, look, and `version.json` watcher.
 
-**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`)
+**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`) ↔ PRESS (`press.html`)
 
-**Add PRESS / REEL later:** append a row to `PAGES` in `deck.js`, create the html with the same `<script src="./deck.js" defer></script>` hook, add the file to `HTML_SOURCES` in `scripts/write_version.py` and the copy list in `.github/workflows/pages.yml`, then `python3 scripts/write_version.py`.
+**Add REEL later:** append a row to `PAGES` in `deck.js`, create the html with the same `<script src="./deck.js" defer></script>` hook, add the file to `HTML_SOURCES` in `scripts/write_version.py` and the copy list in `.github/workflows/pages.yml`, then `python3 scripts/write_version.py`.
 
 | Flag | Default | Notes |
 | --- | --- | --- |
@@ -87,6 +87,12 @@ Recommended living-room URL is bare `hearth.html` (all of the above on, slides i
 [wave.html](https://earthman01.github.io/spacewall-kiosk/wave.html) is the idle-overlay lab: crisp UI, then a translucent wave after **240s** (`?idle=180` seconds; `?idle=0` now). Mouse / key / click fades it out. **Esc** dismisses. Same pixel orbit; after the wave has been up ~90s it dims further. `?mode=spacewall` puts the real board underneath the wash — a prove-out of Phase B wrapping SPACEWALL, still just a browser page.
 
 **Honesty — Phase A only.** A browser page cannot sit on top of Grok Bot.app or other native windows. Fullscreen the portal on the OLED yourself. Phase B (not in this repo) is a native always-on-top click-through Mac overlay that could float the same wave+shift over Grok Bot and SPACEWALL together.
+
+## PRESS (look only)
+
+[press.html](https://earthman01.github.io/spacewall-kiosk/press.html) is a thin floating-newspaper portal — glanceable subjects + post-shaped cards on the same near-black OLED wall. **v1 is placeholders only.** No X / Grok / RSS fetch. Cards fade in, then settle; hover/scan holds the wall so nothing rugpulls mid-read.
+
+Next step (not this ship): a visibility-gated live feed that fetches only when `document.visibilityState === "visible"` / the TV page is actually open.
 
 ## Tiles
 
