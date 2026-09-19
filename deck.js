@@ -193,7 +193,7 @@
   });
   const leftRail = chrome.querySelector(".rail.left");
   const rightRail = chrome.querySelector(".rail.right");
-  const live = chrome.querySelector("#deck-live");
+  live = chrome.querySelector("#deck-live");
 
   function mountChrome() {
     if (!chrome.isConnected) document.body.appendChild(chrome);
