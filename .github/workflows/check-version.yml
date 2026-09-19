@@ -1,0 +1,12 @@
+name: Check version.json
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: version.json v must match hashed client assets
+        run: python3 scripts/write_version.py --check

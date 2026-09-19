@@ -22,13 +22,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Write version.json
-        run: python3 scripts/write_version.py
+
+      # Live Pages is currently legacy-from-main, so watchers poll the committed
+      # version.json. Always regenerate into the artifact as well: if/when the
+      # source is GitHub Actions, this is the file the wall actually receives.
+      - name: Stage site and write version.json
+        run: |
+          set -euo pipefail
+          rm -rf site
+          mkdir -p site
+          cp -a index.html .nojekyll x-status.json site/
+          python3 scripts/write_version.py --out site/version.json
+          python3 scripts/write_version.py --check --out site/version.json
+          echo "artifact version.json:"
+          cat site/version.json
+
       - uses: actions/configure-pages@v5
         with:
           enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: site
       - id: deployment
         uses: actions/deploy-pages@v4
