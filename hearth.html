@@ -180,13 +180,13 @@
 
     .dial {
       position: relative;
-      width: min(46vw, 420px);
-      height: min(46vw, 420px);
+      width: min(58vw, 560px);
+      height: min(58vw, 560px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .ring {
@@ -214,12 +214,23 @@
 
     .clock {
       position: relative;
-      font-size: clamp(52px, 9vw, 112px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(56px, 8.5vw, 108px);
       font-weight: 650;
       letter-spacing: -0.045em;
       line-height: 0.92;
       font-variant-numeric: tabular-nums;
       color: #c2c2c8;
+    }
+
+    .clock .period {
+      font-size: 0.22em;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      color: #7a7a82;
     }
 
     .date {
@@ -313,7 +324,7 @@
             <circle class="prog" id="dayarc" cx="60" cy="60" r="54"
               stroke-dasharray="339.292" stroke-dashoffset="339.292"></circle>
           </svg>
-          <div class="clock" id="clock">—</div>
+          <div class="clock" id="clock"><span id="hms">—</span><span class="period" id="ampm"></span></div>
           <div class="date" id="date"></div>
           <div class="beat" id="beat"></div>
         </div>
@@ -338,7 +349,8 @@
   const DEEP_IDLE_MS = 8 * 60 * 1000;
   const RING = 2 * Math.PI * 54;
 
-  const clockEl = document.getElementById("clock");
+  const hmsEl = document.getElementById("hms");
+  const ampmEl = document.getElementById("ampm");
   const dateEl = document.getElementById("date");
   const beatEl = document.getElementById("beat");
   const arcEl = document.getElementById("dayarc");
@@ -386,7 +398,8 @@
     const d = new Date();
     const p = chicagoParts(d);
     const day = (p.dayPeriod || "").toUpperCase();
-    clockEl.textContent = (p.hour || "—") + ":" + (p.minute || "00") + ":" + (p.second || "00") + " " + day;
+    hmsEl.textContent = (p.hour || "—") + ":" + (p.minute || "00") + ":" + (p.second || "00");
+    ampmEl.textContent = day || "";
     dateEl.textContent = ((p.weekday || "") + "  ·  " + (p.month || "") + " " + (p.day || "")).toUpperCase();
     const frac = dayFraction(d);
     arcEl.style.strokeDashoffset = String(RING * (1 - frac));
