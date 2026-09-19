@@ -108,10 +108,6 @@
         --swell-warm 3.6s ease, --swell-cool 3.6s ease, --accent 3.6s ease, --ring 3.6s ease;
     }
 
-    body.slide-snap {
-      transition: none;
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
@@ -333,6 +329,20 @@
       color: #4a4a54;
     }
 
+    .meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .ver {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #3a3a44;
+    }
+
     a {
       color: #7a7a84;
       text-decoration: none;
@@ -442,6 +452,7 @@
     body.deeper-gentle .mural { opacity: 0.94; }
     body.deeper-gentle .note,
     body.deeper-gentle .hint,
+    body.deeper-gentle .ver,
     body.deeper-gentle .tag { opacity: 0.72; }
 
     body.deeper-crush .mural { opacity: 0.62; }
@@ -593,10 +604,13 @@
           Room portal for the 55&quot; OLED — not another ops grid.
           Browser cannot overlay Grok Bot.app. Fullscreen this page on the panel.
         </p>
-        <div class="hint">
-          <a href="./">spacewall</a>
-          ·
-          <a href="./wave.html">wave lab</a>
+        <div class="meta">
+          <div class="ver">HEARTH v2</div>
+          <div class="hint">
+            <a href="./">spacewall</a>
+            ·
+            <a href="./wave.html">wave lab</a>
+          </div>
         </div>
       </div>
     </div>
@@ -608,61 +622,6 @@
   const VERSION_CHECK_MS = 3 * 60 * 1000;
   const RING = 2 * Math.PI * 54;
   const SLIDES = ["ember", "slate", "wine"];
-  /* Keep in sync with body[data-slide] rules. JS reapplies after each swap
-     so a wedged @property interpolation cannot leave the mural on wine-void. */
-  const PALETTES = {
-    ember: {
-      "--bg": "#16161c",
-      "--floor-top": "#1c1c24",
-      "--floor-mid": "#24222c",
-      "--floor-bot": "#18181e",
-      "--ember": "rgba(112, 40, 52, 0.56)",
-      "--slate": "rgba(42, 50, 68, 0.50)",
-      "--ash": "rgba(40, 34, 40, 0.44)",
-      "--haze-a": "rgba(86, 32, 42, 0.30)",
-      "--haze-b": "rgba(36, 44, 62, 0.26)",
-      "--band-warm": "rgba(90, 30, 40, 0.42)",
-      "--band-cool": "rgba(34, 40, 56, 0.38)",
-      "--swell-warm": "rgba(98, 34, 44, 0.40)",
-      "--swell-cool": "rgba(30, 34, 48, 0.38)",
-      "--accent": "#8e3a42",
-      "--ring": "#6e3840"
-    },
-    slate: {
-      "--bg": "#161a22",
-      "--floor-top": "#1c222c",
-      "--floor-mid": "#222a34",
-      "--floor-bot": "#141820",
-      "--ember": "rgba(46, 60, 84, 0.54)",
-      "--slate": "rgba(32, 42, 60, 0.50)",
-      "--ash": "rgba(32, 38, 48, 0.44)",
-      "--haze-a": "rgba(40, 56, 80, 0.30)",
-      "--haze-b": "rgba(28, 36, 52, 0.26)",
-      "--band-warm": "rgba(48, 58, 78, 0.40)",
-      "--band-cool": "rgba(28, 40, 58, 0.38)",
-      "--swell-warm": "rgba(44, 58, 80, 0.38)",
-      "--swell-cool": "rgba(28, 36, 50, 0.36)",
-      "--accent": "#5a6a82",
-      "--ring": "#3e5068"
-    },
-    wine: {
-      "--bg": "#1c181c",
-      "--floor-top": "#261e24",
-      "--floor-mid": "#2e242c",
-      "--floor-bot": "#1a161a",
-      "--ember": "rgba(126, 48, 64, 0.58)",
-      "--slate": "rgba(86, 42, 58, 0.50)",
-      "--ash": "rgba(48, 34, 42, 0.44)",
-      "--haze-a": "rgba(134, 54, 50, 0.34)",
-      "--haze-b": "rgba(90, 40, 58, 0.30)",
-      "--band-warm": "rgba(116, 42, 56, 0.46)",
-      "--band-cool": "rgba(72, 38, 52, 0.40)",
-      "--swell-warm": "rgba(124, 48, 62, 0.44)",
-      "--swell-cool": "rgba(58, 36, 48, 0.38)",
-      "--accent": "#9a3e48",
-      "--ring": "#7a3040"
-    }
-  };
 
   const params = new URLSearchParams(location.search);
 
@@ -677,11 +636,7 @@
   let reloadArmed = false;
   let deepTimer = null;
   let slideTimer = null;
-  let slideWatch = null;
-  let slideGen = 0;
   let slideIdx = 0;
-  let slideSwaps = 0;
-  let lastSlideAt = 0;
 
   function raw(name) {
     const v = params.get(name);
@@ -769,14 +724,14 @@
     const start = raw("slide");
     const startIdx = SLIDES.indexOf(start);
     slideIdx = startIdx >= 0 ? startIdx : 0;
-    paintSlide(SLIDES[slideIdx], false);
+    b.dataset.slide = SLIDES[slideIdx];
   }
 
   function paintHud() {
     if (!flags.hud) return;
     hudEl.hidden = false;
     hudEl.textContent = [
-      "hearth v2.1",
+      "hearth v2",
       "floor:" + (flags.floor ? "on" : "off"),
       "deeper:" + flags.deeper,
       "waves:" + flags.waves,
@@ -785,97 +740,25 @@
       "drift:" + (flags.drift ? "on" : "off"),
       "peaks:" + flags.peaks,
       "slides:" + (flags.slides ? SLIDES[slideIdx] + "/" + flags.slideDur + "s" : "off"),
-      "swaps:" + slideSwaps,
       "apl:" + (flags.apl ? "on" : "off")
     ].join("  ·  ");
   }
 
-  function applyPalette(name, snap) {
-    const b = document.body;
-    const pal = PALETTES[name] || PALETTES.ember;
-    if (snap) b.classList.add("slide-snap");
-    b.dataset.slide = name;
-    Object.keys(pal).forEach(function (key) {
-      b.style.setProperty(key, pal[key]);
-    });
-    if (snap) {
-      void b.offsetWidth;
-      window.setTimeout(function () {
-        b.classList.remove("slide-snap");
-      }, 40);
-    }
-  }
-
-  function paintSlide(name, dissolve) {
-    const b = document.body;
-    applyPalette(name, !dissolve);
-    if (dissolve) {
-      b.classList.add("slide-swap");
-      window.setTimeout(function () {
-        b.classList.remove("slide-swap");
-        applyPalette(name, false);
-      }, 1600);
-      window.setTimeout(function () {
-        applyPalette(name, false);
-      }, 3700);
-    }
-    paintHud();
-  }
-
   function nextSlide() {
     if (!flags.slides) return;
-    try {
-      slideIdx = (slideIdx + 1) % SLIDES.length;
-      slideSwaps += 1;
-      lastSlideAt = Date.now();
-      paintSlide(SLIDES[slideIdx], true);
-    } catch (err) {
-      lastSlideAt = Date.now();
-    }
-  }
-
-  function clearSlideClocks() {
-    if (slideTimer != null) {
-      clearTimeout(slideTimer);
-      slideTimer = null;
-    }
-    if (slideWatch != null) {
-      clearInterval(slideWatch);
-      slideWatch = null;
-    }
+    slideIdx = (slideIdx + 1) % SLIDES.length;
+    document.body.classList.add("slide-swap");
+    document.body.dataset.slide = SLIDES[slideIdx];
+    paintHud();
+    window.setTimeout(function () {
+      document.body.classList.remove("slide-swap");
+    }, 1600);
   }
 
   function armSlides() {
     if (!flags.slides) return;
-    const gen = ++slideGen;
-    const due = flags.slideDur * 1000;
-    const grace = Math.max(4000, Math.round(due * 0.25));
-    clearSlideClocks();
-    if (!lastSlideAt) lastSlideAt = Date.now();
-
-    function tick() {
-      if (gen !== slideGen) return;
-      nextSlide();
-      slideTimer = setTimeout(tick, due);
-    }
-
-    const elapsed = Date.now() - lastSlideAt;
-    const wait = elapsed >= due ? 250 : Math.max(250, due - elapsed);
-    slideTimer = setTimeout(tick, wait);
-
-    slideWatch = setInterval(function () {
-      if (gen !== slideGen || !flags.slides) return;
-      if (Date.now() - lastSlideAt > due + grace) {
-        nextSlide();
-        clearTimeout(slideTimer);
-        slideTimer = setTimeout(tick, due);
-      }
-    }, Math.min(5000, Math.max(1000, Math.round(due / 4))));
-  }
-
-  function onVisible() {
-    if (document.hidden) return;
-    armSlides();
+    if (slideTimer) clearInterval(slideTimer);
+    slideTimer = setInterval(nextSlide, flags.slideDur * 1000);
   }
 
   function chicagoParts(d) {
@@ -974,10 +857,6 @@
       }
     } catch (e) {}
   }
-
-  document.addEventListener("visibilitychange", onVisible);
-  window.addEventListener("pageshow", onVisible);
-  window.addEventListener("focus", onVisible);
 
   applyFlags();
   paintHud();
