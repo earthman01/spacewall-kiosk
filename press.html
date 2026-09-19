@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="PRESS" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#070708" />
+  <meta name="color-scheme" content="dark" />
+  <title>PRESS</title>
+  <script src="./deck.js?h=91ce108086ee" defer></script>
+  <style>
+    :root {
+      --bg: #070708;
+      --paper: #121218;
+      --text: #d4d4dc;
+      --muted: #6a6a74;
+      --dim: #3a3a42;
+      --rule: #1c1c22;
+      --accent: #8a8a94;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    #orbit {
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      animation: pixel-orbit 220s ease-in-out infinite alternate;
+    }
+
+    header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 22px 28px 14px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.34em;
+      font-size: 15px;
+      color: #e4e4ea;
+    }
+
+    .brand span { color: #8e8e98; }
+
+    .mast {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .tag, .hint {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .stamp {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #2e2e34;
+    }
+
+    a {
+      color: #7a7a84;
+      text-decoration: none;
+    }
+
+    a:hover { color: #c4c4cc; }
+
+    #field {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      align-items: start;
+      align-content: start;
+      gap: 8px 14px;
+      padding: 22px 26px 48px;
+      overflow: hidden;
+    }
+
+    .card {
+      position: relative;
+      grid-column: span 4;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 38%),
+        var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 15px 17px 13px;
+      opacity: 0;
+      transform: translate3d(0, 16px, 0) rotate(var(--rot, 0deg));
+      transition: opacity 2.4s ease, transform 2.4s ease, border-color 0.4s ease;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.38);
+    }
+
+    .card.w3 { grid-column: span 3; }
+    .card.w4 { grid-column: span 4; }
+    .card.w5 { grid-column: span 5; }
+    .card.w6 { grid-column: span 6; }
+
+    /* Uneven clipping hang — newspaper wall, not a status grid. */
+    .card:nth-child(3) { margin-top: 36px; }
+    .card:nth-child(4) { margin-top: 10px; }
+    .card:nth-child(6) { margin-top: 28px; }
+    .card:nth-child(7) { margin-top: 18px; }
+    .card:nth-child(9) { margin-top: 24px; }
+
+    .card.in {
+      opacity: 0.92;
+      transform: translate3d(0, 0, 0) rotate(var(--rot, 0deg));
+    }
+
+    .card.in.settled {
+      animation: paper-drift var(--drift, 56s) ease-in-out infinite alternate;
+    }
+
+    .card.held,
+    body.reading .card.in.settled {
+      animation-play-state: paused;
+    }
+
+    .card.held {
+      opacity: 1;
+      border-color: #2a2a32;
+    }
+
+    .ph {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #3a3a42;
+    }
+
+    .kicker {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 9px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1a1a20;
+    }
+
+    .card h2 {
+      font-size: clamp(16px, 1.7vw, 26px);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: #d8d8e0;
+      max-width: 22ch;
+    }
+
+    .card.lead h2 {
+      font-size: clamp(22px, 2.4vw, 36px);
+      max-width: 18ch;
+    }
+
+    .card p {
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #8a8a94;
+      max-width: 42ch;
+    }
+
+    .card.post p {
+      font-size: 14px;
+      color: #b0b0ba;
+      letter-spacing: 0.01em;
+    }
+
+    .byline {
+      margin-top: 12px;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #3e3e46;
+    }
+
+    .ver {
+      position: fixed;
+      left: calc(12px + env(safe-area-inset-left));
+      bottom: calc(8px + env(safe-area-inset-bottom));
+      z-index: 4;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #3a3a42;
+      pointer-events: none;
+    }
+
+    @keyframes pixel-orbit {
+      from { transform: translate3d(-6px, -5px, 0); }
+      to { transform: translate3d(7px, 6px, 0); }
+    }
+
+    @keyframes paper-drift {
+      from { transform: translate3d(-5px, -4px, 0) rotate(var(--rot, 0deg)); }
+      to { transform: translate3d(6px, 5px, 0) rotate(var(--rot, 0deg)); }
+    }
+
+    @media (max-width: 1100px) {
+      #field { grid-template-columns: repeat(6, 1fr); overflow: auto; }
+      .card, .card.w3, .card.w4, .card.w5, .card.w6 { grid-column: span 3; }
+      .card.lead { grid-column: span 6; }
+      .card:nth-child(n) { margin-top: 0; }
+    }
+
+    @media (max-width: 720px) {
+      header { padding: 16px 16px 10px; }
+      #field {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 14px 14px 52px;
+        overflow: auto;
+      }
+      .card, .card.w3, .card.w4, .card.w5, .card.w6, .card.lead {
+        grid-column: span 1;
+        margin-top: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #orbit { animation-duration: 400s; }
+      .card.in.settled { animation-duration: 120s; }
+    }
+  </style>
+</head>
+<body>
+  <div id="orbit">
+    <header>
+      <div class="brand">PRE<span>SS</span></div>
+      <div class="mast">
+        <div class="tag">floating newspaper</div>
+        <div class="stamp">placeholders · look only</div>
+        <div class="hint">
+          <a href="./">spacewall</a>
+          ·
+          <a href="./hearth.html">hearth</a>
+          ·
+          <a href="./wave.html">wave</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="field" aria-label="Placeholder newspaper wall">
+      <article class="card brief w4" style="--rot:-2.2deg; --drift:58s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Brief · Morning</div>
+        <h2>Saturday in Chicago</h2>
+        <p>Cool start. The panel stays on. Glanceable subjects only — no live wire yet.</p>
+        <div class="byline">placeholder · morning brief</div>
+      </article>
+
+      <article class="card lead subject w5" style="--rot:1.6deg; --drift:64s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Subject · Wall</div>
+        <h2>The newspaper should float, not refresh in your face</h2>
+        <p>Cards fade in, then sit. No rugpull while someone is reading.</p>
+        <div class="byline">placeholder · lead</div>
+      </article>
+
+      <article class="card post w3" style="--rot:2.4deg; --drift:50s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Post · @desk</div>
+        <p>look first. substance later. do not fetch until the TV is actually looking.</p>
+        <div class="byline">placeholder · hot post</div>
+      </article>
+
+      <article class="card post w4" style="--rot:-1.8deg; --drift:70s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Post · @room</div>
+        <p>55" is a living room, not a SOC. iPads already have the ops grid.</p>
+        <div class="byline">placeholder · hot post</div>
+      </article>
+
+      <article class="card subject w4" style="--rot:2.1deg; --drift:54s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Subject · Care</div>
+        <h2>Do not dim to black</h2>
+        <p>Motion is the care strategy. Soft silver, near-black, sparse chrome.</p>
+        <div class="byline">placeholder · subject</div>
+      </article>
+
+      <article class="card brief w4" style="--rot:-2.6deg; --drift:62s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Brief · Deck</div>
+        <h2>SPACEWALL · HEARTH · WAVE · PRESS</h2>
+        <p>Swipe on iPad. Pin the OLED if a swipe ever leaks.</p>
+        <div class="byline">placeholder · morning brief</div>
+      </article>
+
+      <article class="card post w3" style="--rot:1.7deg; --drift:48s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Post · @mark</div>
+        <p>stable while focused. fade the ones he is not looking at.</p>
+        <div class="byline">placeholder · hot post</div>
+      </article>
+
+      <article class="card subject w5" style="--rot:-1.5deg; --drift:66s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Subject · Next</div>
+        <h2>Visibility-gated feed</h2>
+        <p>When this page is actually up on the TV — and only then — fetch. Hidden tabs stay quiet.</p>
+        <div class="byline">placeholder · subject</div>
+      </article>
+
+      <article class="card brief w4" style="--rot:2.3deg; --drift:52s">
+        <div class="ph">placeholder</div>
+        <div class="kicker">Brief · Mix</div>
+        <h2>Morning subjects + hot posts</h2>
+        <p>Two textures on one wall. Fake copy so the layout can be tweaked in the room.</p>
+        <div class="byline">placeholder · morning brief</div>
+      </article>
+    </main>
+  </div>
+  <div id="ver" class="ver" data-portal="PRESS">PRESS 26.38.5</div>
+
+  <script>
+(function () {
+  const VERSION_CHECK_MS = 3 * 60 * 1000;
+  const ENTER_MS = 2400;
+  const STAGGER_MS = 280;
+
+  const field = document.getElementById("field");
+  const cards = Array.prototype.slice.call(field.querySelectorAll(".card"));
+  let loadedVersion = null;
+  let reloadArmed = false;
+  let holdTimer = null;
+
+  function hold() {
+    document.body.classList.add("reading");
+    if (holdTimer) clearTimeout(holdTimer);
+  }
+
+  function releaseSoon() {
+    if (holdTimer) clearTimeout(holdTimer);
+    holdTimer = setTimeout(function () {
+      if (field.matches(":hover") || field.contains(document.activeElement)) return;
+      document.body.classList.remove("reading");
+      cards.forEach(function (card) { card.classList.remove("held"); });
+    }, 900);
+  }
+
+  cards.forEach(function (card, i) {
+    window.setTimeout(function () {
+      card.classList.add("in");
+      window.setTimeout(function () {
+        card.classList.add("settled");
+      }, ENTER_MS);
+    }, 180 + i * STAGGER_MS);
+  });
+
+  field.addEventListener("pointerenter", hold);
+  field.addEventListener("pointerleave", releaseSoon);
+  field.addEventListener("pointerover", function (ev) {
+    const card = ev.target.closest(".card");
+    if (!card) return;
+    cards.forEach(function (c) { c.classList.toggle("held", c === card); });
+    hold();
+  });
+  field.addEventListener("focusin", hold);
+  field.addEventListener("focusout", releaseSoon);
+
+  function versionCheckMs() {
+    try {
+      const raw = new URLSearchParams(location.search).get("vcheck");
+      const n = raw ? Number(raw) : NaN;
+      if (Number.isFinite(n) && n >= 1000) return n;
+    } catch (e) {}
+    return VERSION_CHECK_MS;
+  }
+
+  function paintStamp(data) {
+    const el = document.getElementById("ver");
+    if (!el || !data || !data.label) return;
+    const name = el.getAttribute("data-portal") || "PRESS";
+    el.textContent = name + " " + data.label;
+  }
+
+  async function fetchVersion() {
+    const url = "./version.json?t=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data || typeof data.v !== "string" || !data.v) {
+      throw new Error("bad version");
+    }
+    paintStamp(data);
+    return data.v;
+  }
+
+  async function captureVersion() {
+    try {
+      loadedVersion = await fetchVersion();
+    } catch (e) {
+      loadedVersion = null;
+    }
+  }
+
+  async function checkVersion() {
+    if (reloadArmed) return;
+    try {
+      const remote = await fetchVersion();
+      if (loadedVersion == null) {
+        loadedVersion = remote;
+        return;
+      }
+      if (remote !== loadedVersion) {
+        reloadArmed = true;
+        location.reload();
+      }
+    } catch (e) {}
+  }
+
+  captureVersion();
+  setInterval(checkVersion, versionCheckMs());
+})();
+  </script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 /* SPACEWALL portal deck — iPad swipe across same-origin pages.
  *
  * Order (left → right):
- *   SPACEWALL  ↔  HEARTH  ↔  WAVE
+ *   SPACEWALL  ↔  HEARTH  ↔  WAVE  ↔  PRESS
  *
- * Later pages: append to PAGES (PRESS, then REEL). Add the new html
+ * Later pages: append to PAGES (REEL). Add the new html
  * to write_version.py HTML_SOURCES, pages.yml copy list, and this script
  * tag on that page:  <script src="./deck.js" defer></script>
  * Then run:  python3 scripts/write_version.py
@@ -17,8 +17,8 @@
   const PAGES = [
     { id: "spacewall", file: "index.html", label: "SPACEWALL" },
     { id: "hearth", file: "hearth.html", label: "HEARTH" },
-    { id: "wave", file: "wave.html", label: "WAVE" }
-    // { id: "press", file: "press.html", label: "PRESS" },
+    { id: "wave", file: "wave.html", label: "WAVE" },
+    { id: "press", file: "press.html", label: "PRESS" }
     // { id: "reel", file: "reel.html", label: "REEL" }
   ];
 
