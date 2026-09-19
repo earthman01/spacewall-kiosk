@@ -10,7 +10,28 @@ If Chrome already installed SPACEWALL from the site root (directory scope), unin
 
 Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes). `v` is a content hash of `index.html` (and any other client assets listed in `scripts/write_version.py`). Deploy Pages regenerates `version.json` into the Pages artifact; the committed file on `main` must match, because GitHub Pages currently publishes the branch. After changing kiosk code, run `python3 scripts/write_version.py`.
 
+**Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
+
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.38.4` · `HEARTH 26.38.4` · `WAVE 26.38.4`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
+
+## iPad deck (swipe)
+
+On iPad / phone, swipe left or right to move between viewing systems. Shared script: [`deck.js`](./deck.js). Each portal keeps its own URL, look, and `version.json` watcher.
+
+**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`)
+
+**Add PRESS / REEL later:** append a row to `PAGES` in `deck.js`, create the html with the same `<script src="./deck.js" defer></script>` hook, add the file to `HTML_SOURCES` in `scripts/write_version.py` and the copy list in `.github/workflows/pages.yml`, then `python3 scripts/write_version.py`.
+
+| Flag | Default | Notes |
+| --- | --- | --- |
+| `?swipe=0` / `?deck=0` | see below | Always off. OLED escape hatch — pin the living-room URL if a swipe ever leaks |
+| `?swipe=1` / `?deck=1` | see below | Always on (desktop prove-out; arrows also work) |
+
+Default is **on** for coarse-pointer devices (iPad, phone), including iPad + Magic Keyboard. Default is **off** on a wide canvas (≥1400px) or `display-mode: fullscreen` when there is no coarse pointer — the 55" HEARTH Mac should stay on HEARTH. Iframes and `?embed=1` (WAVE wrapping SPACEWALL) stay off so the inner board cannot swipe away.
+
+Recommended OLED URL stays bare `hearth.html`. Optional belt-and-suspenders: `hearth.html?swipe=0`.
 
 Live: [earthman01.github.io/spacewall-kiosk](https://earthman01.github.io/spacewall-kiosk/)
 
@@ -56,7 +77,8 @@ All kitchen-sink. Omitted = recommended default. `0` / `off` yanks that piece wi
 | `?peaks=0` | modest | `0` allows a brighter face for A/B — not for the panel |
 | `?slides=0` | on | Rotate ember → slate → wine (same charcoal-room band). `?slides=fast` or `?slidedur=12` for prove-out. `?slide=slate` starts on a phase |
 | `?apl=0` | on | Micro brightness breathe so ASBL does not lock |
-| `?hud=1` | off | Tiny flag strip on the floor |
+| `?hud=1` | off | Tiny flag strip on the floor (includes `swipe:on/off`) |
+| `?swipe=0` / `?deck=0` | off on OLED / desktop | Disable iPad deck. See [iPad deck](#ipad-deck-swipe) |
 
 Recommended living-room URL is bare `hearth.html` (all of the above on, slides included until Mark prunes).
 

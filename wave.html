@@ -10,6 +10,7 @@
   <meta name="theme-color" content="#070708" />
   <meta name="color-scheme" content="dark" />
   <title>SPACEWALL · WAVE</title>
+  <script src="./deck.js?h=b98aed2ee2f1" defer></script>
   <style>
     :root {
       --bg: #070708;
@@ -108,6 +109,20 @@
     }
 
     .hint { color: var(--dim); }
+
+    .bottom-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .ver {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #2c2c32;
+    }
 
     .stage {
       flex: 1;
@@ -341,7 +356,10 @@
         Phase A · browser fullscreen portal. A web page cannot sit on top of Grok Bot.app.
         Phase B is a native always-on-top click-through overlay — not this file.
       </p>
-      <div class="hint">esc dismisses · ?idle=sec · <a href="./hearth.html">hearth</a> · <a href="./">wall</a></div>
+      <div class="bottom-meta">
+        <div id="ver" class="ver" data-portal="WAVE">WAVE 26.38.4</div>
+        <div class="hint">esc dismisses · ?idle=sec · <a href="./hearth.html">hearth</a> · <a href="./">wall</a></div>
+      </div>
     </div>
   </div>
 
@@ -514,6 +532,13 @@
     return VERSION_CHECK_MS;
   }
 
+  function paintStamp(data) {
+    const el = document.getElementById("ver");
+    if (!el || !data || !data.label) return;
+    const name = el.getAttribute("data-portal") || "WAVE";
+    el.textContent = name + " " + data.label;
+  }
+
   async function fetchVersion() {
     const url = "./version.json?t=" + Date.now();
     const res = await fetch(url, { cache: "no-store" });
@@ -522,6 +547,7 @@
     if (!data || typeof data.v !== "string" || !data.v) {
       throw new Error("bad version");
     }
+    paintStamp(data);
     return data.v;
   }
 
