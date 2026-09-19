@@ -163,14 +163,17 @@
 
     .tile .name {
       position: relative;
-      font-size: clamp(15px, 1.7vw, 22px);
+      font-size: clamp(14px, 1.45vw, 20px);
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
       z-index: 1;
+      line-height: 1.15;
+      max-height: 2.4em;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
 
     .tile[data-href] { cursor: pointer; }
