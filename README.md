@@ -4,6 +4,10 @@ Fierce dark outage kiosk — full-viewport SOC wall of live status tiles.
 
 Open on iPad Safari → Share → Add to Home Screen → Guided Access.
 
+Chrome / Mac Dock: install **SPACEWALL** from [`index.html`](https://earthman01.github.io/spacewall-kiosk/index.html) and **HEARTH** from [`hearth.html`](https://earthman01.github.io/spacewall-kiosk/hearth.html). They are two PWAs — different manifests, ids, file-path scopes, and Dock icons (red **S** vs ember **H**). SPACEWALL’s scope is only `index.html`, so `hearth.html` is not captured as “Open in SPACEWALL”.
+
+If Chrome already installed SPACEWALL from the site root (directory scope), uninstall that app first (`chrome://apps` → remove SPACEWALL), then reinstall from `index.html` and install HEARTH from `hearth.html`. The old install’s broad scope is what blocked a second Dock icon.
+
 Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes). `v` is a content hash of `index.html` (and any other client assets listed in `scripts/write_version.py`). Deploy Pages regenerates `version.json` into the Pages artifact; the committed file on `main` must match, because GitHub Pages currently publishes the branch. After changing kiosk code, run `python3 scripts/write_version.py`.
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
@@ -14,7 +18,7 @@ Live: [earthman01.github.io/spacewall-kiosk](https://earthman01.github.io/spacew
 
 The 55" Samsung is a **living-room portal**, not a second SPACEWALL — iPads already run the ops grid.
 
-**Fullscreen today:** [hearth.html](https://earthman01.github.io/spacewall-kiosk/hearth.html) (discreet `hearth` link on the wall). Chrome or Safari on the Mac → put that window on the OLED → **View → Enter Full Screen** (or F11). Across-the-room type: Chicago clock, date, a thin day-progress ring. Soft ember/charcoal waves stay alive so the panel is never a black-OFF TV.
+**Install as its own Dock app:** [hearth.html](https://earthman01.github.io/spacewall-kiosk/hearth.html) → Chrome menu → **Install HEARTH** (or Install page as app…). Then put that window on the OLED → **View → Enter Full Screen** (or F11). Across-the-room type: Chicago clock, date, a thin day-progress ring. Soft ember/charcoal waves stay alive so the panel is never a black-OFF TV. Discreet `hearth` link on the wall.
 
 ### OLED care
 
