@@ -120,6 +120,12 @@
       transform: translate3d(0, 16px, 0) rotate(var(--rot, 0deg));
       transition: opacity 2.4s ease, transform 2.4s ease, border-color 0.4s ease;
       box-shadow: 0 14px 40px rgba(0, 0, 0, 0.38);
+      cursor: pointer;
+    }
+
+    .card:focus-visible {
+      outline: 1px solid #3a3a44;
+      outline-offset: 2px;
     }
 
     .card.w3 { grid-column: span 3; }
@@ -144,7 +150,8 @@
     }
 
     .card.held,
-    body.reading .card.in.settled {
+    body.reading .card.in.settled,
+    body.reader-open .card.in.settled {
       animation-play-state: paused;
     }
 
@@ -221,6 +228,117 @@
       pointer-events: none;
     }
 
+    #reader {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      display: none;
+      align-items: stretch;
+      justify-content: center;
+      padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+      background: rgba(7, 7, 8, 0.78);
+    }
+
+    #reader.open { display: flex; }
+
+    body.reader-open { overflow: hidden; }
+    body.reader-open #orbit { pointer-events: none; }
+
+    .reader-sheet {
+      width: min(68ch, 100%);
+      max-height: 100%;
+      overflow: auto;
+      overscroll-behavior: contain;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 28%),
+        var(--paper);
+      border: 1px solid var(--rule);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+      padding: 22px 26px 28px;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .reader-bar {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .reader-back,
+    .reader-x {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .reader-back:hover,
+    .reader-x:hover { color: #d0d0d8; }
+
+    .reader-x {
+      display: none;
+      color: #5a5a64;
+    }
+
+    .reader-x.on { display: inline; }
+
+    .reader-kicker {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .reader-author {
+      font-size: clamp(22px, 2.6vw, 34px);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: #e2e2e8;
+    }
+
+    .reader-handle {
+      margin-top: 8px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6a6a74;
+    }
+
+    .reader-time {
+      margin-top: 8px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #4a4a52;
+    }
+
+    .reader-text {
+      margin-top: 22px;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #c8c8d0;
+      white-space: pre-wrap;
+    }
+
+    .reader-metrics {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px solid #1a1a20;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5a5a64;
+    }
+
     @keyframes pixel-orbit {
       from { transform: translate3d(-6px, -5px, 0); }
       to { transform: translate3d(7px, 6px, 0); }
@@ -250,6 +368,8 @@
         grid-column: span 1;
         margin-top: 0;
       }
+      .reader-sheet { padding: 18px 16px 24px; }
+      .reader-text { font-size: 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -275,7 +395,7 @@
       </div>
     </header>
 
-    <main id="field" aria-label="Placeholder newspaper wall">
+    <main id="field" aria-label="Newspaper wall">
       <article class="card brief w4" style="--rot:-2.2deg; --drift:58s">
         <div class="ph">placeholder</div>
         <div class="kicker">Brief · Morning</div>
@@ -346,53 +466,444 @@
       </article>
     </main>
   </div>
-  <div id="ver" class="ver" data-portal="PRESS">PRESS 26.38.5</div>
+  <div id="ver" class="ver" data-portal="PRESS">PRESS 26.38.6</div>
+
+  <div id="reader" role="dialog" aria-modal="true" aria-labelledby="reader-author" hidden>
+    <div class="reader-sheet">
+      <div class="reader-bar">
+        <button type="button" class="reader-back" id="reader-back">← wall</button>
+        <a class="reader-x" id="reader-x" href="#" rel="noopener noreferrer" target="_blank">Open on X</a>
+      </div>
+      <div class="reader-kicker" id="reader-kicker"></div>
+      <div class="reader-author" id="reader-author"></div>
+      <div class="reader-handle" id="reader-handle"></div>
+      <div class="reader-time" id="reader-time"></div>
+      <div class="reader-text" id="reader-text"></div>
+      <div class="reader-metrics" id="reader-metrics"></div>
+    </div>
+  </div>
 
   <script>
 (function () {
   const VERSION_CHECK_MS = 3 * 60 * 1000;
+  const FEED_REFRESH_MS = 20 * 60 * 1000;
   const ENTER_MS = 2400;
   const STAGGER_MS = 280;
+  const WIDTHS = ["w5", "w4", "w3", "w4", "w4", "w3", "w5", "w4", "w3"];
+  const ROT = [-2.2, 1.6, 2.4, -1.8, 2.1, -2.6, 1.7, -1.5, 2.3];
+  const DRIFT = [58, 64, 50, 70, 54, 62, 48, 66, 52];
 
   const field = document.getElementById("field");
-  const cards = Array.prototype.slice.call(field.querySelectorAll(".card"));
+  const stampEl = document.querySelector("header .stamp");
+  const reader = document.getElementById("reader");
+  const readerBack = document.getElementById("reader-back");
+  const readerX = document.getElementById("reader-x");
+  const readerKicker = document.getElementById("reader-kicker");
+  const readerAuthor = document.getElementById("reader-author");
+  const readerHandle = document.getElementById("reader-handle");
+  const readerTime = document.getElementById("reader-time");
+  const readerText = document.getElementById("reader-text");
+  const readerMetrics = document.getElementById("reader-metrics");
+
+  let cards = Array.prototype.slice.call(field.querySelectorAll(".card"));
+  let itemsById = new Map();
+  let lastGoodFeed = null;
+  let pendingFeed = null;
   let loadedVersion = null;
   let reloadArmed = false;
   let holdTimer = null;
+  let feedTimer = null;
+  let readerOpen = false;
+  let readerPushed = false;
+  let lastFocus = null;
+
+  function pageIsVisible() {
+    return document.visibilityState === "visible";
+  }
+
+  function wallCards() {
+    return Array.prototype.slice.call(field.querySelectorAll(".card"));
+  }
 
   function hold() {
+    if (readerOpen) return;
     document.body.classList.add("reading");
     if (holdTimer) clearTimeout(holdTimer);
   }
 
   function releaseSoon() {
+    if (readerOpen) return;
     if (holdTimer) clearTimeout(holdTimer);
     holdTimer = setTimeout(function () {
+      if (readerOpen) return;
       if (field.matches(":hover") || field.contains(document.activeElement)) return;
       document.body.classList.remove("reading");
-      cards.forEach(function (card) { card.classList.remove("held"); });
+      wallCards().forEach(function (card) { card.classList.remove("held"); });
     }, 900);
   }
 
-  cards.forEach(function (card, i) {
-    window.setTimeout(function () {
-      card.classList.add("in");
+  function revealCards(list) {
+    list.forEach(function (card, i) {
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
       window.setTimeout(function () {
-        card.classList.add("settled");
-      }, ENTER_MS);
-    }, 180 + i * STAGGER_MS);
-  });
+        card.classList.add("in");
+        window.setTimeout(function () {
+          card.classList.add("settled");
+        }, ENTER_MS);
+      }, 180 + i * STAGGER_MS);
+    });
+  }
+
+  revealCards(cards);
 
   field.addEventListener("pointerenter", hold);
   field.addEventListener("pointerleave", releaseSoon);
   field.addEventListener("pointerover", function (ev) {
     const card = ev.target.closest(".card");
-    if (!card) return;
-    cards.forEach(function (c) { c.classList.toggle("held", c === card); });
+    if (!card || readerOpen) return;
+    wallCards().forEach(function (c) { c.classList.toggle("held", c === card); });
     hold();
   });
   field.addEventListener("focusin", hold);
   field.addEventListener("focusout", releaseSoon);
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function compact(n) {
+    const x = Number(n);
+    if (!Number.isFinite(x)) return "0";
+    if (Math.abs(x) >= 1000000) return (x / 1000000).toFixed(x >= 10000000 ? 0 : 1).replace(/\.0$/, "") + "m";
+    if (Math.abs(x) >= 1000) return (x / 1000).toFixed(x >= 10000 ? 0 : 1).replace(/\.0$/, "") + "k";
+    return String(Math.round(x));
+  }
+
+  function formatMetrics(metrics) {
+    if (!metrics || typeof metrics !== "object") return "";
+    const parts = [];
+    if (metrics.likes != null) parts.push(compact(metrics.likes) + " likes");
+    if (metrics.replies != null) parts.push(compact(metrics.replies) + " replies");
+    if (metrics.impressions != null) parts.push(compact(metrics.impressions) + " impressions");
+    return parts.join(" · ");
+  }
+
+  function formatTime(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    const now = Date.now();
+    const delta = now - d.getTime();
+    if (delta >= 0 && delta < 60 * 1000) return "just now";
+    if (delta >= 0 && delta < 60 * 60 * 1000) return Math.floor(delta / 60000) + "m";
+    if (delta >= 0 && delta < 36 * 60 * 60 * 1000) return Math.floor(delta / 3600000) + "h";
+    try {
+      return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      }).format(d);
+    } catch (e) {
+      return d.toISOString();
+    }
+  }
+
+  function safeXUrl(url) {
+    if (!url || typeof url !== "string") return null;
+    try {
+      const u = new URL(url, location.href);
+      if (u.protocol !== "https:" && u.protocol !== "http:") return null;
+      const host = u.hostname.replace(/^www\./, "");
+      if (host !== "x.com" && host !== "twitter.com") return null;
+      return u.href;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function normalizeCard(raw, i) {
+    if (!raw || typeof raw !== "object") return null;
+    const text = String(raw.text || "").trim();
+    const subject = String(raw.subject || "").trim();
+    if (!text && !subject) return null;
+    const kind = raw.kind === "brief" ? "brief" : "post";
+    return {
+      id: String(raw.id || ("card-" + i)),
+      kind: kind,
+      subject: subject || (kind === "brief" ? "Brief" : "Post"),
+      author: String(raw.author || "").replace(/^@/, ""),
+      name: String(raw.name || raw.author || ""),
+      text: text,
+      url: safeXUrl(raw.url),
+      created_at: raw.created_at ? String(raw.created_at) : "",
+      metrics: raw.metrics && typeof raw.metrics === "object" ? raw.metrics : null
+    };
+  }
+
+  function excerpt(text, max) {
+    const t = String(text || "").replace(/\s+/g, " ").trim();
+    if (t.length <= max) return t;
+    return t.slice(0, max - 1).replace(/\s+\S*$/, "") + "…";
+  }
+
+  function itemFromPlaceholder(card) {
+    const kicker = ((card.querySelector(".kicker") || {}).textContent || "").trim();
+    const title = ((card.querySelector("h2") || {}).textContent || "").trim();
+    const body = ((card.querySelector("p") || {}).textContent || "").trim();
+    const byline = ((card.querySelector(".byline") || {}).textContent || "").trim();
+    const kind = card.classList.contains("brief") ? "brief" : "post";
+    return {
+      id: card.getAttribute("data-id") || "",
+      kind: kind,
+      subject: kicker || title || (kind === "brief" ? "Brief" : "Post"),
+      author: "press",
+      name: byline || "PRESS",
+      text: [title, body].filter(Boolean).join("\n\n"),
+      url: null,
+      created_at: "",
+      metrics: null
+    };
+  }
+
+  function itemForCard(card) {
+    const id = card.getAttribute("data-id");
+    if (id && itemsById.has(id)) return itemsById.get(id);
+    return itemFromPlaceholder(card);
+  }
+
+  function paintMast(feed) {
+    if (!stampEl) return;
+    if (!feed) {
+      stampEl.textContent = "placeholders · look only";
+      return;
+    }
+    const when = formatTime(feed.updated_at);
+    stampEl.textContent = when ? "feed · " + when : "feed · visible only";
+  }
+
+  function renderWall(feed) {
+    const items = (feed.cards || []).map(normalizeCard).filter(Boolean);
+    if (!items.length) return false;
+    itemsById = new Map();
+    items.forEach(function (item) { itemsById.set(item.id, item); });
+    field.innerHTML = items.map(function (item, i) {
+      const width = WIDTHS[i % WIDTHS.length];
+      const rot = ROT[i % ROT.length];
+      const drift = DRIFT[i % DRIFT.length];
+      const lead = i === 0 ? " lead" : "";
+      const kindClass = item.kind === "brief" ? "brief" : "post";
+      const kicker = item.kind === "brief"
+        ? "Brief · " + item.subject
+        : "Post · @" + (item.author || "press");
+      const title = item.kind === "brief"
+        ? "<h2>" + escapeHtml(item.subject) + "</h2>"
+        : (i === 0 ? "<h2>" + escapeHtml(item.subject) + "</h2>" : "");
+      const body = "<p>" + escapeHtml(excerpt(item.text, item.kind === "brief" ? 180 : 220)) + "</p>";
+      const who = item.name || item.author || "PRESS";
+      const when = formatTime(item.created_at);
+      const by = escapeHtml([who, when].filter(Boolean).join(" · "));
+      return (
+        '<article class="card ' + kindClass + lead + " " + width + '" style="--rot:' + rot +
+        "deg; --drift:" + drift + 's" data-id="' + escapeHtml(item.id) + '" data-kind="' +
+        item.kind + '">' +
+        '<div class="kicker">' + escapeHtml(kicker) + "</div>" +
+        title + body +
+        '<div class="byline">' + by + "</div>" +
+        "</article>"
+      );
+    }).join("");
+    cards = wallCards();
+    revealCards(cards);
+    paintMast(feed);
+    field.setAttribute("aria-label", "Newspaper wall");
+    return true;
+  }
+
+  function applyFeed(feed) {
+    if (readerOpen) {
+      pendingFeed = feed;
+      lastGoodFeed = feed;
+      return;
+    }
+    if (renderWall(feed)) lastGoodFeed = feed;
+  }
+
+  function openReader(item) {
+    if (!item) return;
+    lastFocus = document.activeElement;
+    readerKicker.textContent = item.kind === "brief"
+      ? "Brief · " + (item.subject || "Brief")
+      : (item.subject ? "Post · " + item.subject : "Post");
+    readerAuthor.textContent = item.name || item.author || "PRESS";
+    readerHandle.textContent = item.author ? "@" + item.author : "";
+    readerTime.textContent = formatTime(item.created_at);
+    readerText.textContent = item.text || "";
+    readerMetrics.textContent = formatMetrics(item.metrics);
+    readerMetrics.hidden = !readerMetrics.textContent;
+    const xurl = item.kind === "brief" ? null : safeXUrl(item.url);
+    if (xurl) {
+      readerX.href = xurl;
+      readerX.classList.add("on");
+    } else {
+      readerX.removeAttribute("href");
+      readerX.classList.remove("on");
+    }
+    reader.hidden = false;
+    reader.classList.add("open");
+    document.body.classList.add("reader-open", "reading");
+    readerOpen = true;
+    if (!readerPushed) {
+      try {
+        history.pushState({ pressReader: item.id || true }, "", "#read");
+        readerPushed = true;
+      } catch (e) {
+        readerPushed = false;
+      }
+    }
+    readerBack.focus();
+  }
+
+  function closeReader(fromPop) {
+    if (!readerOpen) return;
+    readerOpen = false;
+    reader.classList.remove("open");
+    reader.hidden = true;
+    document.body.classList.remove("reader-open");
+    if (!fromPop && readerPushed) {
+      readerPushed = false;
+      try { history.back(); } catch (e) {}
+    } else {
+      readerPushed = false;
+      if (location.hash === "#read") {
+        try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+      }
+    }
+    if (pendingFeed) {
+      const next = pendingFeed;
+      pendingFeed = null;
+      applyFeed(next);
+    }
+    releaseSoon();
+    if (lastFocus && typeof lastFocus.focus === "function") {
+      try { lastFocus.focus(); } catch (e) {}
+    }
+  }
+
+  field.addEventListener("click", function (ev) {
+    if (ev.target.closest("a")) return;
+    const card = ev.target.closest(".card");
+    if (!card) return;
+    ev.preventDefault();
+    openReader(itemForCard(card));
+  });
+
+  field.addEventListener("keydown", function (ev) {
+    if (ev.key !== "Enter" && ev.key !== " ") return;
+    const card = ev.target.closest(".card");
+    if (!card) return;
+    ev.preventDefault();
+    openReader(itemForCard(card));
+  });
+
+  readerBack.addEventListener("click", function (ev) {
+    ev.preventDefault();
+    closeReader();
+  });
+
+  reader.addEventListener("click", function (ev) {
+    if (ev.target === reader) closeReader();
+  });
+
+  ["pointerdown", "pointermove", "pointerup", "pointercancel", "touchstart"].forEach(function (type) {
+    reader.addEventListener(type, function (ev) {
+      ev.stopPropagation();
+    });
+  });
+
+  window.addEventListener("popstate", function () {
+    if (readerOpen) closeReader(true);
+  });
+
+  window.addEventListener("keydown", function (ev) {
+    if (!readerOpen) return;
+    if (ev.key === "Escape") {
+      ev.preventDefault();
+      ev.stopPropagation();
+      closeReader();
+      return;
+    }
+    if (ev.key === "ArrowLeft" || ev.key === "ArrowRight") {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+  }, true);
+
+  if (location.hash === "#read") {
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  }
+
+  function validFeed(data) {
+    return data && typeof data === "object" && Array.isArray(data.cards) && data.cards.length > 0;
+  }
+
+  function feedUrl() {
+    const q = new URLSearchParams();
+    q.set("t", String(Date.now()));
+    if (loadedVersion) q.set("v", loadedVersion);
+    return "./press-feed.json?" + q.toString();
+  }
+
+  async function loadFeed() {
+    if (!pageIsVisible()) return;
+    try {
+      const res = await fetch(feedUrl(), { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (!validFeed(data)) throw new Error("bad feed");
+      applyFeed(data);
+    } catch (e) {
+      if (lastGoodFeed) applyFeed(lastGoodFeed);
+    }
+  }
+
+  function disarmFeedRefresh() {
+    if (feedTimer) {
+      clearInterval(feedTimer);
+      feedTimer = null;
+    }
+  }
+
+  function armFeedRefresh() {
+    disarmFeedRefresh();
+    if (!pageIsVisible()) return;
+    feedTimer = setInterval(function () {
+      if (!pageIsVisible()) {
+        disarmFeedRefresh();
+        return;
+      }
+      loadFeed();
+    }, FEED_REFRESH_MS);
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (pageIsVisible()) {
+      loadFeed();
+      armFeedRefresh();
+    } else {
+      disarmFeedRefresh();
+    }
+  });
+
+  if (pageIsVisible()) {
+    loadFeed();
+    armFeedRefresh();
+  }
 
   function versionCheckMs() {
     try {
