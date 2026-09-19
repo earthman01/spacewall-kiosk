@@ -14,7 +14,7 @@
   <style>
     :root {
       --bg: #070708;
-      --paper: #101014;
+      --paper: #121218;
       --text: #d4d4dc;
       --muted: #6a6a74;
       --dim: #3a3a42;
@@ -100,9 +100,9 @@
       min-height: 0;
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      grid-auto-rows: minmax(0, auto);
+      align-items: start;
       align-content: start;
-      gap: 16px 18px;
+      gap: 8px 14px;
       padding: 22px 26px 48px;
       overflow: hidden;
     }
@@ -111,21 +111,28 @@
       position: relative;
       grid-column: span 4;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 38%),
         var(--paper);
       border: 1px solid var(--rule);
-      border-radius: 3px;
-      padding: 16px 18px 14px;
+      border-radius: 2px;
+      padding: 15px 17px 13px;
       opacity: 0;
       transform: translate3d(0, 16px, 0) rotate(var(--rot, 0deg));
       transition: opacity 2.4s ease, transform 2.4s ease, border-color 0.4s ease;
-      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.32);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.38);
     }
 
     .card.w3 { grid-column: span 3; }
     .card.w4 { grid-column: span 4; }
     .card.w5 { grid-column: span 5; }
     .card.w6 { grid-column: span 6; }
+
+    /* Uneven clipping hang — newspaper wall, not a status grid. */
+    .card:nth-child(3) { margin-top: 36px; }
+    .card:nth-child(4) { margin-top: 10px; }
+    .card:nth-child(6) { margin-top: 28px; }
+    .card:nth-child(7) { margin-top: 18px; }
+    .card:nth-child(9) { margin-top: 24px; }
 
     .card.in {
       opacity: 0.92;
@@ -153,7 +160,7 @@
       font-size: 8px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #2a2a30;
+      color: #3a3a42;
     }
 
     .kicker {
@@ -161,7 +168,9 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 8px;
+      margin-bottom: 9px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1a1a20;
     }
 
     .card h2 {
@@ -223,9 +232,10 @@
     }
 
     @media (max-width: 1100px) {
-      #field { grid-template-columns: repeat(6, 1fr); }
+      #field { grid-template-columns: repeat(6, 1fr); overflow: auto; }
       .card, .card.w3, .card.w4, .card.w5, .card.w6 { grid-column: span 3; }
       .card.lead { grid-column: span 6; }
+      .card:nth-child(n) { margin-top: 0; }
     }
 
     @media (max-width: 720px) {
@@ -233,11 +243,12 @@
       #field {
         grid-template-columns: 1fr;
         gap: 12px;
-        padding: 14px 14px 44px;
+        padding: 14px 14px 52px;
         overflow: auto;
       }
       .card, .card.w3, .card.w4, .card.w5, .card.w6, .card.lead {
         grid-column: span 1;
+        margin-top: 0;
       }
     }
 
@@ -265,7 +276,7 @@
     </header>
 
     <main id="field" aria-label="Placeholder newspaper wall">
-      <article class="card brief w4" style="--rot:-1.1deg; --drift:58s">
+      <article class="card brief w4" style="--rot:-2.2deg; --drift:58s">
         <div class="ph">placeholder</div>
         <div class="kicker">Brief · Morning</div>
         <h2>Saturday in Chicago</h2>
@@ -273,7 +284,7 @@
         <div class="byline">placeholder · morning brief</div>
       </article>
 
-      <article class="card lead subject w5" style="--rot:0.7deg; --drift:64s">
+      <article class="card lead subject w5" style="--rot:1.6deg; --drift:64s">
         <div class="ph">placeholder</div>
         <div class="kicker">Subject · Wall</div>
         <h2>The newspaper should float, not refresh in your face</h2>
@@ -281,21 +292,21 @@
         <div class="byline">placeholder · lead</div>
       </article>
 
-      <article class="card post w3" style="--rot:1.3deg; --drift:50s">
+      <article class="card post w3" style="--rot:2.4deg; --drift:50s">
         <div class="ph">placeholder</div>
         <div class="kicker">Post · @desk</div>
         <p>look first. substance later. do not fetch until the TV is actually looking.</p>
         <div class="byline">placeholder · hot post</div>
       </article>
 
-      <article class="card post w4" style="--rot:-0.8deg; --drift:70s">
+      <article class="card post w4" style="--rot:-1.8deg; --drift:70s">
         <div class="ph">placeholder</div>
         <div class="kicker">Post · @room</div>
         <p>55" is a living room, not a SOC. iPads already have the ops grid.</p>
         <div class="byline">placeholder · hot post</div>
       </article>
 
-      <article class="card subject w4" style="--rot:1.0deg; --drift:54s">
+      <article class="card subject w4" style="--rot:2.1deg; --drift:54s">
         <div class="ph">placeholder</div>
         <div class="kicker">Subject · Care</div>
         <h2>Do not dim to black</h2>
@@ -303,7 +314,7 @@
         <div class="byline">placeholder · subject</div>
       </article>
 
-      <article class="card brief w4" style="--rot:-1.4deg; --drift:62s">
+      <article class="card brief w4" style="--rot:-2.6deg; --drift:62s">
         <div class="ph">placeholder</div>
         <div class="kicker">Brief · Deck</div>
         <h2>SPACEWALL · HEARTH · WAVE · PRESS</h2>
@@ -311,14 +322,14 @@
         <div class="byline">placeholder · morning brief</div>
       </article>
 
-      <article class="card post w3" style="--rot:0.5deg; --drift:48s">
+      <article class="card post w3" style="--rot:1.7deg; --drift:48s">
         <div class="ph">placeholder</div>
         <div class="kicker">Post · @mark</div>
         <p>stable while focused. fade the ones he is not looking at.</p>
         <div class="byline">placeholder · hot post</div>
       </article>
 
-      <article class="card subject w5" style="--rot:-0.6deg; --drift:66s">
+      <article class="card subject w5" style="--rot:-1.5deg; --drift:66s">
         <div class="ph">placeholder</div>
         <div class="kicker">Subject · Next</div>
         <h2>Visibility-gated feed</h2>
@@ -326,7 +337,7 @@
         <div class="byline">placeholder · subject</div>
       </article>
 
-      <article class="card brief w4" style="--rot:1.2deg; --drift:52s">
+      <article class="card brief w4" style="--rot:2.3deg; --drift:52s">
         <div class="ph">placeholder</div>
         <div class="kicker">Brief · Mix</div>
         <h2>Morning subjects + hot posts</h2>
