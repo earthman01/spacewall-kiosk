@@ -1,0 +1,26 @@
+{
+  "name": "SPACEWALL",
+  "short_name": "SPACEWALL",
+  "description": "Fierce dark outage kiosk — live status tiles.",
+  "id": "/spacewall-kiosk/spacewall",
+  "start_url": "./index.html",
+  "scope": "./index.html",
+  "display": "standalone",
+  "background_color": "#070708",
+  "theme_color": "#000000",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "./icons/spacewall-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/spacewall-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

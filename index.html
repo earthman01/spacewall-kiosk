@@ -10,6 +10,17 @@
   <meta name="theme-color" content="#000000" />
   <meta name="color-scheme" content="dark" />
   <title>SPACEWALL</title>
+  <link rel="manifest" href="./spacewall.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/spacewall-192.png" />
+  <link rel="apple-touch-icon" href="./icons/spacewall-192.png" />
+  <script>
+    (function () {
+      var path = location.pathname;
+      if (/\/index\.html$/i.test(path)) return;
+      var base = /\/$/.test(path) ? path : path + "/";
+      location.replace(base + "index.html" + location.search + location.hash);
+    })();
+  </script>
   <style>
     :root {
       --bg: #070708;
