@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="SPACEWALL WAVE" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#070708" />
+  <meta name="color-scheme" content="dark" />
+  <title>SPACEWALL · WAVE</title>
+  <style>
+    :root {
+      --bg: #070708;
+      --text: #e8e8ec;
+      --muted: #6a6a74;
+      --red-fierce: #ff0033;
+      --dim: #2c2c32;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .room {
+      position: relative;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 32px 22px;
+    }
+
+    .top, .bottom {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      animation: drift-chrome 64s ease-in-out infinite alternate;
+    }
+
+    .bottom { align-items: flex-end; }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      font-size: 15px;
+      color: #f2f2f5;
+    }
+
+    .brand span { color: var(--red-fierce); }
+
+    .tag, .hint, .honesty {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .honesty {
+      max-width: 52ch;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      line-height: 1.45;
+      color: #4a4a52;
+    }
+
+    .hint { color: var(--dim); }
+
+    .stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      animation: drift-stage 80s ease-in-out infinite alternate;
+    }
+
+    .clock {
+      font-size: clamp(42px, 8vw, 96px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      font-variant-numeric: tabular-nums;
+      color: #d8d8de;
+    }
+
+    .status {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    a {
+      color: #8a8a94;
+      text-decoration: none;
+    }
+
+    a:hover { color: #c8c8d0; }
+
+    #wave {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2.4s ease;
+    }
+
+    #wave.on {
+      opacity: 1;
+    }
+
+    #wave.out {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    #wave:not(.on):not(.out) .blob,
+    #wave:not(.on):not(.out) .band,
+    #wave:not(.on):not(.out) .swell path {
+      animation-play-state: paused;
+    }
+
+    .glass {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 7, 9, 0.22);
+      backdrop-filter: blur(26px) saturate(0.8);
+      -webkit-backdrop-filter: blur(26px) saturate(0.8);
+    }
+
+    .field {
+      position: absolute;
+      inset: -20%;
+      filter: blur(42px) contrast(1.05);
+      transform: translateZ(0);
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: screen;
+      will-change: transform;
+    }
+
+    .blob.a {
+      width: 78vw;
+      height: 62vw;
+      left: -12vw;
+      top: 8vh;
+      background: radial-gradient(circle at 40% 40%, rgba(72, 18, 28, 0.55), transparent 68%);
+      animation: drift-a 34s ease-in-out infinite alternate;
+    }
+
+    .blob.b {
+      width: 70vw;
+      height: 58vw;
+      right: -18vw;
+      top: -10vh;
+      background: radial-gradient(circle at 50% 50%, rgba(28, 32, 44, 0.62), transparent 70%);
+      animation: drift-b 41s ease-in-out infinite alternate;
+    }
+
+    .blob.c {
+      width: 90vw;
+      height: 50vw;
+      left: 10vw;
+      bottom: -18vh;
+      background: radial-gradient(circle at 50% 40%, rgba(18, 14, 16, 0.8), transparent 72%);
+      animation: drift-c 29s ease-in-out infinite alternate;
+    }
+
+    .blob.d {
+      width: 54vw;
+      height: 54vw;
+      left: 32vw;
+      top: 22vh;
+      background: radial-gradient(circle at 50% 50%, rgba(48, 22, 28, 0.32), transparent 66%);
+      animation: drift-d 37s ease-in-out infinite alternate;
+    }
+
+    .swell {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.9;
+    }
+
+    .swell path {
+      filter: blur(18px);
+    }
+
+    .band {
+      position: absolute;
+      left: -15%;
+      width: 130%;
+      height: 42%;
+      opacity: 0.55;
+      filter: blur(36px);
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(36, 12, 18, 0.45) 42%,
+        rgba(14, 14, 18, 0.2) 100%
+      );
+      border-radius: 50%;
+      animation: swell-y 26s ease-in-out infinite alternate;
+    }
+
+    .band.two {
+      top: auto;
+      bottom: 4%;
+      height: 36%;
+      opacity: 0.4;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(22, 24, 32, 0.5) 50%,
+        transparent 100%
+      );
+      animation-duration: 33s;
+      animation-direction: alternate-reverse;
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(120% 90% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.45) 100%);
+      pointer-events: none;
+    }
+
+    @keyframes drift-a {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(14vw, 10vh, 0) scale(1.12); }
+    }
+
+    @keyframes drift-b {
+      from { transform: translate3d(0, 0, 0) rotate(0deg); }
+      to { transform: translate3d(-16vw, 12vh, 0) rotate(-12deg); }
+    }
+
+    @keyframes drift-c {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(-10vw, -8vh, 0) scale(1.08); }
+    }
+
+    @keyframes drift-d {
+      from { transform: translate3d(0, 8vh, 0) scale(0.92); }
+      to { transform: translate3d(8vw, -10vh, 0) scale(1.18); }
+    }
+
+    @keyframes swell-y {
+      from { transform: translate3d(-4vw, 6vh, 0) rotate(-4deg); }
+      to { transform: translate3d(6vw, -8vh, 0) rotate(5deg); }
+    }
+
+    @keyframes drift-chrome {
+      from { transform: translate3d(-10px, 0, 0); }
+      to { transform: translate3d(14px, 6px, 0); }
+    }
+
+    @keyframes drift-stage {
+      from { transform: translate3d(8px, -6px, 0); }
+      to { transform: translate3d(-12px, 10px, 0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      /* Motion is the OLED point of this page — keep it, just slower. */
+      .blob, .band, .top, .bottom, .stage {
+        animation-duration: 90s;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="room">
+    <div class="top">
+      <div class="brand">SPACE<span>WALL</span></div>
+      <div class="tag">wave portal</div>
+    </div>
+    <div class="stage">
+      <div class="clock" id="clock">—</div>
+      <div class="status" id="status" aria-live="polite">idle overlay armed</div>
+    </div>
+    <div class="bottom">
+      <p class="honesty">
+        Phase A · browser fullscreen portal. A web page cannot sit on top of Grok Bot.app.
+        Phase B is a native always-on-top click-through overlay — not this file.
+      </p>
+      <div class="hint">esc dismisses · ?idle=sec · <a href="./">wall</a></div>
+    </div>
+  </div>
+
+  <div id="wave" aria-hidden="true">
+    <div class="glass"></div>
+    <div class="field">
+      <div class="blob a"></div>
+      <div class="blob b"></div>
+      <div class="blob c"></div>
+      <div class="blob d"></div>
+      <div class="band"></div>
+      <div class="band two"></div>
+      <svg class="swell" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="rgba(56,16,24,0.28)" d="M0,520 C180,470 320,610 520,560 C720,510 860,430 1040,480 C1200,522 1320,500 1440,470 L1440,900 L0,900 Z">
+          <animate attributeName="d" dur="22s" repeatCount="indefinite"
+            values="
+              M0,520 C180,470 320,610 520,560 C720,510 860,430 1040,480 C1200,522 1320,500 1440,470 L1440,900 L0,900 Z;
+              M0,500 C200,560 360,440 560,500 C760,560 900,620 1080,540 C1240,480 1340,520 1440,500 L1440,900 L0,900 Z;
+              M0,540 C160,490 340,580 540,530 C740,480 900,400 1100,460 C1260,506 1340,490 1440,450 L1440,900 L0,900 Z;
+              M0,520 C180,470 320,610 520,560 C720,510 860,430 1040,480 C1200,522 1320,500 1440,470 L1440,900 L0,900 Z
+            " />
+        </path>
+        <path fill="rgba(20,22,30,0.32)" d="M0,640 C220,600 400,700 620,660 C840,620 980,560 1180,600 C1300,624 1380,610 1440,590 L1440,900 L0,900 Z">
+          <animate attributeName="d" dur="28s" repeatCount="indefinite"
+            values="
+              M0,640 C220,600 400,700 620,660 C840,620 980,560 1180,600 C1300,624 1380,610 1440,590 L1440,900 L0,900 Z;
+              M0,660 C180,700 420,620 640,680 C860,740 1020,640 1200,670 C1320,688 1380,700 1440,680 L1440,900 L0,900 Z;
+              M0,620 C240,580 380,720 600,640 C820,560 1000,600 1200,560 C1320,538 1380,580 1440,560 L1440,900 L0,900 Z;
+              M0,640 C220,600 400,700 620,660 C840,620 980,560 1180,600 C1300,624 1380,610 1440,590 L1440,900 L0,900 Z
+            " />
+        </path>
+      </svg>
+    </div>
+    <div class="vignette"></div>
+  </div>
+
+  <script>
+(function () {
+  const VERSION_CHECK_MS = 3 * 60 * 1000;
+  const DEFAULT_IDLE_SEC = 240;
+
+  const wave = document.getElementById("wave");
+  const clockEl = document.getElementById("clock");
+  const statusEl = document.getElementById("status");
+
+  function idleSeconds() {
+    try {
+      const raw = new URLSearchParams(location.search).get("idle");
+      if (raw == null || raw === "") return DEFAULT_IDLE_SEC;
+      const n = Number(raw);
+      if (!Number.isFinite(n) || n < 0) return DEFAULT_IDLE_SEC;
+      return Math.min(n, 86400);
+    } catch (e) {
+      return DEFAULT_IDLE_SEC;
+    }
+  }
+
+  const idleMs = idleSeconds() * 1000;
+  let timer = null;
+  let countdown = null;
+  let showing = false;
+  let armed = false;
+  let loadedVersion = null;
+  let reloadArmed = false;
+
+  function formatClock(d) {
+    try {
+      return d.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: "America/Chicago",
+        hour12: true
+      }) + " CT";
+    } catch (e) {
+      return d.toISOString();
+    }
+  }
+
+  function formatRemain(ms) {
+    const s = Math.max(0, Math.ceil(ms / 1000));
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return m + ":" + String(r).padStart(2, "0");
+  }
+
+  function setStatus(text) {
+    if (statusEl.textContent !== text) statusEl.textContent = text;
+  }
+
+  function showWave() {
+    if (showing) return;
+    showing = true;
+    wave.classList.remove("out");
+    wave.classList.add("on");
+    wave.setAttribute("aria-hidden", "false");
+    setStatus("wave · move to clear");
+  }
+
+  function hideWave() {
+    if (!showing) {
+      wave.classList.remove("on", "out");
+      return;
+    }
+    showing = false;
+    wave.classList.add("out");
+    wave.classList.remove("on");
+    wave.setAttribute("aria-hidden", "true");
+  }
+
+  function armIdle() {
+    if (timer) clearTimeout(timer);
+    if (countdown) clearInterval(countdown);
+    const start = Date.now();
+    if (idleMs === 0) {
+      showWave();
+      setStatus("wave · move to clear");
+      return;
+    }
+    timer = setTimeout(showWave, idleMs);
+    function tick() {
+      if (showing) return;
+      const left = idleMs - (Date.now() - start);
+      setStatus("idle · wave in " + formatRemain(left));
+    }
+    tick();
+    countdown = setInterval(tick, 250);
+  }
+
+  function onActivity(ev) {
+    if (!armed) return;
+    if (ev && ev.key === "Escape") {
+      ev.preventDefault();
+    }
+    hideWave();
+    armIdle();
+  }
+
+  function tickClock() {
+    clockEl.textContent = formatClock(new Date());
+  }
+
+  ["pointerdown", "pointermove", "keydown", "wheel", "touchstart"].forEach(function (type) {
+    window.addEventListener(type, onActivity, { passive: false });
+  });
+
+  function versionCheckMs() {
+    try {
+      const raw = new URLSearchParams(location.search).get("vcheck");
+      const n = raw ? Number(raw) : NaN;
+      if (Number.isFinite(n) && n >= 1000) return n;
+    } catch (e) {}
+    return VERSION_CHECK_MS;
+  }
+
+  async function fetchVersion() {
+    const url = "./version.json?t=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data || typeof data.v !== "string" || !data.v) {
+      throw new Error("bad version");
+    }
+    return data.v;
+  }
+
+  async function captureVersion() {
+    try {
+      loadedVersion = await fetchVersion();
+    } catch (e) {
+      loadedVersion = null;
+    }
+  }
+
+  async function checkVersion() {
+    if (reloadArmed) return;
+    try {
+      const remote = await fetchVersion();
+      if (loadedVersion == null) {
+        loadedVersion = remote;
+        return;
+      }
+      if (remote !== loadedVersion) {
+        reloadArmed = true;
+        location.reload();
+      }
+    } catch (e) {}
+  }
+
+  tickClock();
+  setInterval(tickClock, 1000);
+  setTimeout(function () {
+    armed = true;
+    armIdle();
+  }, 400);
+  captureVersion();
+  setInterval(checkVersion, versionCheckMs());
+})();
+  </script>
+</body>
+</html>

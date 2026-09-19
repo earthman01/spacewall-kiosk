@@ -94,6 +94,18 @@
       100% { opacity: 1; }
     }
 
+    a.wave-link {
+      color: #3a3a42;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    a.wave-link:hover { color: #8a8a94; }
+
     button#demo {
       appearance: none;
       border: 1px solid #3a1018;
@@ -272,6 +284,7 @@
   <header>
     <div class="brand">SPACE<span>WALL</span></div>
     <div class="meta">
+      <a class="wave-link" href="./wave.html" title="OLED idle wave portal">wave</a>
       <button type="button" id="demo" aria-pressed="false">Demo red</button>
       <div id="refresh">—</div>
     </div>
