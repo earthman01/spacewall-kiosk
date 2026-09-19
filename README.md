@@ -20,20 +20,45 @@ The 55" Samsung is a **living-room portal**, not a second SPACEWALL — iPads al
 
 **Install as its own Dock app:** [hearth.html](https://earthman01.github.io/spacewall-kiosk/hearth.html) → Chrome menu → **Install HEARTH** (or Install page as app…). Then put that window on the OLED → **View → Enter Full Screen** (or F11). Across-the-room type: Chicago clock, date, a thin day-progress ring. Soft ember/charcoal waves stay alive so the panel is never a black-OFF TV. Discreet `hearth` link on the wall.
 
-### OLED care
+### OLED care (HEARTH v2)
 
-What the page does for burn-in mitigation:
+Dim-to-black is **not** the care strategy. Samsung ASBL / logo-luminance was drowning v1 in void black after a long sit. HEARTH now keeps the dark ember/charcoal room, stays readable across the room, and supplies **our** motion so the panel is less likely to crush the image.
 
-- Continuous low-APL motion (blurry waves, no full-field white, no neon)
-- Slow **pixel orbit** of the whole composition (~±6px over a few minutes) so type and marks do not sit on the same subpixels
-- After ~8 minutes idle, the mural dims a little deeper
-- Nothing is a parked high-contrast logo
+What the page does:
+
+- **Luminance floor** — charcoal wash so the mural never reads as “TV off” (still dark, not a bright screensaver)
+- Continuous low-APL motion, now a stronger wave/haze drift (elegant, not frantic)
+- Slow **pixel orbit** of the whole composition (~±6–7px over a few minutes; `?orbit=strong` is wider)
+- Soft **silver** clock (no pure `#fff`); optional slow clock/ring wander
+- After ~8 minutes idle, a **gentle** mute of chrome only (`?deeper=crush` is the old brightness crush; `?deeper=0` disables)
+- Experimental **3 mural slides** (ember / slate / wine) every 3 minutes — Apple TV Photos pattern; Mark may yank this (`?slides=0`)
+- Slow **APL breathe** so average picture level does not lock
+- Modest peak whites — no parked high-contrast logos
 
 What the TV / Mac should do:
 
 - On the Samsung, leave **Pixel Shift / Screen Shift on** if the set offers it for this input
 - HDMI from a Mac often **does not** get the TV’s own 2-minute screensaver — the set treats a computer as a PC. We supply the motion so the panel is not a static freeze-frame
 - Do not max OLED brightness for a portal that sits for hours
+
+### HEARTH URL flags
+
+All kitchen-sink. Omitted = recommended default. `0` / `off` yanks that piece without a rewrite. `?hud=1` shows the active set.
+
+| Flag | Default | Notes |
+| --- | --- | --- |
+| `?floor=0` | on | Hide the charcoal floor; old near-void black |
+| `?deeper=0` / `gentle` / `crush` | `gentle` | Idle after 8 min. `crush` = v1 dim. `?idle=sec` sets the timer (`0` = never) |
+| `?waves=0` / `soft` / `strong` | `strong` | `soft` is v1 travel; `0` freezes blobs/bands |
+| `?orbit=0` / `1` / `strong` | `1` (~±7px) | Whole-composition pixel shift |
+| `?silver=0` | on | Soft silver clock vs older gray |
+| `?drift=0` | on | Slow clock/ring position wander |
+| `?peaks=0` | modest | `0` allows a brighter face for A/B — not for the panel |
+| `?slides=0` | on | Rotate ember → slate → wine. `?slides=fast` or `?slidedur=12` for prove-out. `?slide=slate` starts on a phase |
+| `?apl=0` | on | Micro brightness breathe so ASBL does not lock |
+| `?hud=1` | off | Tiny flag strip on the floor |
+
+Recommended living-room URL is bare `hearth.html` (all of the above on, slides included until Mark prunes).
 
 ### Wave lab (overlay prove-out)
 

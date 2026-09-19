@@ -7,18 +7,92 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="HEARTH" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#070708" />
+  <meta name="theme-color" content="#121216" />
   <meta name="color-scheme" content="dark" />
   <title>HEARTH</title>
   <link rel="manifest" href="./hearth.webmanifest" />
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/hearth-192.png" />
   <link rel="apple-touch-icon" href="./icons/hearth-192.png" />
   <style>
+    /* Palette tokens interpolate on slide change (Chrome / the TV Mac). */
+    @property --bg { syntax: "<color>"; inherits: true; initial-value: #121216; }
+    @property --floor-mid { syntax: "<color>"; inherits: true; initial-value: #1c1a22; }
+    @property --ember { syntax: "<color>"; inherits: true; initial-value: rgba(112, 40, 52, 0.56); }
+    @property --slate { syntax: "<color>"; inherits: true; initial-value: rgba(42, 50, 68, 0.50); }
+    @property --ash { syntax: "<color>"; inherits: true; initial-value: rgba(26, 22, 26, 0.48); }
+    @property --haze-a { syntax: "<color>"; inherits: true; initial-value: rgba(86, 32, 42, 0.30); }
+    @property --haze-b { syntax: "<color>"; inherits: true; initial-value: rgba(36, 44, 62, 0.26); }
+    @property --band-warm { syntax: "<color>"; inherits: true; initial-value: rgba(90, 30, 40, 0.42); }
+    @property --band-cool { syntax: "<color>"; inherits: true; initial-value: rgba(34, 40, 56, 0.38); }
+    @property --swell-warm { syntax: "<color>"; inherits: true; initial-value: rgba(98, 34, 44, 0.40); }
+    @property --swell-cool { syntax: "<color>"; inherits: true; initial-value: rgba(30, 34, 48, 0.38); }
+    @property --accent { syntax: "<color>"; inherits: true; initial-value: #8e3a42; }
+    @property --ring { syntax: "<color>"; inherits: true; initial-value: #6e3840; }
+    @property --apl { syntax: "<number>"; inherits: true; initial-value: 1; }
+
     :root {
-      --bg: #08080a;
-      --text: #c8c8ce;
-      --muted: #5a5a62;
-      --ember: #6a2430;
+      --bg: #121216;
+      --text: #c8ccd4;
+      --muted: #6e7280;
+      --clock: #d0d4dc;
+      --orbit-nudge: 7px;
+    }
+
+    /* --- slides (Apple TV album pattern; ?slides=0 freezes) --- */
+    body[data-slide="ember"] {
+      --bg: #121216;
+      --floor-mid: #1c1a22;
+      --ember: rgba(112, 40, 52, 0.56);
+      --slate: rgba(42, 50, 68, 0.50);
+      --ash: rgba(26, 22, 26, 0.48);
+      --haze-a: rgba(86, 32, 42, 0.30);
+      --haze-b: rgba(36, 44, 62, 0.26);
+      --band-warm: rgba(90, 30, 40, 0.42);
+      --band-cool: rgba(34, 40, 56, 0.38);
+      --swell-warm: rgba(98, 34, 44, 0.40);
+      --swell-cool: rgba(30, 34, 48, 0.38);
+      --accent: #8e3a42;
+      --ring: #6e3840;
+    }
+
+    body[data-slide="slate"] {
+      --bg: #10141a;
+      --floor-mid: #182028;
+      --ember: rgba(46, 60, 84, 0.54);
+      --slate: rgba(32, 42, 60, 0.50);
+      --ash: rgba(18, 22, 30, 0.46);
+      --haze-a: rgba(40, 56, 80, 0.30);
+      --haze-b: rgba(28, 36, 52, 0.26);
+      --band-warm: rgba(48, 58, 78, 0.40);
+      --band-cool: rgba(28, 40, 58, 0.38);
+      --swell-warm: rgba(44, 58, 80, 0.38);
+      --swell-cool: rgba(24, 32, 46, 0.36);
+      --accent: #5a6a82;
+      --ring: #3e5068;
+    }
+
+    body[data-slide="wine"] {
+      --bg: #161014;
+      --floor-mid: #22161c;
+      --ember: rgba(104, 32, 52, 0.56);
+      --slate: rgba(64, 30, 42, 0.46);
+      --ash: rgba(24, 16, 20, 0.50);
+      --haze-a: rgba(120, 44, 40, 0.26);
+      --haze-b: rgba(72, 28, 44, 0.28);
+      --band-warm: rgba(96, 28, 44, 0.42);
+      --band-cool: rgba(52, 28, 40, 0.34);
+      --swell-warm: rgba(108, 36, 48, 0.40);
+      --swell-cool: rgba(40, 24, 34, 0.36);
+      --accent: #9a3e48;
+      --ring: #7a3040;
+    }
+
+    body {
+      transition:
+        --bg 3.6s ease, --floor-mid 3.6s ease, --ember 3.6s ease, --slate 3.6s ease,
+        --ash 3.6s ease, --haze-a 3.6s ease, --haze-b 3.6s ease, --band-warm 3.6s ease,
+        --band-cool 3.6s ease, --swell-warm 3.6s ease, --swell-cool 3.6s ease,
+        --accent 3.6s ease, --ring 3.6s ease;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,78 +109,131 @@
       -webkit-user-select: none;
     }
 
-    body {
-      min-height: 100dvh;
-    }
+    body { min-height: 100dvh; }
 
+    /* --- pixel orbit (?orbit=0 off, ?orbit=strong wider) --- */
     #orbit {
       position: relative;
       height: 100dvh;
       animation: pixel-orbit 220s ease-in-out infinite alternate;
     }
 
+    body.orbit-strong #orbit { animation-name: pixel-orbit-strong; animation-duration: 170s; }
+    body.orbit-off #orbit { animation: none; }
+
+    /* --- luminance floor (?floor=0 restores near-void black) --- */
+    .floor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(92% 72% at 50% 44%, var(--floor-mid) 0%, transparent 68%),
+        linear-gradient(180deg, #16161c 0%, var(--bg) 42%, #141218 100%);
+      filter: brightness(var(--apl));
+    }
+
+    body.floor-off {
+      --bg: #08080a;
+    }
+    body.floor-off .floor { display: none; }
+
+    /* --- APL micro-breathe (?apl=0 off) --- */
+    body.apl-on { animation: apl-tick 140s ease-in-out infinite; }
+
     .mural {
       position: absolute;
       inset: -16%;
       pointer-events: none;
-      transition: opacity 4s ease;
+      transition: opacity 1.6s ease;
+    }
+
+    body.slide-swap .mural { opacity: 0.78; }
+
+    .haze {
+      position: absolute;
+      inset: -18%;
+      background:
+        radial-gradient(48% 40% at 28% 38%, var(--haze-a), transparent 70%),
+        radial-gradient(44% 36% at 74% 60%, var(--haze-b), transparent 68%);
+      filter: blur(42px);
+      opacity: 0.9;
+      animation: haze-drift 38s ease-in-out infinite alternate;
     }
 
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(36px);
+      filter: blur(30px);
       will-change: transform;
     }
 
     .blob.a {
-      width: 80vw;
-      height: 58vw;
+      width: 84vw;
+      height: 60vw;
       left: -18vw;
-      top: 6vh;
-      background: radial-gradient(circle at 40% 40%, rgba(78, 24, 34, 0.38), transparent 70%);
-      animation: drift-a 32s ease-in-out infinite alternate;
+      top: 4vh;
+      background: radial-gradient(circle at 40% 40%, var(--ember), transparent 70%);
+      animation: drift-a 28s ease-in-out infinite alternate;
     }
 
     .blob.b {
-      width: 70vw;
-      height: 54vw;
+      width: 74vw;
+      height: 56vw;
       right: -20vw;
       top: -8vh;
-      background: radial-gradient(circle at 50% 50%, rgba(28, 34, 48, 0.36), transparent 70%);
-      animation: drift-b 40s ease-in-out infinite alternate;
+      background: radial-gradient(circle at 50% 50%, var(--slate), transparent 70%);
+      animation: drift-b 36s ease-in-out infinite alternate;
     }
 
     .blob.c {
-      width: 92vw;
-      height: 48vw;
-      left: 6vw;
+      width: 96vw;
+      height: 50vw;
+      left: 4vw;
       bottom: -20vh;
-      background: radial-gradient(circle at 50% 40%, rgba(16, 14, 16, 0.55), transparent 72%);
-      animation: drift-c 26s ease-in-out infinite alternate;
+      background: radial-gradient(circle at 50% 40%, var(--ash), transparent 72%);
+      animation: drift-c 22s ease-in-out infinite alternate;
+    }
+
+    .blob.d {
+      width: 58vw;
+      height: 40vw;
+      left: 28vw;
+      top: 18vh;
+      background: radial-gradient(circle at 50% 50%, var(--haze-a), transparent 72%);
+      filter: blur(48px);
+      animation: drift-d 44s ease-in-out infinite alternate;
     }
 
     .band {
       position: absolute;
-      left: -16%;
-      top: 22%;
-      width: 132%;
-      height: 44%;
+      left: -18%;
+      top: 20%;
+      width: 136%;
+      height: 46%;
       border-radius: 50%;
-      filter: blur(26px);
-      opacity: 0.65;
-      background: linear-gradient(180deg, transparent, rgba(58, 18, 26, 0.34) 48%, transparent);
-      animation: swell 20s ease-in-out infinite alternate;
+      filter: blur(24px);
+      opacity: 0.78;
+      background: linear-gradient(180deg, transparent, var(--band-warm) 48%, transparent);
+      animation: swell 16s ease-in-out infinite alternate;
     }
 
     .band.two {
       top: auto;
-      bottom: 2%;
-      height: 38%;
-      opacity: 0.5;
-      background: linear-gradient(180deg, transparent, rgba(24, 28, 40, 0.36) 50%, transparent);
-      animation-duration: 27s;
+      bottom: 0;
+      height: 40%;
+      opacity: 0.62;
+      background: linear-gradient(180deg, transparent, var(--band-cool) 50%, transparent);
+      animation-duration: 22s;
       animation-direction: alternate-reverse;
+    }
+
+    .band.three {
+      top: 48%;
+      height: 28%;
+      opacity: 0.4;
+      filter: blur(32px);
+      background: linear-gradient(180deg, transparent, var(--haze-b) 50%, transparent);
+      animation-duration: 30s;
     }
 
     .swell {
@@ -116,13 +243,34 @@
       height: 100%;
     }
 
-    .swell path { filter: blur(12px); }
+    .swell path { filter: blur(11px); }
+    .swell .warm { fill: var(--swell-warm); }
+    .swell .cool { fill: var(--swell-cool); }
 
     .vignette {
       position: absolute;
       inset: 0;
+      background: radial-gradient(118% 90% at 50% 48%, transparent 50%, rgba(10, 10, 14, 0.28) 100%);
+    }
+
+    body.floor-off .vignette {
       background: radial-gradient(115% 88% at 50% 48%, transparent 46%, rgba(0, 0, 0, 0.42) 100%);
     }
+
+    /* --- waves: default strong; ?waves=soft old travel; ?waves=0 freeze --- */
+    body.waves-soft .blob { filter: blur(36px); }
+    body.waves-soft .blob.a { animation-duration: 32s; }
+    body.waves-soft .blob.b { animation-duration: 40s; }
+    body.waves-soft .blob.c { animation-duration: 26s; }
+    body.waves-soft .haze,
+    body.waves-soft .blob.d,
+    body.waves-soft .band.three { opacity: 0.35; }
+    body.waves-soft .band { filter: blur(26px); opacity: 0.65; animation-duration: 20s; }
+    body.waves-soft .band.two { opacity: 0.5; animation-duration: 27s; }
+
+    body.waves-off .haze,
+    body.waves-off .blob,
+    body.waves-off .band { animation: none; }
 
     .room {
       position: relative;
@@ -147,16 +295,16 @@
       font-weight: 800;
       letter-spacing: 0.34em;
       font-size: 13px;
-      color: #b8b8be;
+      color: #c4c6cc;
     }
 
-    .brand span { color: #8a3038; }
+    .brand span { color: var(--accent); }
 
     .tag, .hint, .note {
       font-size: 11px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: #3e3e46;
+      color: #4e4e58;
     }
 
     .note {
@@ -164,15 +312,15 @@
       letter-spacing: 0.05em;
       text-transform: none;
       line-height: 1.45;
-      color: #3a3a42;
+      color: #4a4a54;
     }
 
     a {
-      color: #6a6a74;
+      color: #7a7a84;
       text-decoration: none;
     }
 
-    a:hover { color: #b0b0b8; }
+    a:hover { color: #c4c4cc; }
 
     .stage {
       flex: 1;
@@ -192,29 +340,35 @@
       gap: 10px;
     }
 
+    /* --- clock/ring wander (?drift=0 off) --- */
+    body.drift-on .dial {
+      animation: dial-drift 190s ease-in-out infinite alternate;
+    }
+
     .ring {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      opacity: 0.7;
+      opacity: 0.78;
     }
 
     .ring .track {
       fill: none;
-      stroke: #1a1a20;
+      stroke: #2a2a32;
       stroke-width: 1.2;
     }
 
     .ring .prog {
       fill: none;
-      stroke: #5a2832;
+      stroke: var(--ring);
       stroke-width: 1.6;
       stroke-linecap: round;
       transform: rotate(-90deg);
       transform-origin: 60px 60px;
     }
 
+    /* --- soft silver clock (?silver=0 old gray) --- */
     .clock {
       position: relative;
       display: flex;
@@ -226,14 +380,14 @@
       letter-spacing: -0.045em;
       line-height: 0.92;
       font-variant-numeric: tabular-nums;
-      color: #c2c2c8;
+      color: var(--clock);
     }
 
     .clock .period {
       font-size: 0.22em;
       font-weight: 600;
       letter-spacing: 0.28em;
-      color: #7a7a82;
+      color: #8a8e96;
     }
 
     .date {
@@ -249,65 +403,149 @@
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #3c3c44;
+      color: #4e4e58;
       font-variant-numeric: tabular-nums;
     }
 
-    body.deeper .mural { opacity: 0.62; }
-    body.deeper .clock { color: #8a8a92; }
-    body.deeper .date { color: #4a4a52; }
-    body.deeper .ring { opacity: 0.45; }
+    body.silver-off {
+      --clock: #c2c2c8;
+      --muted: #5a5a62;
+    }
+    body.silver-off .clock .period { color: #7a7a82; }
+
+    /* Modest peaks: no #fff. ?peaks=0 allows a brighter face for A/B. */
+    body.peaks-off {
+      --clock: #f0f2f6;
+    }
+    body.peaks-off .brand { color: #ececf0; }
+    body.peaks-off .clock .period { color: #b0b4bc; }
+
+    /* --- idle deeper: default gentle; ?deeper=0 off; ?deeper=crush old --- */
+    body.deeper-gentle .mural { opacity: 0.94; }
+    body.deeper-gentle .note,
+    body.deeper-gentle .hint,
+    body.deeper-gentle .tag { opacity: 0.72; }
+
+    body.deeper-crush .mural { opacity: 0.62; }
+    body.deeper-crush .clock { color: #8a8a92; }
+    body.deeper-crush .date { color: #4a4a52; }
+    body.deeper-crush .ring { opacity: 0.45; }
+
+    #hud {
+      position: fixed;
+      left: 16px;
+      bottom: 10px;
+      z-index: 9;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5a5a64;
+      pointer-events: none;
+    }
 
     @keyframes pixel-orbit {
       from { transform: translate3d(-6px, -5px, 0); }
       to { transform: translate3d(7px, 6px, 0); }
     }
 
+    @keyframes pixel-orbit-strong {
+      from { transform: translate3d(-11px, -9px, 0); }
+      to { transform: translate3d(12px, 10px, 0); }
+    }
+
     @keyframes drift-a {
       from { transform: translate3d(0, 0, 0) scale(1); }
-      to { transform: translate3d(16vw, 12vh, 0) scale(1.12); }
+      to { transform: translate3d(22vw, 16vh, 0) scale(1.18); }
     }
 
     @keyframes drift-b {
       from { transform: translate3d(0, 0, 0) rotate(0deg); }
-      to { transform: translate3d(-18vw, 14vh, 0) rotate(-12deg); }
+      to { transform: translate3d(-24vw, 18vh, 0) rotate(-16deg); }
     }
 
     @keyframes drift-c {
       from { transform: translate3d(0, 0, 0); }
-      to { transform: translate3d(-12vw, -10vh, 0) scale(1.08); }
+      to { transform: translate3d(-16vw, -14vh, 0) scale(1.14); }
+    }
+
+    @keyframes drift-d {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(10vw, -12vh, 0) scale(1.2); }
     }
 
     @keyframes swell {
+      from { transform: translate3d(-12vw, 10vh, 0) rotate(-6deg); }
+      to { transform: translate3d(13vw, -12vh, 0) rotate(8deg); }
+    }
+
+    @keyframes haze-drift {
+      from { transform: translate3d(-10vw, 6vh, 0) scale(1); }
+      to { transform: translate3d(12vw, -8vh, 0) scale(1.12); }
+    }
+
+    @keyframes dial-drift {
+      from { transform: translate3d(-22px, -14px, 0); }
+      to { transform: translate3d(24px, 16px, 0); }
+    }
+
+    @keyframes apl-tick {
+      0%, 100% { --apl: 1; }
+      22% { --apl: 1.07; }
+      48% { --apl: 0.96; }
+      74% { --apl: 1.05; }
+    }
+
+    body.waves-soft .blob.a { animation-name: drift-a-soft; }
+    body.waves-soft .blob.b { animation-name: drift-b-soft; }
+    body.waves-soft .blob.c { animation-name: drift-c-soft; }
+    body.waves-soft .band { animation-name: swell-soft; }
+
+    @keyframes drift-a-soft {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(16vw, 12vh, 0) scale(1.12); }
+    }
+    @keyframes drift-b-soft {
+      from { transform: translate3d(0, 0, 0) rotate(0deg); }
+      to { transform: translate3d(-18vw, 14vh, 0) rotate(-12deg); }
+    }
+    @keyframes drift-c-soft {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(-12vw, -10vh, 0) scale(1.08); }
+    }
+    @keyframes swell-soft {
       from { transform: translate3d(-8vw, 8vh, 0) rotate(-5deg); }
       to { transform: translate3d(9vw, -10vh, 0) rotate(6deg); }
     }
   </style>
 </head>
-<body>
+<body data-slide="ember">
   <div id="orbit">
+    <div class="floor" aria-hidden="true"></div>
     <div class="mural" aria-hidden="true">
+      <div class="haze"></div>
       <div class="blob a"></div>
       <div class="blob b"></div>
       <div class="blob c"></div>
+      <div class="blob d"></div>
       <div class="band"></div>
       <div class="band two"></div>
+      <div class="band three"></div>
       <svg class="swell" viewBox="0 0 1440 900" preserveAspectRatio="none">
-        <path fill="rgba(64,20,28,0.34)" d="M0,520 C180,470 320,610 520,560 C720,510 860,430 1040,480 C1200,522 1320,500 1440,470 L1440,900 L0,900 Z">
-          <animate attributeName="d" dur="24s" repeatCount="indefinite"
+        <path class="warm" d="M0,520 C180,470 320,610 520,560 C720,510 860,430 1040,480 C1200,522 1320,500 1440,470 L1440,900 L0,900 Z">
+          <animate attributeName="d" dur="20s" repeatCount="indefinite"
             values="
               M0,520 C180,470 320,610 520,560 C720,510 860,430 1040,480 C1200,522 1320,500 1440,470 L1440,900 L0,900 Z;
-              M0,500 C200,560 360,440 560,500 C760,560 900,620 1080,540 C1240,480 1340,520 1440,500 L1440,900 L0,900 Z;
-              M0,540 C160,490 340,580 540,530 C740,480 900,400 1100,460 C1260,506 1340,490 1440,450 L1440,900 L0,900 Z;
+              M0,470 C200,560 360,400 560,500 C760,600 900,640 1080,520 C1240,440 1340,520 1440,480 L1440,900 L0,900 Z;
+              M0,560 C160,490 340,600 540,510 C740,430 900,360 1100,440 C1260,496 1340,470 1440,410 L1440,900 L0,900 Z;
               M0,520 C180,470 320,610 520,560 C720,510 860,430 1040,480 C1200,522 1320,500 1440,470 L1440,900 L0,900 Z
             " />
         </path>
-        <path fill="rgba(22,24,34,0.36)" d="M0,640 C220,600 400,700 620,660 C840,620 980,560 1180,600 C1300,624 1380,610 1440,590 L1440,900 L0,900 Z">
-          <animate attributeName="d" dur="30s" repeatCount="indefinite"
+        <path class="cool" d="M0,640 C220,600 400,700 620,660 C840,620 980,560 1180,600 C1300,624 1380,610 1440,590 L1440,900 L0,900 Z">
+          <animate attributeName="d" dur="26s" repeatCount="indefinite"
             values="
               M0,640 C220,600 400,700 620,660 C840,620 980,560 1180,600 C1300,624 1380,610 1440,590 L1440,900 L0,900 Z;
-              M0,660 C180,700 420,620 640,680 C860,740 1020,640 1200,670 C1320,688 1380,700 1440,680 L1440,900 L0,900 Z;
-              M0,620 C240,580 380,720 600,640 C820,560 1000,600 1200,560 C1320,538 1380,580 1440,560 L1440,900 L0,900 Z;
+              M0,680 C180,720 420,600 640,700 C860,780 1020,620 1200,690 C1320,720 1380,740 1440,700 L1440,900 L0,900 Z;
+              M0,600 C240,560 380,760 600,620 C820,500 1000,580 1200,520 C1320,490 1380,560 1440,520 L1440,900 L0,900 Z;
               M0,640 C220,600 400,700 620,660 C840,620 980,560 1180,600 C1300,624 1380,610 1440,590 L1440,900 L0,900 Z
             " />
         </path>
@@ -345,22 +583,151 @@
       </div>
     </div>
   </div>
+  <div id="hud" hidden></div>
 
   <script>
 (function () {
   const VERSION_CHECK_MS = 3 * 60 * 1000;
-  const DEEP_IDLE_MS = 8 * 60 * 1000;
   const RING = 2 * Math.PI * 54;
+  const SLIDES = ["ember", "slate", "wine"];
+
+  const params = new URLSearchParams(location.search);
 
   const hmsEl = document.getElementById("hms");
   const ampmEl = document.getElementById("ampm");
   const dateEl = document.getElementById("date");
   const beatEl = document.getElementById("beat");
   const arcEl = document.getElementById("dayarc");
+  const hudEl = document.getElementById("hud");
 
   let loadedVersion = null;
   let reloadArmed = false;
   let deepTimer = null;
+  let slideTimer = null;
+  let slideIdx = 0;
+
+  function raw(name) {
+    const v = params.get(name);
+    return v == null ? null : v.toLowerCase();
+  }
+
+  function isOff(name) {
+    const v = raw(name);
+    return v === "0" || v === "off" || v === "false" || v === "no";
+  }
+
+  function isOn(name, fallback) {
+    const v = raw(name);
+    if (v == null) return fallback;
+    if (v === "0" || v === "off" || v === "false" || v === "no") return false;
+    if (v === "1" || v === "on" || v === "true" || v === "yes") return true;
+    return true;
+  }
+
+  function numFlag(name, fallback, min) {
+    const v = raw(name);
+    if (v == null) return fallback;
+    const n = Number(v);
+    if (!Number.isFinite(n)) return fallback;
+    if (min != null && n < min) return fallback;
+    return n;
+  }
+
+  const flags = {
+    floor: isOn("floor", true),
+    deeper: (function () {
+      const v = raw("deeper");
+      if (v == null) return "gentle";
+      if (v === "0" || v === "off" || v === "false" || v === "no") return "off";
+      if (v === "crush" || v === "old") return "crush";
+      return "gentle";
+    })(),
+    waves: (function () {
+      const v = raw("waves");
+      if (v == null) return "strong";
+      if (v === "0" || v === "off") return "off";
+      if (v === "soft" || v === "old") return "soft";
+      return "strong";
+    })(),
+    orbit: (function () {
+      const v = raw("orbit");
+      if (v == null || v === "1" || v === "on") return "on";
+      if (v === "0" || v === "off") return "off";
+      if (v === "strong" || v === "2") return "strong";
+      return "on";
+    })(),
+    silver: isOn("silver", true),
+    drift: isOn("drift", true),
+    peaks: isOff("peaks") ? "off" : "modest",
+    slides: isOn("slides", true),
+    slideDur: (function () {
+      const fast = raw("slides") === "fast";
+      const d = numFlag("slidedur", fast ? 12 : 180, 2);
+      return d;
+    })(),
+    apl: isOn("apl", true),
+    hud: isOn("hud", false),
+    idleMs: (function () {
+      const sec = raw("idle");
+      if (sec == null) return 8 * 60 * 1000;
+      const n = Number(sec);
+      if (!Number.isFinite(n)) return 8 * 60 * 1000;
+      if (n <= 0) return 0;
+      return n * 1000;
+    })()
+  };
+
+  function applyFlags() {
+    const b = document.body;
+    if (!flags.floor) b.classList.add("floor-off");
+    if (flags.waves === "soft") b.classList.add("waves-soft");
+    if (flags.waves === "off") b.classList.add("waves-off");
+    if (flags.orbit === "off") b.classList.add("orbit-off");
+    if (flags.orbit === "strong") b.classList.add("orbit-strong");
+    if (!flags.silver) b.classList.add("silver-off");
+    if (flags.drift) b.classList.add("drift-on");
+    if (flags.peaks === "off") b.classList.add("peaks-off");
+    if (flags.apl) b.classList.add("apl-on");
+
+    const start = raw("slide");
+    const startIdx = SLIDES.indexOf(start);
+    slideIdx = startIdx >= 0 ? startIdx : 0;
+    b.dataset.slide = SLIDES[slideIdx];
+  }
+
+  function paintHud() {
+    if (!flags.hud) return;
+    hudEl.hidden = false;
+    hudEl.textContent = [
+      "hearth v2",
+      "floor:" + (flags.floor ? "on" : "off"),
+      "deeper:" + flags.deeper,
+      "waves:" + flags.waves,
+      "orbit:" + flags.orbit,
+      "silver:" + (flags.silver ? "on" : "off"),
+      "drift:" + (flags.drift ? "on" : "off"),
+      "peaks:" + flags.peaks,
+      "slides:" + (flags.slides ? SLIDES[slideIdx] + "/" + flags.slideDur + "s" : "off"),
+      "apl:" + (flags.apl ? "on" : "off")
+    ].join("  ·  ");
+  }
+
+  function nextSlide() {
+    if (!flags.slides) return;
+    slideIdx = (slideIdx + 1) % SLIDES.length;
+    document.body.classList.add("slide-swap");
+    document.body.dataset.slide = SLIDES[slideIdx];
+    paintHud();
+    window.setTimeout(function () {
+      document.body.classList.remove("slide-swap");
+    }, 1600);
+  }
+
+  function armSlides() {
+    if (!flags.slides) return;
+    if (slideTimer) clearInterval(slideTimer);
+    slideTimer = setInterval(nextSlide, flags.slideDur * 1000);
+  }
 
   function chicagoParts(d) {
     const fmt = new Intl.DateTimeFormat("en-US", {
@@ -409,27 +776,27 @@
     beatEl.textContent = "day  ·  " + Math.round(frac * 100) + "%";
   }
 
-  function armDeep() {
-    if (deepTimer) clearTimeout(deepTimer);
-    document.body.classList.remove("deeper");
-    deepTimer = setTimeout(function () {
-      document.body.classList.add("deeper");
-    }, DEEP_IDLE_MS);
+  function clearDeeper() {
+    document.body.classList.remove("deeper-gentle", "deeper-crush");
   }
 
-  function onActivity() {
-    armDeep();
+  function armDeep() {
+    if (deepTimer) clearTimeout(deepTimer);
+    clearDeeper();
+    if (flags.deeper === "off" || flags.idleMs <= 0) return;
+    deepTimer = setTimeout(function () {
+      document.body.classList.add(flags.deeper === "crush" ? "deeper-crush" : "deeper-gentle");
+    }, flags.idleMs);
   }
 
   ["pointerdown", "pointermove", "keydown", "wheel", "touchstart"].forEach(function (type) {
-    window.addEventListener(type, onActivity, { passive: true });
+    window.addEventListener(type, armDeep, { passive: true });
   });
 
   function versionCheckMs() {
     try {
-      const raw = new URLSearchParams(location.search).get("vcheck");
-      const n = raw ? Number(raw) : NaN;
-      if (Number.isFinite(n) && n >= 1000) return n;
+      const n = numFlag("vcheck", VERSION_CHECK_MS, 1000);
+      return n;
     } catch (e) {}
     return VERSION_CHECK_MS;
   }
@@ -459,9 +826,12 @@
     } catch (e) {}
   }
 
+  applyFlags();
+  paintHud();
   paint();
   setInterval(paint, 1000);
   armDeep();
+  armSlides();
   captureVersion();
   setInterval(checkVersion, versionCheckMs());
 })();
