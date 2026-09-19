@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="HEARTH" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#121216" />
+  <meta name="theme-color" content="#16161c" />
   <meta name="color-scheme" content="dark" />
   <title>HEARTH</title>
   <link rel="manifest" href="./hearth.webmanifest" />
@@ -15,11 +15,13 @@
   <link rel="apple-touch-icon" href="./icons/hearth-192.png" />
   <style>
     /* Palette tokens interpolate on slide change (Chrome / the TV Mac). */
-    @property --bg { syntax: "<color>"; inherits: true; initial-value: #121216; }
-    @property --floor-mid { syntax: "<color>"; inherits: true; initial-value: #1c1a22; }
+    @property --bg { syntax: "<color>"; inherits: true; initial-value: #16161c; }
+    @property --floor-top { syntax: "<color>"; inherits: true; initial-value: #1c1c24; }
+    @property --floor-mid { syntax: "<color>"; inherits: true; initial-value: #24222c; }
+    @property --floor-bot { syntax: "<color>"; inherits: true; initial-value: #18181e; }
     @property --ember { syntax: "<color>"; inherits: true; initial-value: rgba(112, 40, 52, 0.56); }
     @property --slate { syntax: "<color>"; inherits: true; initial-value: rgba(42, 50, 68, 0.50); }
-    @property --ash { syntax: "<color>"; inherits: true; initial-value: rgba(26, 22, 26, 0.48); }
+    @property --ash { syntax: "<color>"; inherits: true; initial-value: rgba(40, 34, 40, 0.44); }
     @property --haze-a { syntax: "<color>"; inherits: true; initial-value: rgba(86, 32, 42, 0.30); }
     @property --haze-b { syntax: "<color>"; inherits: true; initial-value: rgba(36, 44, 62, 0.26); }
     @property --band-warm { syntax: "<color>"; inherits: true; initial-value: rgba(90, 30, 40, 0.42); }
@@ -31,20 +33,27 @@
     @property --apl { syntax: "<number>"; inherits: true; initial-value: 1; }
 
     :root {
-      --bg: #121216;
+      --bg: #16161c;
       --text: #c8ccd4;
       --muted: #6e7280;
       --clock: #d0d4dc;
       --orbit-nudge: 7px;
     }
 
-    /* --- slides (Apple TV album pattern; ?slides=0 freezes) --- */
+    /* Hard charcoal under the interpolating body so a wedged --bg cannot flash void. */
+    html { background: #18181e; }
+
+    /* --- slides (Apple TV album pattern; ?slides=0 freezes) ---
+       All three stay in the same charcoal-room APL band. Wine is burgundy
+       charcoal, not a near-black void — dark reds read as OFF on OLED. */
     body[data-slide="ember"] {
-      --bg: #121216;
-      --floor-mid: #1c1a22;
+      --bg: #16161c;
+      --floor-top: #1c1c24;
+      --floor-mid: #24222c;
+      --floor-bot: #18181e;
       --ember: rgba(112, 40, 52, 0.56);
       --slate: rgba(42, 50, 68, 0.50);
-      --ash: rgba(26, 22, 26, 0.48);
+      --ash: rgba(40, 34, 40, 0.44);
       --haze-a: rgba(86, 32, 42, 0.30);
       --haze-b: rgba(36, 44, 62, 0.26);
       --band-warm: rgba(90, 30, 40, 0.42);
@@ -56,43 +65,47 @@
     }
 
     body[data-slide="slate"] {
-      --bg: #10141a;
-      --floor-mid: #182028;
+      --bg: #161a22;
+      --floor-top: #1c222c;
+      --floor-mid: #222a34;
+      --floor-bot: #141820;
       --ember: rgba(46, 60, 84, 0.54);
       --slate: rgba(32, 42, 60, 0.50);
-      --ash: rgba(18, 22, 30, 0.46);
+      --ash: rgba(32, 38, 48, 0.44);
       --haze-a: rgba(40, 56, 80, 0.30);
       --haze-b: rgba(28, 36, 52, 0.26);
       --band-warm: rgba(48, 58, 78, 0.40);
       --band-cool: rgba(28, 40, 58, 0.38);
       --swell-warm: rgba(44, 58, 80, 0.38);
-      --swell-cool: rgba(24, 32, 46, 0.36);
+      --swell-cool: rgba(28, 36, 50, 0.36);
       --accent: #5a6a82;
       --ring: #3e5068;
     }
 
     body[data-slide="wine"] {
-      --bg: #161014;
-      --floor-mid: #22161c;
-      --ember: rgba(104, 32, 52, 0.56);
-      --slate: rgba(64, 30, 42, 0.46);
-      --ash: rgba(24, 16, 20, 0.50);
-      --haze-a: rgba(120, 44, 40, 0.26);
-      --haze-b: rgba(72, 28, 44, 0.28);
-      --band-warm: rgba(96, 28, 44, 0.42);
-      --band-cool: rgba(52, 28, 40, 0.34);
-      --swell-warm: rgba(108, 36, 48, 0.40);
-      --swell-cool: rgba(40, 24, 34, 0.36);
+      --bg: #1c181c;
+      --floor-top: #261e24;
+      --floor-mid: #2e242c;
+      --floor-bot: #1a161a;
+      --ember: rgba(126, 48, 64, 0.58);
+      --slate: rgba(86, 42, 58, 0.50);
+      --ash: rgba(48, 34, 42, 0.44);
+      --haze-a: rgba(134, 54, 50, 0.34);
+      --haze-b: rgba(90, 40, 58, 0.30);
+      --band-warm: rgba(116, 42, 56, 0.46);
+      --band-cool: rgba(72, 38, 52, 0.40);
+      --swell-warm: rgba(124, 48, 62, 0.44);
+      --swell-cool: rgba(58, 36, 48, 0.38);
       --accent: #9a3e48;
       --ring: #7a3040;
     }
 
     body {
       transition:
-        --bg 3.6s ease, --floor-mid 3.6s ease, --ember 3.6s ease, --slate 3.6s ease,
-        --ash 3.6s ease, --haze-a 3.6s ease, --haze-b 3.6s ease, --band-warm 3.6s ease,
-        --band-cool 3.6s ease, --swell-warm 3.6s ease, --swell-cool 3.6s ease,
-        --accent 3.6s ease, --ring 3.6s ease;
+        --bg 3.6s ease, --floor-top 3.6s ease, --floor-mid 3.6s ease, --floor-bot 3.6s ease,
+        --ember 3.6s ease, --slate 3.6s ease, --ash 3.6s ease, --haze-a 3.6s ease,
+        --haze-b 3.6s ease, --band-warm 3.6s ease, --band-cool 3.6s ease,
+        --swell-warm 3.6s ease, --swell-cool 3.6s ease, --accent 3.6s ease, --ring 3.6s ease;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -128,7 +141,7 @@
       pointer-events: none;
       background:
         radial-gradient(92% 72% at 50% 44%, var(--floor-mid) 0%, transparent 68%),
-        linear-gradient(180deg, #16161c 0%, var(--bg) 42%, #141218 100%);
+        linear-gradient(180deg, var(--floor-top) 0%, var(--bg) 42%, var(--floor-bot) 100%);
       filter: brightness(var(--apl));
     }
 
@@ -137,8 +150,9 @@
     }
     body.floor-off .floor { display: none; }
 
-    /* --- APL micro-breathe (?apl=0 off) --- */
-    body.apl-on { animation: apl-tick 140s ease-in-out infinite; }
+    /* APL breathe lives on .floor, not body — same-element @property
+       animation + color transitions can wedge after a slide swap. */
+    body.apl-on .floor { animation: apl-tick 140s ease-in-out infinite; }
 
     .mural {
       position: absolute;
@@ -250,7 +264,7 @@
     .vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(118% 90% at 50% 48%, transparent 50%, rgba(10, 10, 14, 0.28) 100%);
+      background: radial-gradient(118% 90% at 50% 48%, transparent 52%, rgba(14, 14, 18, 0.2) 100%);
     }
 
     body.floor-off .vignette {
@@ -313,6 +327,20 @@
       text-transform: none;
       line-height: 1.45;
       color: #4a4a54;
+    }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .ver {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #3a3a44;
     }
 
     a {
@@ -424,6 +452,7 @@
     body.deeper-gentle .mural { opacity: 0.94; }
     body.deeper-gentle .note,
     body.deeper-gentle .hint,
+    body.deeper-gentle .ver,
     body.deeper-gentle .tag { opacity: 0.72; }
 
     body.deeper-crush .mural { opacity: 0.62; }
@@ -490,9 +519,9 @@
 
     @keyframes apl-tick {
       0%, 100% { --apl: 1; }
-      22% { --apl: 1.07; }
-      48% { --apl: 0.96; }
-      74% { --apl: 1.05; }
+      22% { --apl: 1.06; }
+      48% { --apl: 0.99; }
+      74% { --apl: 1.04; }
     }
 
     body.waves-soft .blob.a { animation-name: drift-a-soft; }
@@ -575,10 +604,13 @@
           Room portal for the 55&quot; OLED — not another ops grid.
           Browser cannot overlay Grok Bot.app. Fullscreen this page on the panel.
         </p>
-        <div class="hint">
-          <a href="./">spacewall</a>
-          ·
-          <a href="./wave.html">wave lab</a>
+        <div class="meta">
+          <div class="ver">HEARTH v2</div>
+          <div class="hint">
+            <a href="./">spacewall</a>
+            ·
+            <a href="./wave.html">wave lab</a>
+          </div>
         </div>
       </div>
     </div>

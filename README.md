@@ -31,7 +31,7 @@ What the page does:
 - Slow **pixel orbit** of the whole composition (~±6–7px over a few minutes; `?orbit=strong` is wider)
 - Soft **silver** clock (no pure `#fff`); optional slow clock/ring wander
 - After ~8 minutes idle, a **gentle** mute of chrome only (`?deeper=crush` is the old brightness crush; `?deeper=0` disables)
-- Experimental **3 mural slides** (ember / slate / wine) every 3 minutes — Apple TV Photos pattern; Mark may yank this (`?slides=0`)
+- **3 mural slides** (ember / slate / wine) every 3 minutes, all in the same charcoal-room band (`?slides=0` yanks)
 - Slow **APL breathe** so average picture level does not lock
 - Modest peak whites — no parked high-contrast logos
 
@@ -54,7 +54,7 @@ All kitchen-sink. Omitted = recommended default. `0` / `off` yanks that piece wi
 | `?silver=0` | on | Soft silver clock vs older gray |
 | `?drift=0` | on | Slow clock/ring position wander |
 | `?peaks=0` | modest | `0` allows a brighter face for A/B — not for the panel |
-| `?slides=0` | on | Rotate ember → slate → wine. `?slides=fast` or `?slidedur=12` for prove-out. `?slide=slate` starts on a phase |
+| `?slides=0` | on | Rotate ember → slate → wine (same charcoal-room band). `?slides=fast` or `?slidedur=12` for prove-out. `?slide=slate` starts on a phase |
 | `?apl=0` | on | Micro brightness breathe so ASBL does not lock |
 | `?hud=1` | off | Tiny flag strip on the floor |
 
