@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Write version.json for SPACEWALL kiosk auto-reload.
 
-`v` is a content hash of kiosk client assets (index.html, wave.html, and
-any other files listed in SOURCES), not the latest git SHA. Pages also
-deploys when x-status.json refreshes; hashing code means those data-only
-deploys do not bounce wall iPads.
+`v` is a content hash of kiosk client assets (index.html, wave.html,
+hearth.html, and any other files listed in SOURCES), not the latest git
+SHA. Pages also deploys when x-status.json refreshes; hashing code means
+those data-only deploys do not bounce wall iPads.
 
 Deploy Pages always regenerates this file into the artifact. The copy
 committed on main must stay in sync too: the live site is published from
@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCES = ("index.html", "wave.html")
+SOURCES = ("index.html", "wave.html", "hearth.html")
 DEFAULT_OUT = ROOT / "version.json"
 
 

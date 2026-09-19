@@ -10,13 +10,32 @@ The first time after enabling auto-reload, force-quit the home-screen web app on
 
 Live: [earthman01.github.io/spacewall-kiosk](https://earthman01.github.io/spacewall-kiosk/)
 
-## OLED wave portal
+## OLED room: HEARTH
 
-Fullscreen idle overlay for a 55" Samsung OLED used as a Mac extended display — a **soft blurry wave over the page**, not a screensaver that replaces the frame.
+The 55" Samsung is a **living-room portal**, not a second SPACEWALL — iPads already run the ops grid.
 
-Open [wave.html](https://earthman01.github.io/spacewall-kiosk/wave.html) and fullscreen it on the OLED (or follow the discreet `wave` link on the wall). After **240s** idle, a translucent moving wash fades in over the crisp UI. Mouse, key, click, or scroll fades it out immediately. **Esc** dismisses the overlay without exiting the page. Override delay with `?idle=180` (seconds; `?idle=0` shows the wave now). Soft blacks, continuous slow motion, no static logo parked in one place.
+**Fullscreen today:** [hearth.html](https://earthman01.github.io/spacewall-kiosk/hearth.html) (discreet `hearth` link on the wall). Chrome or Safari on the Mac → put that window on the OLED → **View → Enter Full Screen** (or F11). Across-the-room type: Chicago clock, date, a thin day-progress ring. Soft ember/charcoal waves stay alive so the panel is never a black-OFF TV.
 
-**Honesty — Phase A only.** A browser page cannot sit on top of Grok Bot.app or other native windows. This file is a fullscreen portal / demo you put on the OLED yourself. Phase B (not in this repo) would be a native always-on-top click-through Mac overlay that can float over Grok Bot and SPACEWALL together.
+### OLED care
+
+What the page does for burn-in mitigation:
+
+- Continuous low-APL motion (blurry waves, no full-field white, no neon)
+- Slow **pixel orbit** of the whole composition (~±6px over a few minutes) so type and marks do not sit on the same subpixels
+- After ~8 minutes idle, the mural dims a little deeper
+- Nothing is a parked high-contrast logo
+
+What the TV / Mac should do:
+
+- On the Samsung, leave **Pixel Shift / Screen Shift on** if the set offers it for this input
+- HDMI from a Mac often **does not** get the TV’s own 2-minute screensaver — the set treats a computer as a PC. We supply the motion so the panel is not a static freeze-frame
+- Do not max OLED brightness for a portal that sits for hours
+
+### Wave lab (overlay prove-out)
+
+[wave.html](https://earthman01.github.io/spacewall-kiosk/wave.html) is the idle-overlay lab: crisp UI, then a translucent wave after **240s** (`?idle=180` seconds; `?idle=0` now). Mouse / key / click fades it out. **Esc** dismisses. Same pixel orbit; after the wave has been up ~90s it dims further. `?mode=spacewall` puts the real board underneath the wash — a prove-out of Phase B wrapping SPACEWALL, still just a browser page.
+
+**Honesty — Phase A only.** A browser page cannot sit on top of Grok Bot.app or other native windows. Fullscreen the portal on the OLED yourself. Phase B (not in this repo) is a native always-on-top click-through Mac overlay that could float the same wave+shift over Grok Bot and SPACEWALL together.
 
 ## Tiles
 

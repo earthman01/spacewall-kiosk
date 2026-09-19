@@ -38,6 +38,32 @@
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
+    #orbit {
+      height: 100%;
+      animation: pixel-orbit 210s ease-in-out infinite alternate;
+    }
+
+    #board-frame {
+      display: none;
+    }
+
+    body.spacewall-mode #board-frame {
+      display: block;
+      position: fixed;
+      inset: 0;
+      border: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: #070708;
+    }
+
+    body.spacewall-mode .room { display: none; }
+
+    body.deeper .glass { background: rgba(7, 7, 9, 0.2); }
+    body.deeper .clock { color: #8e8e96; }
+    body.deeper #wave.on { filter: brightness(0.82); }
+
     .room {
       position: relative;
       height: 100dvh;
@@ -275,6 +301,11 @@
       to { transform: translate3d(10vw, -12vh, 0) rotate(7deg); }
     }
 
+    @keyframes pixel-orbit {
+      from { transform: translate3d(-6px, -5px, 0); }
+      to { transform: translate3d(7px, 6px, 0); }
+    }
+
     @keyframes drift-chrome {
       from { transform: translate3d(-10px, 0, 0); }
       to { transform: translate3d(14px, 6px, 0); }
@@ -294,6 +325,8 @@
   </style>
 </head>
 <body>
+  <div id="orbit">
+  <iframe id="board-frame" title="SPACEWALL" hidden></iframe>
   <div class="room">
     <div class="top">
       <div class="brand">SPACE<span>WALL</span></div>
@@ -308,7 +341,7 @@
         Phase A · browser fullscreen portal. A web page cannot sit on top of Grok Bot.app.
         Phase B is a native always-on-top click-through overlay — not this file.
       </p>
-      <div class="hint">esc dismisses · ?idle=sec · <a href="./">wall</a></div>
+      <div class="hint">esc dismisses · ?idle=sec · <a href="./hearth.html">hearth</a> · <a href="./">wall</a></div>
     </div>
   </div>
 
@@ -344,15 +377,25 @@
     </div>
     <div class="vignette"></div>
   </div>
+  </div>
 
   <script>
 (function () {
   const VERSION_CHECK_MS = 3 * 60 * 1000;
   const DEFAULT_IDLE_SEC = 240;
+  const DEEP_AFTER_MS = 90 * 1000;
 
+  const params = new URLSearchParams(location.search);
   const wave = document.getElementById("wave");
   const clockEl = document.getElementById("clock");
   const statusEl = document.getElementById("status");
+  const frame = document.getElementById("board-frame");
+
+  if (params.get("mode") === "spacewall") {
+    document.body.classList.add("spacewall-mode");
+    frame.hidden = false;
+    frame.src = "./index.html?embed=1";
+  }
 
   function idleSeconds() {
     try {
@@ -369,6 +412,7 @@
   const idleMs = idleSeconds() * 1000;
   let timer = null;
   let countdown = null;
+  let deepTimer = null;
   let showing = false;
   let armed = false;
   let loadedVersion = null;
@@ -406,9 +450,15 @@
     wave.classList.add("on");
     wave.setAttribute("aria-hidden", "false");
     setStatus("wave · move to clear");
+    if (deepTimer) clearTimeout(deepTimer);
+    deepTimer = setTimeout(function () {
+      document.body.classList.add("deeper");
+    }, DEEP_AFTER_MS);
   }
 
   function hideWave() {
+    document.body.classList.remove("deeper");
+    if (deepTimer) clearTimeout(deepTimer);
     if (!showing) {
       wave.classList.remove("on", "out");
       return;

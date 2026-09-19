@@ -284,7 +284,8 @@
   <header>
     <div class="brand">SPACE<span>WALL</span></div>
     <div class="meta">
-      <a class="wave-link" href="./wave.html" title="OLED idle wave portal">wave</a>
+      <a class="wave-link" href="./hearth.html" title="OLED room portal">hearth</a>
+      <a class="wave-link" href="./wave.html" title="OLED idle wave lab">wave</a>
       <button type="button" id="demo" aria-pressed="false">Demo red</button>
       <div id="refresh">—</div>
     </div>
@@ -642,6 +643,14 @@
       // Stay quiet on transient fetch errors — do not reload.
     }
   }
+
+  try {
+    if (new URLSearchParams(location.search).get("embed") === "1") {
+      document.querySelectorAll(".wave-link").forEach(function (el) {
+        el.hidden = true;
+      });
+    }
+  } catch (e) {}
 
   demoBtn.addEventListener("click", function () {
     demoRed = !demoRed;
