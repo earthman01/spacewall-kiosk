@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-19T23:35:00Z",
+  "updated_at": "2026-09-20T00:33:00Z",
   "source": "x-seed-v1",
   "cards": [
     {
@@ -78,6 +78,105 @@
       "url": null,
       "created_at": "2026-09-19T23:35:00Z",
       "metrics": null
+    },
+    {
+      "id": "seed-fsd-unpark",
+      "kind": "post",
+      "subject": "FSD · Unpark",
+      "author": "lotnotes",
+      "name": "Lot Notes",
+      "text": "FSD can drive you home. Getting out of a tight Chicago lot still asks for a hand. Micro-nav and unpark are the next newspaper subjects — not a status tile.",
+      "url": null,
+      "created_at": "2026-09-18T14:10:00.000Z",
+      "metrics": { "likes": 3, "replies": 1, "impressions": 140 }
+    },
+    {
+      "id": "seed-cabin-voice",
+      "kind": "post",
+      "subject": "Cabin Grok",
+      "author": "cabinline",
+      "name": "Cabin Line",
+      "text": "Voice in the cabin is the product now. Climate, seat, nav, and a Grok thread while FSD holds the lane. The car is a room. The room has a desk.",
+      "url": null,
+      "created_at": "2026-09-17T19:22:00.000Z",
+      "metrics": { "likes": 6, "replies": 0, "impressions": 210 }
+    },
+    {
+      "id": "seed-idle-compute",
+      "kind": "post",
+      "subject": "Idle compute",
+      "author": "nightpack",
+      "name": "Night Pack",
+      "text": "Parked HW4 is a supercomputer on a charger. Most of it idle. If Grok inference can sit on that silicon at night, the driveway is a rack.",
+      "url": null,
+      "created_at": "2026-09-16T08:05:00.000Z",
+      "metrics": { "likes": 5, "replies": 2, "impressions": 188 }
+    },
+    {
+      "id": "seed-grok-build-desk",
+      "kind": "post",
+      "subject": "Grok Build desk",
+      "author": "desknote",
+      "name": "Desk Note",
+      "text": "Typed sentence → app with a URL. Grok Build on paid is a workshop, not a demo reel. The wall should carry the workshop, not a launch banner.",
+      "url": null,
+      "created_at": "2026-09-15T21:40:00.000Z",
+      "metrics": { "likes": 2, "replies": 0, "impressions": 96 }
+    },
+    {
+      "id": "brief-2",
+      "kind": "brief",
+      "subject": "Evening brief",
+      "author": "press",
+      "name": "PRESS",
+      "text": "Keep the grid straight. Fill the glass. Subjects: unpark friction · cabin voice · driveway inference · Grok Build workshop · household FSD plans.",
+      "url": null,
+      "created_at": "2026-09-20T00:33:00Z",
+      "metrics": null
+    },
+    {
+      "id": "seed-robotaxi-watch",
+      "kind": "post",
+      "subject": "Robotaxi watch",
+      "author": "curbside",
+      "name": "Curbside",
+      "text": "Robotaxi talk belongs on PRESS as a subject, not a countdown. Watch unsupervised miles, parking, and the last fifty feet to the curb.",
+      "url": null,
+      "created_at": "2026-09-14T16:18:00.000Z",
+      "metrics": { "likes": 1, "replies": 1, "impressions": 74 }
+    },
+    {
+      "id": "seed-fsd-v14",
+      "kind": "post",
+      "subject": "FSD v14",
+      "author": "lanekeep",
+      "name": "Lane Keep",
+      "text": "v14.3 is the one in the car tonight. Smooth on the arterial. Still a human for the garage door and the last turn into the stall.",
+      "url": null,
+      "created_at": "2026-09-13T11:02:00.000Z",
+      "metrics": { "likes": 8, "replies": 0, "impressions": 256 }
+    },
+    {
+      "id": "seed-xai-colossus",
+      "kind": "post",
+      "subject": "xAI · train",
+      "author": "rackrow",
+      "name": "Rack Row",
+      "text": "Training is a Memphis story. Inference may become a driveway story. PRESS keeps both on the same wall so the room can see the split.",
+      "url": null,
+      "created_at": "2026-09-12T09:30:00.000Z",
+      "metrics": { "likes": 4, "replies": 0, "impressions": 163 }
+    },
+    {
+      "id": "seed-household",
+      "kind": "post",
+      "subject": "Household FSD",
+      "author": "kitchenpad",
+      "name": "Kitchen Pad",
+      "text": "Two cars, one Grok, a school run and a grocery loop. The household plan is the real product. The wall should make that glanceable.",
+      "url": null,
+      "created_at": "2026-09-11T22:15:00.000Z",
+      "metrics": { "likes": 3, "replies": 0, "impressions": 81 }
     }
   ]
 }
