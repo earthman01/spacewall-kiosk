@@ -32,7 +32,7 @@ jobs:
           rm -rf site
           mkdir -p site
           cp -a index.html wave.html hearth.html press.html deck.js .nojekyll x-status.json \
-            spacewall.webmanifest hearth.webmanifest icons site/
+            press-feed.json spacewall.webmanifest hearth.webmanifest icons site/
           python3 scripts/write_version.py --out site/version.json
           python3 scripts/write_version.py --check --out site/version.json
           echo "artifact version.json:"

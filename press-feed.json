@@ -1,0 +1,83 @@
+{
+  "updated_at": "2026-09-19T23:35:00Z",
+  "source": "x-seed-v1",
+  "cards": [
+    {
+      "id": "2101288384564240396",
+      "kind": "post",
+      "subject": "Tesla · xAI",
+      "author": "divyanshekha",
+      "name": "divyanshishekhawat",
+      "text": "Hey @elonmusk, greetings from Rajasthan, India! Had 2 futuristic business concepts built on First Principles for your ecosystem: (1.)Tesla Compute Marketplace: Monetize parked Tesla FSD chips at night to form a decentralized cloud network for training @xai Grok.",
+      "url": "https://x.com/divyanshekha/status/2101288384564240396",
+      "created_at": "2026-09-19T12:32:45.000Z",
+      "metrics": { "likes": 0, "replies": 1, "impressions": 3 }
+    },
+    {
+      "id": "2094544603060052243",
+      "kind": "post",
+      "subject": "FSD · Grok",
+      "author": "michaelxbloch",
+      "name": "Michael Bloch",
+      "text": "No one alive has done more for human productivity than @elonmusk. Right now I'm sitting in my Tesla. I haven't touched the wheel since I got in. FSD is driving me home. I'm having a voice discussion with Grok about quantum tech as it drives me. It’s seamless and near zero",
+      "url": "https://x.com/michaelxbloch/status/2094544603060052243",
+      "created_at": "2026-08-31T21:55:22.000Z",
+      "metrics": { "likes": 72, "replies": 4, "impressions": 4333 }
+    },
+    {
+      "id": "2094060066559152256",
+      "kind": "post",
+      "subject": "Grok in the car",
+      "author": "afrikha44",
+      "name": "Afrikha",
+      "text": "Tesla's Summer Update quietly handed Grok real control of the car: voice commands reach deeper vehicle functions in 2026.26.6.5, now merged with FSD v14.3.8. The xAI-Tesla integration is becoming a product, not a demo.",
+      "url": "https://x.com/afrikha44/status/2094060066559152256",
+      "created_at": "2026-08-30T13:50:00.000Z",
+      "metrics": { "likes": 1, "replies": 0, "impressions": 62 }
+    },
+    {
+      "id": "2090560754252759441",
+      "kind": "post",
+      "subject": "Grok Build",
+      "author": "Toshogu",
+      "name": "Toshogu | AI",
+      "text": "xAI makes Grok Build available to all paying Grok and X subscribers. The feature turns a typed sentence into a working app, game, or website, each with its own web address, on web, iPhone, and Android.",
+      "url": "https://x.com/Toshogu/status/2090560754252759441",
+      "created_at": "2026-08-20T22:04:59.000Z",
+      "metrics": { "likes": 2, "replies": 0, "impressions": 88 }
+    },
+    {
+      "id": "2093743040590393713",
+      "kind": "post",
+      "subject": "Grok Bot · Tesla",
+      "author": "TeslaJedi",
+      "name": "Aaron",
+      "text": "Grok Bot is coming to Teslas. Every HW4/AI5 car already has a supercomputer sitting there for FSD — most of it idle when parked or on charge. If owners can offload some Grok inference onto that hardware, do we get a block of free tokens for…",
+      "url": "https://x.com/TeslaJedi/status/2093743040590393713",
+      "created_at": "2026-08-29T16:50:15.000Z",
+      "metrics": { "likes": 0, "replies": 1, "impressions": 45 }
+    },
+    {
+      "id": "2093155487722148196",
+      "kind": "post",
+      "subject": "Grok Bot day",
+      "author": "1andypatterson",
+      "name": "Andy Patterson",
+      "text": "I’m not a content creator or a high-profile exec. I’m a dad of 7 running a small family-owned business the best I can every day. But today… today was different. Today my Grok Bot @bot worked all day for me and got more done than I ever could have all while my @Tesla on FSD",
+      "url": "https://x.com/1andypatterson/status/2093155487722148196",
+      "created_at": "2026-08-28T01:55:31.000Z",
+      "metrics": { "likes": 4, "replies": 0, "impressions": 34 }
+    },
+    {
+      "id": "brief-1",
+      "kind": "brief",
+      "subject": "Morning brief",
+      "author": "press",
+      "name": "PRESS",
+      "text": "Subjects to thicken later: FSD parking/micro-nav friction · Grok Build for all paid · Tesla idle-compute ideas · household FSD/Grok plans.",
+      "url": null,
+      "created_at": "2026-09-19T23:35:00Z",
+      "metrics": null
+    }
+  ]
+}

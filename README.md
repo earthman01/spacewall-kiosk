@@ -12,7 +12,7 @@ Kiosks auto-reload after deploys (they poll `version.json` every few minutes and
 
 **Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
 
-Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.38.5` · `HEARTH 26.38.5` · `WAVE 26.38.5` · `PRESS 26.38.5`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.38.6` · `HEARTH 26.38.6` · `WAVE 26.38.6` · `PRESS 26.38.6`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
@@ -88,11 +88,35 @@ Recommended living-room URL is bare `hearth.html` (all of the above on, slides i
 
 **Honesty — Phase A only.** A browser page cannot sit on top of Grok Bot.app or other native windows. Fullscreen the portal on the OLED yourself. Phase B (not in this repo) is a native always-on-top click-through Mac overlay that could float the same wave+shift over Grok Bot and SPACEWALL together.
 
-## PRESS (look only)
+## PRESS
 
-[press.html](https://earthman01.github.io/spacewall-kiosk/press.html) is a thin floating-newspaper portal — glanceable subjects + post-shaped cards on the same near-black OLED wall. **v1 is placeholders only.** No X / Grok / RSS fetch. Cards fade in, then settle; hover/scan holds the wall so nothing rugpulls mid-read.
+Live: [press.html](https://earthman01.github.io/spacewall-kiosk/press.html)
 
-Next step (not this ship): a visibility-gated live feed that fetches only when `document.visibilityState === "visible"` / the TV page is actually open.
+Thin floating-newspaper portal — glanceable subjects + post-shaped cards on the same near-black OLED wall. Cards fade in, then settle; hover/scan holds the wall so nothing rugpulls mid-read. Tap a card to open an **in-app overlay reader** (same window / same PWA). Back/close returns to the wall. Primary read never leaves `press.html`. Posts may show a small secondary **Open on X** link in the overlay; briefs have no X url.
+
+The page only reads same-origin [`press-feed.json`](./press-feed.json), and only while `document.visibilityState === "visible"`. Hidden tabs and background iPads do not poll the feed. While visible, a slow refresh (about 20 minutes) can pick up a new file. Fetch failure keeps the last good wall, or the hardcoded placeholders if nothing has loaded yet.
+
+**No X API, Grok API, or secrets in the client.** Future refreshes of `press-feed.json` are offline writers (CosS / X / Grok). They commit or drop a new JSON file; the page does not call those APIs. `press-feed.json` is data-only (like `x-status.json`) and is not part of the `version.json` content hash, so a feed-only update does not bounce the wall iPads.
+
+```json
+{
+  "updated_at": "2026-09-19T23:35:00Z",
+  "source": "x-seed-v1",
+  "cards": [
+    {
+      "id": "…",
+      "kind": "post | brief",
+      "subject": "…",
+      "author": "handle",
+      "name": "display name",
+      "text": "full body",
+      "url": "https://x.com/…/status/… or null",
+      "created_at": "2026-09-19T12:32:45.000Z",
+      "metrics": { "likes": 0, "replies": 0, "impressions": 0 }
+    }
+  ]
+}
+```
 
 ## Tiles
 
