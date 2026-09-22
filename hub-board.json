@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T21:56:00Z",
+  "updated_at": "2026-09-22T22:55:00Z",
   "source": "cos-voice-call-abed2dda-sep22",
   "title": "HUB",
   "subtitle": "Personal OS · planning & build",
@@ -97,9 +97,9 @@
         {
           "id": "reel",
           "title": "REEL",
-          "status": "parked",
-          "detail": "Parked until after PRESS thin.",
-          "url": null
+          "status": "live",
+          "detail": "Slow cinema float — original mood packs, no film stills.",
+          "url": "https://earthman01.github.io/spacewall-kiosk/reel.html"
         }
       ]
     },

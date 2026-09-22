@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           rm -rf site
           mkdir -p site
-          cp -a index.html wave.html hearth.html press.html hub.html deck.js .nojekyll x-status.json \
+          cp -a index.html wave.html hearth.html press.html hub.html reel.html deck.js .nojekyll x-status.json \
             press-feed.json hub-board.json spacewall.webmanifest hearth.webmanifest icons site/
           python3 scripts/write_version.py --out site/version.json
           python3 scripts/write_version.py --check --out site/version.json
