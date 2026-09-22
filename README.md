@@ -12,7 +12,7 @@ Kiosks auto-reload after deploys (they poll `version.json` every few minutes and
 
 **Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
 
-Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.38.7` · `HEARTH 26.38.7` · `WAVE 26.38.7` · `PRESS 26.38.7`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.39.1` · `HEARTH 26.39.1` · `WAVE 26.39.1` · `PRESS 26.39.1` · `HUB 26.39.1`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
@@ -20,9 +20,9 @@ The first time after enabling auto-reload, force-quit the home-screen web app on
 
 On iPad / phone, swipe left or right to move between viewing systems. Shared script: [`deck.js`](./deck.js). Each portal keeps its own URL, look, and `version.json` watcher.
 
-**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`) ↔ PRESS (`press.html`)
+**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`) ↔ PRESS (`press.html`) ↔ HUB (`hub.html`)
 
-**Add REEL later:** append a row to `PAGES` in `deck.js`, create the html with the same `<script src="./deck.js" defer></script>` hook, add the file to `HTML_SOURCES` in `scripts/write_version.py` and the copy list in `.github/workflows/pages.yml`, then `python3 scripts/write_version.py`.
+**Add REEL later:** append a row to `PAGES` in `deck.js` (REEL stays commented until then), create the html with the same `<script src="./deck.js" defer></script>` hook, add the file to `HTML_SOURCES` / `PORTAL_BY_FILE` in `scripts/write_version.py` and the copy list in `.github/workflows/pages.yml`, then `python3 scripts/write_version.py`.
 
 | Flag | Default | Notes |
 | --- | --- | --- |
@@ -87,6 +87,43 @@ Recommended living-room URL is bare `hearth.html` (all of the above on, slides i
 [wave.html](https://earthman01.github.io/spacewall-kiosk/wave.html) is the idle-overlay lab: crisp UI, then a translucent wave after **240s** (`?idle=180` seconds; `?idle=0` now). Mouse / key / click fades it out. **Esc** dismisses. Same pixel orbit; after the wave has been up ~90s it dims further. `?mode=spacewall` puts the real board underneath the wash — a prove-out of Phase B wrapping SPACEWALL, still just a browser page.
 
 **Honesty — Phase A only.** A browser page cannot sit on top of Grok Bot.app or other native windows. Fullscreen the portal on the OLED yourself. Phase B (not in this repo) is a native always-on-top click-through Mac overlay that could float the same wave+shift over Grok Bot and SPACEWALL together.
+
+## HUB
+
+Live: [hub.html](https://earthman01.github.io/spacewall-kiosk/hub.html)
+
+Planning and build status wall for the personal OS — glance where planning and building stand, on an iPad or the 55" OLED. Near-black, full viewport. A north-star band (headline + short body) sits above four columns of status cards: Sprouted, This week, Building, Parked. Status words use the house palette (green live, amber building, dim parked) so the wall reads from across the room. Sparse chrome. No bright whites.
+
+The page only reads same-origin [`hub-board.json`](./hub-board.json), and only while `document.visibilityState === "visible"`. Hidden tabs and background iPads do not poll the board. While visible, a slow refresh (about 20 minutes) can pick up a new file. Fetch failure keeps the last good board.
+
+**No X API, Grok API, or secrets in the client.** CosS refreshes `hub-board.json` offline (commit or drop a new JSON file). The page does not call those APIs. `hub-board.json` is data-only — like `press-feed.json` and `x-status.json` — and is not part of the `version.json` content hash, so a board-only update does not bounce the wall iPads.
+
+Status vocabulary: `live` | `proved` | `building` | `next` | `waiting` | `parked` | `seed`.
+
+```json
+{
+  "updated_at": "2026-09-22T21:56:00Z",
+  "source": "cos-voice-call-…",
+  "title": "HUB",
+  "subtitle": "Personal OS · planning & build",
+  "north_star": { "headline": "…", "body": "…" },
+  "columns": [
+    {
+      "id": "sprouted",
+      "label": "Sprouted",
+      "items": [
+        {
+          "id": "…",
+          "title": "…",
+          "status": "live",
+          "detail": "…",
+          "url": "https://earthman01.github.io/spacewall-kiosk/… or null"
+        }
+      ]
+    }
+  ]
+}
+```
 
 ## PRESS
 
