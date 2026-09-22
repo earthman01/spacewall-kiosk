@@ -1,12 +1,12 @@
 /* SPACEWALL portal deck — iPad swipe across same-origin pages.
  *
  * Order (left → right):
- *   SPACEWALL  ↔  HEARTH  ↔  WAVE  ↔  PRESS  ↔  HUB
+ *   SPACEWALL  ↔  HEARTH  ↔  WAVE  ↔  PRESS  ↔  HUB  ↔  REEL
  *
- * Later pages: append to PAGES (REEL stays parked). Add the new html
- * to write_version.py HTML_SOURCES, pages.yml copy list, and this script
- * tag on that page:  <script src="./deck.js" defer></script>
- * Then run:  python3 scripts/write_version.py
+ * A new portal: append a row to PAGES, add the html to write_version.py
+ * HTML_SOURCES and PORTAL_BY_FILE, the pages.yml copy list, and this
+ * script tag on that page:  <script src="./deck.js" defer></script>
+ * Then run:  python3 scripts/write_version.py --bump-ship
  *
  * Default: on for iPad / phone (coarse pointer). Off on the OLED /
  * living-room Mac (fine pointer, wide or fullscreen) so HEARTH does
@@ -19,8 +19,8 @@
     { id: "hearth", file: "hearth.html", label: "HEARTH" },
     { id: "wave", file: "wave.html", label: "WAVE" },
     { id: "press", file: "press.html", label: "PRESS" },
-    { id: "hub", file: "hub.html", label: "HUB" }
-    // { id: "reel", file: "reel.html", label: "REEL" }
+    { id: "hub", file: "hub.html", label: "HUB" },
+    { id: "reel", file: "reel.html", label: "REEL" }
   ];
 
   const STORE_DIR = "spacewall-deck-dir";

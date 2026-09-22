@@ -12,7 +12,7 @@ Kiosks auto-reload after deploys (they poll `version.json` every few minutes and
 
 **Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
 
-Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.39.1` · `HEARTH 26.39.1` · `WAVE 26.39.1` · `PRESS 26.39.1` · `HUB 26.39.1`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.39.2` · `HEARTH 26.39.2` · `WAVE 26.39.2` · `PRESS 26.39.2` · `HUB 26.39.2` · `REEL 26.39.2`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
@@ -20,9 +20,7 @@ The first time after enabling auto-reload, force-quit the home-screen web app on
 
 On iPad / phone, swipe left or right to move between viewing systems. Shared script: [`deck.js`](./deck.js). Each portal keeps its own URL, look, and `version.json` watcher.
 
-**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`) ↔ PRESS (`press.html`) ↔ HUB (`hub.html`)
-
-**Add REEL later:** append a row to `PAGES` in `deck.js` (REEL stays commented until then), create the html with the same `<script src="./deck.js" defer></script>` hook, add the file to `HTML_SOURCES` / `PORTAL_BY_FILE` in `scripts/write_version.py` and the copy list in `.github/workflows/pages.yml`, then `python3 scripts/write_version.py`.
+**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`) ↔ PRESS (`press.html`) ↔ HUB (`hub.html`) ↔ REEL (`reel.html`)
 
 | Flag | Default | Notes |
 | --- | --- | --- |
@@ -124,6 +122,22 @@ Status vocabulary: `live` | `proved` | `building` | `next` | `waiting` | `parked
   ]
 }
 ```
+
+## REEL
+
+Live: [reel.html](https://earthman01.github.io/spacewall-kiosk/reel.html)
+
+Slow cinema-ambience float for the 55″ OLED, and the page after HUB on the iPad deck. Near-black full viewport. Large soft-edged panels drift, fade, and restack — calm, Apple TV screensaver energy. Art is original and generative (gradients, geometry, procedural texture). No film stills, hotlinks, or scraped frames.
+
+Mood packs cycle on their own. The on-screen label stays discreet: **Twilight** (cool blue dusk), **Tech Noir** (night chrome, amber/red edge, rain-glass), **2001** (deep field, pale monoliths, slow orbit), **Ember** (warm gold/green dusk). Tap or swipe up for the next pack; swipe down for the previous. `prefers-reduced-motion` holds a still composition. Self-contained — the only fetch is the shared `version.json` poll.
+
+| Flag | Default | Notes |
+| --- | --- | --- |
+| `?pack=twilight` / `noir` / `void` / `ember` | twilight, then cycle | Start pack. Aliases: `shoegaze`, `tech`, `2001`, `lotr` |
+| `?packs=0` | cycle on | Freeze the pack cycle |
+| `?packdur=sec` | 180 | Seconds between packs (`12` for prove-out) |
+| `?motion=0` | motion on | Freeze drift, restack, rain, and orbit |
+| `?hud=1` | off | Tiny flag strip (includes `swipe:on/off`) |
 
 ## PRESS
 

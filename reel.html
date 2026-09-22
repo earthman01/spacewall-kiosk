@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="REEL" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#12161c" />
+  <meta name="color-scheme" content="dark" />
+  <title>REEL</title>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add("booting");
+      var off = false;
+      try {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) off = true;
+        var m = (new URLSearchParams(location.search).get("motion") || "").toLowerCase();
+        if (m === "0" || m === "off" || m === "false" || m === "no") off = true;
+      } catch (e) {}
+      if (off) root.classList.add("motion-off");
+    })();
+  </script>
+  <script src="./deck.js?h=d8d30b657060" defer></script>
+  <style>
+    @property --bg { syntax: "<color>"; inherits: true; initial-value: #141820; }
+    @property --floor-top { syntax: "<color>"; inherits: true; initial-value: #1c2636; }
+    @property --floor-mid { syntax: "<color>"; inherits: true; initial-value: #2a384e; }
+    @property --floor-bot { syntax: "<color>"; inherits: true; initial-value: #12161e; }
+    @property --haze-a { syntax: "<color>"; inherits: true; initial-value: rgba(72, 96, 138, 0.42); }
+    @property --haze-b { syntax: "<color>"; inherits: true; initial-value: rgba(98, 74, 116, 0.30); }
+
+    :root { color-scheme: dark; }
+
+    html { background: #101114; }
+
+    body {
+      --bg: #141820;
+      --floor-top: #1c2636;
+      --floor-mid: #2a384e;
+      --floor-bot: #12161e;
+      --haze-a: rgba(72, 96, 138, 0.42);
+      --haze-b: rgba(98, 74, 116, 0.30);
+      transition:
+        --bg 3.4s ease, --floor-top 3.4s ease, --floor-mid 3.4s ease, --floor-bot 3.4s ease,
+        --haze-a 3.4s ease, --haze-b 3.4s ease;
+    }
+
+    body[data-pack="twilight"] {
+      --bg: #141820;
+      --floor-top: #1c2636;
+      --floor-mid: #2a384e;
+      --floor-bot: #12161e;
+      --haze-a: rgba(72, 96, 138, 0.42);
+      --haze-b: rgba(98, 74, 116, 0.30);
+    }
+
+    body[data-pack="noir"] {
+      --bg: #16181e;
+      --floor-top: #22242c;
+      --floor-mid: #34303a;
+      --floor-bot: #141216;
+      --haze-a: rgba(160, 100, 44, 0.30);
+      --haze-b: rgba(120, 40, 44, 0.26);
+    }
+
+    body[data-pack="void"] {
+      --bg: #121316;
+      --floor-top: #18191e;
+      --floor-mid: #22232a;
+      --floor-bot: #101114;
+      --haze-a: rgba(168, 164, 154, 0.10);
+      --haze-b: rgba(90, 86, 78, 0.12);
+    }
+
+    body[data-pack="ember"] {
+      --bg: #1a1612;
+      --floor-top: #2c2218;
+      --floor-mid: #4a3820;
+      --floor-bot: #16130e;
+      --haze-a: rgba(184, 132, 56, 0.34);
+      --haze-b: rgba(42, 72, 48, 0.36);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: #c8ccd4;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body { min-height: 100dvh; }
+
+    #orbit {
+      position: relative;
+      height: 100dvh;
+      overflow: hidden;
+      animation: pixel-orbit 220s ease-in-out infinite alternate;
+    }
+
+    @keyframes pixel-orbit {
+      from { transform: translate3d(-6px, -5px, 0); }
+      to { transform: translate3d(7px, 6px, 0); }
+    }
+
+    .floor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(88% 70% at 50% 44%, var(--floor-mid) 0%, transparent 68%),
+        linear-gradient(180deg, var(--floor-top) 0%, var(--bg) 46%, var(--floor-bot) 100%);
+      animation: apl-breathe 140s ease-in-out infinite;
+    }
+
+    @keyframes apl-breathe {
+      0%, 100% { filter: brightness(0.96); }
+      50% { filter: brightness(1.05); }
+    }
+
+    .haze {
+      position: absolute;
+      inset: -18%;
+      pointer-events: none;
+      filter: blur(46px);
+    }
+
+    .haze.a {
+      background: radial-gradient(46% 40% at 28% 38%, var(--haze-a), transparent 70%);
+      animation: haze-a 38s ease-in-out infinite alternate;
+    }
+
+    .haze.b {
+      background: radial-gradient(44% 38% at 74% 62%, var(--haze-b), transparent 68%);
+      animation: haze-b 46s ease-in-out infinite alternate;
+    }
+
+    @keyframes haze-a {
+      from { transform: translate3d(-3%, -1%, 0) scale(1); }
+      to { transform: translate3d(5%, 3%, 0) scale(1.06); }
+    }
+
+    @keyframes haze-b {
+      from { transform: translate3d(2%, 2%, 0) scale(1.04); }
+      to { transform: translate3d(-4%, -2%, 0) scale(1); }
+    }
+
+    .rain {
+      position: absolute;
+      inset: -25%;
+      pointer-events: none;
+      opacity: 0;
+      background: repeating-linear-gradient(
+        102deg,
+        transparent 0 16px,
+        rgba(196, 206, 216, 0.12) 16px 17px
+      );
+      animation: rain-fall 3.6s linear infinite;
+      transition: opacity 1.6s ease;
+    }
+
+    body[data-pack="noir"] .rain { opacity: 1; }
+
+    @keyframes rain-fall {
+      from { transform: translate3d(0, -4%, 0); }
+      to { transform: translate3d(-28px, 8%, 0); }
+    }
+
+    .stars, .motes {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.8s ease;
+    }
+
+    .stars {
+      box-shadow:
+        12vw 16vh 0 0 rgba(196, 192, 184, 0.28),
+        22vw 38vh 0 0 rgba(196, 192, 184, 0.16),
+        31vw 12vh 0 0 rgba(186, 182, 174, 0.22),
+        44vw 22vh 0 0 rgba(210, 206, 198, 0.18),
+        57vw 14vh 0 0 rgba(190, 186, 178, 0.14),
+        63vw 44vh 0 0 rgba(200, 196, 188, 0.2),
+        78vw 20vh 0 0 rgba(186, 182, 174, 0.24),
+        86vw 36vh 0 0 rgba(196, 192, 184, 0.12),
+        18vw 62vh 0 0 rgba(190, 186, 178, 0.16),
+        72vw 68vh 0 0 rgba(200, 196, 188, 0.14),
+        48vw 58vh 0 0 rgba(186, 182, 174, 0.1),
+        90vw 72vh 0 0 rgba(196, 192, 184, 0.18);
+    }
+
+    body[data-pack="void"] .stars { opacity: 1; animation: star-breathe 9s ease-in-out infinite; }
+
+    @keyframes star-breathe {
+      0%, 100% { opacity: 0.72; }
+      50% { opacity: 1; }
+    }
+
+    .motes {
+      width: 3px;
+      height: 3px;
+      background: transparent;
+    }
+
+    .motes.a {
+      box-shadow:
+        14vw 80vh 0 0 rgba(196, 132, 58, 0.55),
+        28vw 92vh 0 0 rgba(176, 120, 48, 0.4),
+        46vw 74vh 0 0 rgba(200, 150, 70, 0.45),
+        62vw 88vh 0 0 rgba(160, 90, 40, 0.5),
+        78vw 70vh 0 0 rgba(190, 140, 64, 0.35),
+        88vw 96vh 0 0 rgba(150, 110, 48, 0.4);
+      animation: mote-rise 32s linear infinite;
+    }
+
+    .motes.b {
+      box-shadow:
+        20vw 100vh 0 0 rgba(120, 150, 90, 0.28),
+        36vw 86vh 0 0 rgba(196, 140, 60, 0.32),
+        54vw 104vh 0 0 rgba(180, 110, 48, 0.38),
+        70vw 78vh 0 0 rgba(140, 160, 96, 0.22),
+        84vw 110vh 0 0 rgba(200, 150, 72, 0.3);
+      animation: mote-rise 46s linear infinite;
+    }
+
+    body[data-pack="ember"] .motes { opacity: 0.9; }
+
+    @keyframes mote-rise {
+      from { transform: translate3d(0, 8vh, 0); }
+      to { transform: translate3d(-2vw, -92vh, 0); }
+    }
+
+    .orbit-ring {
+      position: absolute;
+      left: 14%;
+      top: 28%;
+      width: 72%;
+      height: 44%;
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2s ease;
+    }
+
+    body[data-pack="void"] .orbit-ring { opacity: 1; }
+
+    html:not(.motion-off) body[data-pack="void"] .orbit-ring {
+      animation: ring-spin 220s linear infinite;
+    }
+
+    @keyframes ring-spin {
+      from { transform: rotate(-16deg); }
+      to { transform: rotate(344deg); }
+    }
+
+    .orbit-ring ellipse { fill: none; stroke: rgba(198, 194, 186, 0.55); stroke-width: 0.6; }
+
+    #float {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+    }
+
+    html:not(.motion-off) body[data-pack="void"] #float {
+      animation: void-orbit 90s ease-in-out infinite alternate;
+    }
+
+    @keyframes void-orbit {
+      from { transform: rotate(-6deg) scale(1.08); }
+      to { transform: rotate(6deg) scale(1.08); }
+    }
+
+    .card {
+      position: absolute;
+      overflow: hidden;
+      border-radius: 28px;
+      will-change: transform;
+      background: #14161c;
+      box-shadow:
+        0 24px 64px rgba(0, 0, 0, 0.42),
+        inset 0 0 0 1px rgba(206, 210, 218, 0.08);
+      transition:
+        left 3.4s cubic-bezier(0.22, 1, 0.36, 1),
+        top 3.4s cubic-bezier(0.22, 1, 0.36, 1),
+        width 3.4s cubic-bezier(0.22, 1, 0.36, 1),
+        height 3.4s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 1.5s ease,
+        border-radius 2.6s ease,
+        box-shadow 2.6s ease;
+    }
+
+    .card.swap { opacity: 0.48 !important; }
+
+    body[data-pack="noir"] .card {
+      border-radius: 16px;
+      box-shadow:
+        0 22px 56px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(184, 122, 58, 0.26),
+        inset 4px 0 0 rgba(176, 96, 48, 0.72);
+    }
+
+    body[data-pack="void"] .card {
+      border-radius: 1px;
+      background: #1a1916;
+      box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.55),
+        inset 0 0 0 1px rgba(48, 46, 42, 0.55);
+    }
+
+    .art {
+      position: absolute;
+      inset: -8%;
+      animation: ken 52s ease-in-out infinite alternate;
+    }
+
+    .card:nth-child(2n) .art { animation-duration: 68s; animation-direction: alternate-reverse; }
+    .card:nth-child(3n) .art { animation-duration: 46s; }
+
+    @keyframes ken {
+      from { transform: scale(1.03) translate3d(0, 0, 0); }
+      to { transform: scale(1.08) translate3d(-1.6%, -1.1%, 0); }
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(210, 214, 220, 0.07),
+        transparent 24%,
+        transparent 68%,
+        rgba(0, 0, 0, 0.32)
+      );
+    }
+
+    body[data-pack="void"] .card::after {
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.2),
+        transparent 16%,
+        transparent 78%,
+        rgba(0, 0, 0, 0.24)
+      );
+    }
+
+    .glass {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      background: repeating-linear-gradient(
+        96deg,
+        transparent 0 11px,
+        rgba(196, 204, 214, 0.1) 11px 12px
+      );
+    }
+
+    body[data-pack="noir"] .glass {
+      opacity: 1;
+      animation: rain-fall 4.2s linear infinite;
+    }
+
+    .face-twilight-0 {
+      background:
+        radial-gradient(90% 50% at 50% 108%, rgba(16, 20, 30, 0.25), transparent 46%),
+        linear-gradient(180deg, #1a2740 0%, #243656 30%, #516484 47%, #7d7288 53%, #3a4860 64%, #182232 100%);
+    }
+
+    .face-twilight-1 {
+      background:
+        radial-gradient(13% 11% at 68% 32%, #c5ceda 0 58%, rgba(150, 168, 192, 0.38) 62%, transparent 72%),
+        radial-gradient(55% 48% at 24% 74%, rgba(58, 74, 108, 0.5), transparent 68%),
+        linear-gradient(205deg, #141c2c 0%, #2c3c56 52%, #1a2434 100%);
+    }
+
+    .face-twilight-2 {
+      background:
+        linear-gradient(112deg, transparent 28%, rgba(156, 176, 206, 0.26) 47%, rgba(120, 142, 180, 0.05) 58%, transparent 72%),
+        radial-gradient(70% 60% at 18% 82%, rgba(54, 68, 102, 0.55), transparent 62%),
+        linear-gradient(165deg, #1c283c, #344860 42%, #1e2a3c);
+    }
+
+    .face-twilight-3 {
+      background:
+        linear-gradient(180deg, transparent 0 18%, rgba(156, 170, 190, 0.16) 30%, transparent 42%),
+        linear-gradient(180deg, transparent 0 52%, rgba(130, 148, 172, 0.15) 64%, transparent 76%),
+        radial-gradient(70% 42% at 40% 28%, rgba(86, 108, 142, 0.38), transparent 70%),
+        linear-gradient(180deg, #162030, #2a3a50);
+    }
+
+    .face-twilight-4 {
+      background:
+        radial-gradient(80% 36% at 50% 58%, rgba(126, 146, 176, 0.22), transparent 70%),
+        linear-gradient(180deg, #121a28 0%, #2a3a52 40%, #5a6880 58%, #243044 100%);
+    }
+
+    .face-noir-0 {
+      background:
+        linear-gradient(180deg, rgba(16, 18, 24, 0.05), rgba(8, 10, 14, 0.28)),
+        repeating-linear-gradient(90deg, #2a313c 0 18px, #3c4656 18px 19px),
+        linear-gradient(180deg, #262c38, #343c4a 55%, #1e242e);
+    }
+
+    .face-noir-1 {
+      background:
+        linear-gradient(100deg, #242a34 0%, #2e3642 40%, #4a3030 48.4%, #b85a52 49.5%, #b85a52 50.5%, #4a3030 51.6%, #2a303a 64%, #1c222c 100%);
+    }
+
+    .face-noir-2 {
+      background:
+        linear-gradient(180deg, rgba(16, 18, 24, 0.08), rgba(8, 10, 14, 0.35)),
+        repeating-linear-gradient(90deg, transparent 0 14px, rgba(196, 140, 64, 0.32) 14px 17px, transparent 17px 34px),
+        repeating-linear-gradient(0deg, #2a3038 0 22px, #3a3228 22px 24px, #242a32 24px 46px),
+        linear-gradient(180deg, #1e242e, #2a241c);
+    }
+
+    .face-noir-3 {
+      background:
+        radial-gradient(36% 8% at 28% 46%, rgba(196, 132, 64, 0.55), transparent 70%),
+        radial-gradient(28% 7% at 64% 48%, rgba(160, 58, 52, 0.48), transparent 72%),
+        linear-gradient(180deg, #222834 0%, #1e2430 44%, #3a2a22 46%, #16181e 100%);
+    }
+
+    .face-noir-4 {
+      background:
+        radial-gradient(42% 38% at 82% 16%, rgba(196, 132, 64, 0.38), transparent 62%),
+        linear-gradient(160deg, #2a313c 0%, #1e242e 42%, #2a221c 100%),
+        repeating-linear-gradient(135deg, transparent 0 28px, rgba(200, 208, 216, 0.07) 28px 29px);
+    }
+
+    .face-void-0 {
+      background: linear-gradient(90deg, #6a6660 0%, #9c988e 20%, #b4b0a6 46%, #8e8a82 78%, #5c5852 100%);
+    }
+
+    .face-void-1 {
+      background: linear-gradient(90deg, #5c5a56 0%, #948f86 28%, #aea9a0 52%, #7a766e 100%);
+    }
+
+    .face-void-2 {
+      background: linear-gradient(90deg, #6e5c46 0 2.2%, #aea99f 2.6%, #b8b4aa 42%, #867f76 100%);
+    }
+
+    .face-void-3 {
+      background: linear-gradient(90deg, #5a5854 0%, #8a8680 36%, #6e6c66 100%);
+    }
+
+    .face-void-4 {
+      background: linear-gradient(90deg, #4e4c48 0%, #7a7670 40%, #5c5a56 100%);
+    }
+
+    .face-ember-0 {
+      background:
+        linear-gradient(180deg, transparent 42%, rgba(14, 12, 10, 0.55) 100%),
+        radial-gradient(28% 70% at 16% 108%, #142016 0%, transparent 62%),
+        radial-gradient(36% 78% at 50% 112%, #1c2a1e 0%, transparent 64%),
+        radial-gradient(30% 66% at 84% 104%, #101810 0%, transparent 60%),
+        linear-gradient(180deg, #24343c 0%, #4a4030 40%, #8a6a38 56%, #1e1812 80%);
+    }
+
+    .face-ember-1 {
+      background:
+        repeating-linear-gradient(90deg, transparent 0 7%, rgba(8, 12, 8, 0.62) 7% 9.5%, transparent 9.5% 24%),
+        radial-gradient(46% 18% at 48% 64%, rgba(184, 146, 70, 0.42), transparent 70%),
+        linear-gradient(180deg, #243830 0%, #4a4228 52%, #1a1612 100%);
+    }
+
+    .face-ember-2 {
+      background:
+        radial-gradient(circle at 22% 66%, rgba(196, 120, 48, 0.75) 0 0.7%, transparent 1.1%),
+        radial-gradient(circle at 48% 58%, rgba(200, 146, 64, 0.55) 0 0.55%, transparent 0.95%),
+        radial-gradient(circle at 70% 72%, rgba(176, 86, 40, 0.6) 0 0.5%, transparent 0.9%),
+        radial-gradient(circle at 34% 78%, rgba(210, 160, 72, 0.4) 0 0.45%, transparent 0.85%),
+        radial-gradient(circle at 84% 60%, rgba(160, 120, 48, 0.35) 0 0.4%, transparent 0.8%),
+        radial-gradient(80% 46% at 50% 100%, rgba(54, 32, 14, 0.7), transparent 62%),
+        linear-gradient(180deg, #141c18, #2a2416 72%);
+    }
+
+    .face-ember-3 {
+      background:
+        linear-gradient(180deg, transparent 0 28%, rgba(24, 34, 26, 0.38) 29% 38%, transparent 39%),
+        linear-gradient(180deg, transparent 0 48%, rgba(20, 30, 22, 0.42) 49% 60%, transparent 61%),
+        linear-gradient(180deg, transparent 0 68%, rgba(14, 16, 12, 0.55) 69% 82%, transparent 83%),
+        radial-gradient(50% 28% at 62% 42%, rgba(176, 138, 64, 0.26), transparent 70%),
+        linear-gradient(180deg, #243034, #3a3420);
+    }
+
+    .face-ember-4 {
+      background:
+        radial-gradient(70% 40% at 30% 70%, rgba(40, 64, 40, 0.45), transparent 68%),
+        radial-gradient(40% 24% at 70% 36%, rgba(184, 140, 64, 0.3), transparent 70%),
+        linear-gradient(180deg, #20302a 0%, #4a4024 48%, #1e1812 100%);
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      pointer-events: none;
+      background: radial-gradient(72% 68% at 50% 46%, transparent 42%, rgba(8, 8, 10, 0.5) 100%);
+    }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      z-index: 31;
+      width: 100%;
+      height: 100%;
+      opacity: 0.045;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+
+    .pack {
+      position: absolute;
+      top: calc(18px + env(safe-area-inset-top));
+      left: calc(20px + env(safe-area-inset-left));
+      z-index: 40;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #9a9ea6;
+      text-shadow: 0 0 10px rgba(6, 6, 8, 0.95), 0 1px 2px rgba(6, 6, 8, 0.95);
+      pointer-events: none;
+    }
+
+    .ver {
+      position: absolute;
+      left: calc(18px + env(safe-area-inset-left));
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 40;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #8e8e98;
+      text-shadow: 0 1px 8px rgba(6, 6, 8, 0.9);
+      pointer-events: none;
+    }
+
+    .hint {
+      position: absolute;
+      right: calc(18px + env(safe-area-inset-right));
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 40;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #4a4a52;
+    }
+
+    .hint a {
+      color: #5c5c66;
+      text-decoration: none;
+    }
+
+    .hint a:hover { color: #c4c4cc; }
+
+    .hint a:focus-visible {
+      outline: 1px solid #3a3a44;
+      outline-offset: 3px;
+    }
+
+    #hud {
+      position: fixed;
+      top: calc(18px + env(safe-area-inset-top));
+      right: calc(18px + env(safe-area-inset-right));
+      z-index: 50;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5a5a64;
+      pointer-events: none;
+    }
+
+    html.booting .card,
+    html.motion-off .card,
+    html.motion-off body {
+      transition: none;
+    }
+
+    html.motion-off #orbit,
+    html.motion-off .floor,
+    html.motion-off .haze,
+    html.motion-off .rain,
+    html.motion-off .stars,
+    html.motion-off .motes,
+    html.motion-off .orbit-ring,
+    html.motion-off #float,
+    html.motion-off .art,
+    html.motion-off .glass {
+      animation: none !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #orbit, .floor, .haze, .rain, .stars, .motes, .orbit-ring, #float, .art, .glass {
+        animation: none !important;
+      }
+      .card, body { transition: none !important; }
+    }
+  </style>
+</head>
+<body data-pack="twilight">
+  <div id="orbit">
+    <div class="floor" aria-hidden="true"></div>
+    <div class="haze a" aria-hidden="true"></div>
+    <div class="haze b" aria-hidden="true"></div>
+    <div class="rain" aria-hidden="true"></div>
+    <div class="stars" aria-hidden="true"></div>
+    <div class="motes a" aria-hidden="true"></div>
+    <div class="motes b" aria-hidden="true"></div>
+    <svg class="orbit-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <ellipse cx="50" cy="50" rx="36" ry="14"></ellipse>
+    </svg>
+    <div id="float" aria-hidden="true">
+      <div class="card" style="left:-6%;top:4%;width:46%;height:64%;z-index:2;opacity:0.92">
+        <div class="art face-twilight-0"></div>
+        <div class="glass"></div>
+      </div>
+      <div class="card" style="left:54%;top:-8%;width:44%;height:52%;z-index:3;opacity:0.9">
+        <div class="art face-twilight-1"></div>
+        <div class="glass"></div>
+      </div>
+      <div class="card" style="left:20%;top:26%;width:52%;height:58%;z-index:6;opacity:1">
+        <div class="art face-twilight-2"></div>
+        <div class="glass"></div>
+      </div>
+      <div class="card" style="left:66%;top:44%;width:38%;height:46%;z-index:4;opacity:0.88">
+        <div class="art face-twilight-3"></div>
+        <div class="glass"></div>
+      </div>
+      <div class="card" style="left:-2%;top:62%;width:34%;height:36%;z-index:1;opacity:0.84">
+        <div class="art face-twilight-4"></div>
+        <div class="glass"></div>
+      </div>
+    </div>
+    <div class="vignette" aria-hidden="true"></div>
+    <svg class="grain" aria-hidden="true">
+      <filter id="reel-grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#reel-grain)"></rect>
+    </svg>
+    <div id="pack-label" class="pack" aria-live="polite">Twilight</div>
+    <div class="hint">
+      <a href="./hub.html">hub</a>
+      ·
+      <a href="./hearth.html">hearth</a>
+      ·
+      <a href="./">spacewall</a>
+    </div>
+    <div id="ver" class="ver" data-portal="REEL">REEL 26.39.2</div>
+  </div>
+  <div id="hud" hidden></div>
+
+  <script>
+(function () {
+  const VERSION_CHECK_MS = 3 * 60 * 1000;
+  const RESTACK_MS = 14000;
+
+  const PACKS = [
+    {
+      id: "twilight",
+      label: "Twilight",
+      aliases: ["twilight", "shoegaze", "dusk"],
+      amp: 48,
+      slots: [
+        { x: -6, y: 4, w: 46, h: 64, z: 2, r: -1.6, s: 1, o: 0.92 },
+        { x: 54, y: -8, w: 44, h: 52, z: 3, r: 1.3, s: 1, o: 0.9 },
+        { x: 20, y: 26, w: 52, h: 58, z: 6, r: -0.4, s: 1.02, o: 1 },
+        { x: 66, y: 44, w: 38, h: 46, z: 4, r: 1.8, s: 0.98, o: 0.88 },
+        { x: -2, y: 62, w: 34, h: 36, z: 1, r: 0.6, s: 0.97, o: 0.84 }
+      ]
+    },
+    {
+      id: "noir",
+      label: "Tech Noir",
+      aliases: ["noir", "tech", "technoir", "tech-noir", "chrome"],
+      amp: 36,
+      slots: [
+        { x: -8, y: 8, w: 40, h: 72, z: 3, r: -1.2, s: 1, o: 0.94 },
+        { x: 50, y: -6, w: 46, h: 48, z: 2, r: 0.8, s: 1, o: 0.9 },
+        { x: 22, y: 28, w: 48, h: 52, z: 6, r: -0.3, s: 1.03, o: 1 },
+        { x: 62, y: 40, w: 40, h: 54, z: 4, r: 1.4, s: 1, o: 0.9 },
+        { x: 4, y: 58, w: 36, h: 40, z: 1, r: 0.5, s: 0.98, o: 0.86 }
+      ]
+    },
+    {
+      id: "void",
+      label: "2001",
+      aliases: ["void", "2001", "monolith", "orbit"],
+      amp: 18,
+      slots: [
+        { x: 8, y: -12, w: 18, h: 96, z: 3, r: -0.4, s: 1, o: 0.96 },
+        { x: 36, y: -8, w: 22, h: 116, z: 6, r: 0.15, s: 1, o: 1 },
+        { x: 68, y: -16, w: 16, h: 104, z: 4, r: 0.45, s: 1, o: 0.94 },
+        { x: 24, y: 6, w: 11, h: 74, z: 2, r: -0.2, s: 1, o: 0.8 },
+        { x: 56, y: 16, w: 9, h: 60, z: 1, r: 0.25, s: 1, o: 0.72 }
+      ]
+    },
+    {
+      id: "ember",
+      label: "Ember",
+      aliases: ["ember", "lotr", "forest", "gold"],
+      amp: 42,
+      slots: [
+        { x: -8, y: 6, w: 52, h: 58, z: 2, r: -1.2, s: 1, o: 0.92 },
+        { x: 50, y: -4, w: 48, h: 50, z: 3, r: 1.0, s: 1, o: 0.9 },
+        { x: 16, y: 28, w: 56, h: 54, z: 6, r: -0.3, s: 1.02, o: 1 },
+        { x: 62, y: 46, w: 42, h: 44, z: 4, r: 1.5, s: 0.98, o: 0.88 },
+        { x: -4, y: 60, w: 40, h: 38, z: 1, r: 0.4, s: 0.96, o: 0.84 }
+      ]
+    }
+  ];
+
+  const params = new URLSearchParams(location.search);
+  const labelEl = document.getElementById("pack-label");
+  const hudEl = document.getElementById("hud");
+  const cardEls = Array.prototype.slice.call(document.querySelectorAll("#float .card"));
+
+  let packIndex = 0;
+  let lead = 2;
+  let seq = 0;
+  let raf = 0;
+  let looping = false;
+  let packTimer = null;
+  let stackTimer = null;
+  let loadedVersion = null;
+  let reloadArmed = false;
+  let motionOff = document.documentElement.classList.contains("motion-off");
+
+  const cards = cardEls.map(function (el, i) {
+    return {
+      el: el,
+      art: el.querySelector(".art"),
+      home: PACKS[0].slots[i],
+      phase: i * 1.7,
+      scale: PACKS[0].slots[i].s
+    };
+  });
+
+  function raw(name) {
+    const v = params.get(name);
+    return v == null ? null : String(v).toLowerCase();
+  }
+
+  function isOff(name) {
+    const v = raw(name);
+    return v === "0" || v === "off" || v === "false" || v === "no";
+  }
+
+  function isOn(name) {
+    const v = raw(name);
+    return v === "1" || v === "on" || v === "true" || v === "yes";
+  }
+
+  function packDurSec() {
+    const n = Number(params.get("packdur"));
+    if (Number.isFinite(n) && n >= 4 && n <= 3600) return n;
+    return 180;
+  }
+
+  const packDur = packDurSec();
+  const packsOff = isOff("packs");
+
+  function findPack(name) {
+    if (!name) return 0;
+    const i = PACKS.findIndex(function (p) {
+      return p.aliases.indexOf(name) !== -1;
+    });
+    return i >= 0 ? i : 0;
+  }
+
+  packIndex = findPack(raw("pack"));
+
+  function pageIsVisible() {
+    return document.visibilityState === "visible";
+  }
+
+  function applyDepth() {
+    cards.forEach(function (card, i) {
+      const front = i === lead;
+      card.el.style.zIndex = String(card.home.z + (front ? 8 : 0));
+      if (!card.el.classList.contains("swap")) {
+        card.el.style.opacity = String(front ? 1 : card.home.o);
+      }
+    });
+  }
+
+  function paint(now) {
+    const t = now || performance.now();
+    const amp = motionOff ? 0 : PACKS[packIndex].amp;
+    cards.forEach(function (card, i) {
+      const home = card.home;
+      const ph = card.phase;
+      const wx = Math.sin(t * 0.00028 + ph) * amp;
+      const wy = Math.cos(t * 0.00019 + ph * 1.4) * amp * 0.62;
+      const rot = home.r + (motionOff ? 0 : Math.sin(t * 0.00012 + ph) * 0.85);
+      const target = home.s * (i === lead ? 1.045 : 1);
+      card.scale += (target - card.scale) * (motionOff ? 1 : 0.045);
+      const breathe = motionOff ? 1 : 1 + Math.sin(t * 0.00009 + ph) * 0.02;
+      card.el.style.transform =
+        "translate3d(" + wx.toFixed(2) + "px," + wy.toFixed(2) + "px,0) rotate(" +
+        rot.toFixed(3) + "deg) scale(" + (card.scale * breathe).toFixed(4) + ")";
+    });
+  }
+
+  function applyPack(index, animate) {
+    const pack = PACKS[index];
+    const token = ++seq;
+    document.body.dataset.pack = pack.id;
+    labelEl.textContent = pack.label;
+    cards.forEach(function (card, i) {
+      card.home = pack.slots[i];
+      card.el.style.left = card.home.x + "%";
+      card.el.style.top = card.home.y + "%";
+      card.el.style.width = card.home.w + "%";
+      card.el.style.height = card.home.h + "%";
+    });
+    lead = 2;
+    const paintFaces = function () {
+      if (token !== seq) return;
+      cards.forEach(function (card, i) {
+        card.art.className = "art face-" + pack.id + "-" + (i % 5);
+        card.el.classList.remove("swap");
+      });
+      applyDepth();
+    };
+    if (!animate || motionOff) paintFaces();
+    else {
+      cards.forEach(function (card) { card.el.classList.add("swap"); });
+      window.setTimeout(paintFaces, 520);
+    }
+    paintHud();
+    if (motionOff) paint(performance.now());
+  }
+
+  function advance(dir) {
+    packIndex = (packIndex + dir + PACKS.length) % PACKS.length;
+    applyPack(packIndex, true);
+  }
+
+  function restack() {
+    if (motionOff) return;
+    lead = (lead + 1) % cards.length;
+    applyDepth();
+  }
+
+  function paintHud() {
+    if (!hudEl || hudEl.hidden) return;
+    const base =
+      "pack:" + PACKS[packIndex].id +
+      "  ·  motion:" + (motionOff ? "off" : "on") +
+      "  ·  packs:" + (packsOff ? "off" : packDur + "s");
+    const prev = hudEl.textContent || "";
+    const swipe = prev.match(/swipe:\S+/);
+    hudEl.textContent = swipe ? base + "  ·  " + swipe[0] : base;
+  }
+
+  function stopLoop() {
+    looping = false;
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+  }
+
+  function tick(now) {
+    if (!looping) return;
+    paint(now);
+    raf = requestAnimationFrame(tick);
+  }
+
+  function startLoop() {
+    if (motionOff || looping || !pageIsVisible()) return;
+    looping = true;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function disarmTimers() {
+    if (packTimer) clearInterval(packTimer);
+    if (stackTimer) clearInterval(stackTimer);
+    packTimer = null;
+    stackTimer = null;
+  }
+
+  function armTimers() {
+    disarmTimers();
+    if (!pageIsVisible()) return;
+    if (!packsOff) {
+      packTimer = setInterval(function () { advance(1); }, packDur * 1000);
+    }
+    if (!motionOff) stackTimer = setInterval(restack, RESTACK_MS);
+  }
+
+  function syncMotion(off) {
+    motionOff = off;
+    document.documentElement.classList.toggle("motion-off", off);
+    if (off) {
+      stopLoop();
+      paint(performance.now());
+    } else if (pageIsVisible()) {
+      startLoop();
+    }
+    armTimers();
+    paintHud();
+  }
+
+  if (isOn("hud")) {
+    hudEl.hidden = false;
+    paintHud();
+  }
+
+  applyPack(packIndex, false);
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      document.documentElement.classList.remove("booting");
+    });
+  });
+  armTimers();
+  startLoop();
+
+  try {
+    const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    reduceMq.addEventListener("change", function () {
+      if (reduceMq.matches) syncMotion(true);
+      else if (!isOff("motion")) syncMotion(false);
+    });
+  } catch (e) {}
+
+  document.addEventListener("visibilitychange", function () {
+    if (pageIsVisible()) {
+      armTimers();
+      startLoop();
+    } else {
+      disarmTimers();
+      stopLoop();
+    }
+  });
+
+  let startX = 0;
+  let startY = 0;
+  let tracking = false;
+
+  window.addEventListener("pointerdown", function (ev) {
+    if (ev.isPrimary === false) return;
+    if (ev.target && ev.target.closest && ev.target.closest("a, button")) return;
+    startX = ev.clientX;
+    startY = ev.clientY;
+    tracking = true;
+  }, { passive: true });
+
+  window.addEventListener("pointerup", function (ev) {
+    if (!tracking) return;
+    tracking = false;
+    const dx = ev.clientX - startX;
+    const dy = ev.clientY - startY;
+    if (Math.abs(dx) < 18 && Math.abs(dy) < 18) {
+      advance(1);
+      return;
+    }
+    if (Math.abs(dy) < 48 || Math.abs(dy) < Math.abs(dx) * 1.15) return;
+    advance(dy < 0 ? 1 : -1);
+  }, { passive: true });
+
+  window.addEventListener("pointercancel", function () { tracking = false; });
+
+  window.addEventListener("keydown", function (ev) {
+    if (ev.defaultPrevented || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+    if (ev.target && ev.target.closest && ev.target.closest("a, button, input, textarea")) return;
+    if (ev.key === "ArrowUp" || ev.key === "PageDown") {
+      ev.preventDefault();
+      advance(1);
+    } else if (ev.key === "ArrowDown" || ev.key === "PageUp") {
+      ev.preventDefault();
+      advance(-1);
+    }
+  });
+
+  function versionCheckMs() {
+    try {
+      const n = Number(params.get("vcheck"));
+      if (Number.isFinite(n) && n >= 1000) return n;
+    } catch (e) {}
+    return VERSION_CHECK_MS;
+  }
+
+  function paintStamp(data) {
+    const el = document.getElementById("ver");
+    if (!el || !data || !data.label) return;
+    const name = el.getAttribute("data-portal") || "REEL";
+    el.textContent = name + " " + data.label;
+  }
+
+  async function fetchVersion() {
+    const url = "./version.json?t=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data || typeof data.v !== "string" || !data.v) {
+      throw new Error("bad version");
+    }
+    paintStamp(data);
+    return data.v;
+  }
+
+  async function captureVersion() {
+    try {
+      loadedVersion = await fetchVersion();
+    } catch (e) {
+      loadedVersion = null;
+    }
+  }
+
+  async function checkVersion() {
+    if (reloadArmed) return;
+    try {
+      const remote = await fetchVersion();
+      if (loadedVersion == null) {
+        loadedVersion = remote;
+        return;
+      }
+      if (remote !== loadedVersion) {
+        reloadArmed = true;
+        location.reload();
+      }
+    } catch (e) {}
+  }
+
+  captureVersion();
+  setInterval(checkVersion, versionCheckMs());
+})();
+  </script>
+</body>
+</html>
