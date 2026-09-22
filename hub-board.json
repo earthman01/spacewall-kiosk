@@ -1,0 +1,127 @@
+{
+  "updated_at": "2026-09-22T21:56:00Z",
+  "source": "cos-voice-call-abed2dda-sep22",
+  "title": "HUB",
+  "subtitle": "Personal OS · planning & build",
+  "north_star": {
+    "headline": "Be a hub, not a leaf",
+    "body": "Tesla × cabin Grok × CoS × calendar/mail × house displays × life logistics through one personal OS. Navy career pays the bills ~7 more years. This layer is life admin, not a startup. Plant edges now so the phase change finds you already connected."
+  },
+  "columns": [
+    {
+      "id": "sprouted",
+      "label": "Sprouted",
+      "items": [
+        {
+          "id": "spacewall",
+          "title": "SPACEWALL / HEARTH",
+          "status": "live",
+          "detail": "House display platform — iPads + 55″ OLED. Mind-blown seed.",
+          "url": "https://earthman01.github.io/spacewall-kiosk/"
+        },
+        {
+          "id": "cabin-cal",
+          "title": "Cabin calendar connector",
+          "status": "proved",
+          "detail": "Wrote “A and W trailer” today (~3:41 PM CT).",
+          "url": null
+        },
+        {
+          "id": "cos-team",
+          "title": "CoS team",
+          "status": "live",
+          "detail": "earthbot + CFO + admin + explorer + air — density, not five apps.",
+          "url": null
+        },
+        {
+          "id": "awareness",
+          "title": "Awareness loop",
+          "status": "live",
+          "detail": "Morning brief + lean X digests + voice-safe try-this.",
+          "url": null
+        },
+        {
+          "id": "voice-ingest",
+          "title": "Voice hang-up ingest",
+          "status": "live",
+          "detail": "Transcripts on disk; skill locked so hang-ups don’t go blank.",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "this-week",
+      "label": "This week",
+      "items": [
+        {
+          "id": "cabin-gmail",
+          "title": "Cabin edge #2 — Gmail/files",
+          "status": "next",
+          "detail": "When parked: connect Gmail (or files) like calendar; one real ask.",
+          "url": null
+        },
+        {
+          "id": "cross-surface",
+          "title": "Cross-surface SPACEWALL briefing",
+          "status": "next",
+          "detail": "Once, tell cabin Grok the house-stack one-liner so car and CoS share the win.",
+          "url": null
+        },
+        {
+          "id": "spearhead",
+          "title": "Spearhead habit",
+          "status": "next",
+          "detail": "CoS pushes one no-brainer when a needle drops or a seed needs water.",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "building",
+      "label": "Building",
+      "items": [
+        {
+          "id": "hub-portal",
+          "title": "HUB portal (this board)",
+          "status": "building",
+          "detail": "SPACEWALL-style planning/build wall for the personal OS.",
+          "url": null
+        },
+        {
+          "id": "press",
+          "title": "PRESS",
+          "status": "live",
+          "detail": "Floating newspaper portal on the same platform.",
+          "url": "https://earthman01.github.io/spacewall-kiosk/press.html"
+        },
+        {
+          "id": "reel",
+          "title": "REEL",
+          "status": "parked",
+          "detail": "Parked until after PRESS thin.",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "parked",
+      "label": "Parked / later",
+      "items": [
+        {
+          "id": "boat-week",
+          "title": "Boat / trailer week",
+          "status": "waiting",
+          "detail": "Eric A&W estimate by tomorrow AM; Gary logistics; Daniel Thompson repair.",
+          "url": null
+        },
+        {
+          "id": "cabin-hub",
+          "title": "Cabin as edge of personal OS",
+          "status": "seed",
+          "detail": "More connectors + memory continuity across car and CoS.",
+          "url": null
+        }
+      ]
+    }
+  ]
+}

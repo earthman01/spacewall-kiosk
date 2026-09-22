@@ -2,9 +2,10 @@
 """Write version.json for SPACEWALL kiosk auto-reload.
 
 `v` is a content hash of kiosk client assets (index.html, wave.html,
-hearth.html, press.html, deck.js, and any other files listed in SOURCES), not the
-latest git SHA. Pages also deploys when x-status.json or press-feed.json
-refresh; hashing code means those data-only deploys do not bounce wall iPads.
+hearth.html, press.html, hub.html, deck.js, and any other files listed in
+SOURCES), not the latest git SHA. Pages also deploys when x-status.json,
+press-feed.json, or hub-board.json refresh; hashing code means those
+data-only deploys do not bounce wall iPads.
 
 Human-facing stamp (Mark / Tesla-style decimals) lives in the same file:
 `year`, `week`, `ship`, `hotfix`, and `label` (YEAR.WEEK.SHIP, plus .HOTFIX
@@ -33,20 +34,21 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 # Portal html that must load deck.js. Append reel.html here.
-HTML_SOURCES = ("index.html", "wave.html", "hearth.html", "press.html")
+HTML_SOURCES = ("index.html", "wave.html", "hearth.html", "press.html", "hub.html")
 SOURCES = HTML_SOURCES + ("deck.js",)
 PORTAL_BY_FILE = {
     "index.html": "SPACEWALL",
     "hearth.html": "HEARTH",
     "wave.html": "WAVE",
     "press.html": "PRESS",
+    "hub.html": "HUB",
 }
 DEFAULT_OUT = ROOT / "version.json"
 DECK_SCRIPT_RE = re.compile(
     r'<script src="\./deck\.js(?:\?h=[a-f0-9]+)?" defer></script>'
 )
 VER_EL_RE = re.compile(
-    r'(<[^>]*\bid="ver"[^>]*>)(SPACEWALL|HEARTH|WAVE|PRESS) \d+\.\d+\.\d+(?:\.\d+)?(</)'
+    r'(<[^>]*\bid="ver"[^>]*>)(SPACEWALL|HEARTH|WAVE|PRESS|HUB) \d+\.\d+\.\d+(?:\.\d+)?(</)'
 )
 
 

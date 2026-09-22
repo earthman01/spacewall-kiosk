@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="HUB" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#070708" />
+  <meta name="color-scheme" content="dark" />
+  <title>HUB</title>
+  <script src="./deck.js?h=22cc8c12dca5" defer></script>
+  <style>
+    :root {
+      --bg: #070708;
+      --paper: #0e0e11;
+      --text: #d4d4dc;
+      --title: #d8d8e0;
+      --muted: #6a6a74;
+      --dim: #3a3a42;
+      --rule: #1c1c22;
+      --ok: #1aff6e;
+      --amber: #ffb020;
+      --proved: #7dcaa0;
+      --next: #b4b4be;
+      --waiting: #a08050;
+      --parked: #4a4a52;
+      --seed: #6a6a74;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    #orbit {
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      animation: pixel-orbit 220s ease-in-out infinite alternate;
+    }
+
+    header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 14px 20px 10px;
+      border-bottom: 1px solid var(--rule);
+      background: #050506;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.34em;
+      font-size: 15px;
+      color: #e4e4ea;
+    }
+
+    .brand span { color: #8e8e98; }
+
+    .mast {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .tag, .hint, .board-stamp {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .tag { color: var(--muted); }
+
+    a {
+      color: #7a7a84;
+      text-decoration: none;
+    }
+
+    a:hover { color: #c4c4cc; }
+
+    #north {
+      flex-shrink: 0;
+      padding: 16px 22px 14px;
+      border-bottom: 1px solid #151518;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 70%),
+        #08080a;
+    }
+
+    #north h1 {
+      font-size: clamp(28px, 3.1vw, 56px);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--title);
+    }
+
+    #north p {
+      margin-top: 8px;
+      max-width: 68rem;
+      font-size: clamp(14px, 1.2vw, 20px);
+      line-height: 1.35;
+      color: #8a8a94;
+    }
+
+    #board {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+      gap: 10px;
+      padding: 12px 14px 26px;
+    }
+
+    .col {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .col-label {
+      flex-shrink: 0;
+      font-size: clamp(11px, 0.95vw, 14px);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 2px;
+    }
+
+    .col-items {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: auto;
+    }
+
+    .card {
+      position: relative;
+      flex: 1 1 0;
+      min-height: 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      padding: 12px 14px 12px 16px;
+      background: var(--paper);
+      border: 1px solid #1a1a1f;
+      border-radius: 10px;
+      overflow: hidden;
+      color: inherit;
+    }
+
+    a.card { cursor: pointer; }
+
+    .card:focus-visible {
+      outline: 1px solid #3a3a44;
+      outline-offset: 2px;
+    }
+
+    .card .rail {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #2a2a32;
+    }
+
+    .card .status {
+      font-size: clamp(11px, 0.95vw, 14px);
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      line-height: 1;
+      color: var(--dim);
+    }
+
+    .card h3 {
+      font-size: clamp(16px, 1.45vw, 26px);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      color: var(--title);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .card p {
+      font-size: clamp(12px, 1.02vw, 16px);
+      line-height: 1.3;
+      color: #8a8a94;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .card.live {
+      background: linear-gradient(160deg, #0b1a12 0%, #0a0e0c 100%);
+      border-color: #143d24;
+    }
+    .card.live .rail { background: var(--ok); }
+    .card.live .status { color: var(--ok); }
+
+    .card.proved {
+      background: linear-gradient(160deg, #0c1612 0%, #0c0e0d 100%);
+      border-color: #1c3a2c;
+    }
+    .card.proved .rail { background: var(--proved); }
+    .card.proved .status { color: var(--proved); }
+
+    .card.building {
+      background: linear-gradient(160deg, #1f1506 0%, #100e08 100%);
+      border-color: #5a3a0a;
+    }
+    .card.building .rail { background: var(--amber); }
+    .card.building .status { color: var(--amber); }
+
+    .card.next {
+      background: linear-gradient(160deg, #141418 0%, #0e0e11 100%);
+      border-color: #2a2a32;
+    }
+    .card.next .rail { background: var(--next); }
+    .card.next .status { color: var(--next); }
+
+    .card.waiting {
+      background: linear-gradient(160deg, #16130e 0%, #0e0e0c 100%);
+      border-color: #3a3020;
+    }
+    .card.waiting .rail { background: var(--waiting); }
+    .card.waiting .status { color: var(--waiting); }
+
+    .card.parked {
+      background: #0c0c0e;
+      border-color: #222228;
+    }
+    .card.parked .rail { background: var(--parked); }
+    .card.parked .status { color: var(--parked); }
+    .card.parked h3 { color: #9a9aa4; }
+
+    .card.seed {
+      background: #0c0c0e;
+      border-color: #1e1e24;
+    }
+    .card.seed .rail { background: var(--seed); }
+    .card.seed .status { color: var(--seed); }
+    .card.seed h3 { color: #b0b0b8; }
+
+    .empty {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .ver {
+      position: fixed;
+      left: calc(12px + env(safe-area-inset-left));
+      bottom: calc(8px + env(safe-area-inset-bottom));
+      z-index: 4;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #3a3a42;
+      pointer-events: none;
+    }
+
+    @keyframes pixel-orbit {
+      from { transform: translate3d(-6px, -5px, 0); }
+      to { transform: translate3d(7px, 6px, 0); }
+    }
+
+    @media (max-height: 820px) {
+      header { padding: 10px 16px 8px; }
+      #north { padding: 10px 16px 8px; }
+      #north h1 { font-size: clamp(22px, 2.6vw, 36px); }
+      #north p {
+        margin-top: 4px;
+        font-size: clamp(13px, 1.15vw, 16px);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      #board { padding: 8px 12px 22px; gap: 8px; }
+      .card { padding: 8px 10px 8px 14px; min-height: 58px; gap: 2px; }
+      .card p { -webkit-line-clamp: 2; }
+    }
+
+    @media (max-width: 1080px) and (orientation: portrait) {
+      html, body { overflow: auto; }
+      #orbit { height: auto; min-height: 100dvh; animation: none; }
+      #board {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: none;
+        overflow: visible;
+      }
+      .col-items { overflow: visible; }
+      .card { flex: 0 0 auto; min-height: 0; }
+    }
+
+    @media (max-width: 700px) {
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .mast { align-items: flex-start; }
+      #board { grid-template-columns: 1fr; padding-bottom: 48px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #orbit { animation-duration: 400s; }
+    }
+  </style>
+</head>
+<body>
+  <div id="orbit">
+    <header>
+      <div class="brand">HU<span>B</span></div>
+      <div class="mast">
+        <div class="tag" id="subtitle">personal os</div>
+        <div class="board-stamp" id="board-stamp">board · —</div>
+        <div class="hint">
+          <a href="./">spacewall</a>
+          ·
+          <a href="./hearth.html">hearth</a>
+          ·
+          <a href="./wave.html">wave</a>
+          ·
+          <a href="./press.html">press</a>
+        </div>
+      </div>
+    </header>
+
+    <section id="north" aria-label="North star">
+      <h1 id="ns-headline">—</h1>
+      <p id="ns-body"></p>
+    </section>
+
+    <main id="board" aria-live="polite" aria-label="Planning board"></main>
+  </div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.39.1</div>
+
+  <script>
+(function () {
+  const VERSION_CHECK_MS = 3 * 60 * 1000;
+  const BOARD_REFRESH_MS = 20 * 60 * 1000;
+  const KNOWN = {
+    live: "Live",
+    proved: "Proved",
+    building: "Building",
+    next: "Next",
+    waiting: "Waiting",
+    parked: "Parked",
+    seed: "Seed"
+  };
+
+  const board = document.getElementById("board");
+  const headlineEl = document.getElementById("ns-headline");
+  const bodyEl = document.getElementById("ns-body");
+  const subtitleEl = document.getElementById("subtitle");
+  const boardStampEl = document.getElementById("board-stamp");
+
+  let lastGood = null;
+  let loadedVersion = null;
+  let reloadArmed = false;
+  let boardTimer = null;
+
+  function pageIsVisible() {
+    return document.visibilityState === "visible";
+  }
+
+  function statusKey(raw) {
+    const k = String(raw || "").trim().toLowerCase();
+    return Object.prototype.hasOwnProperty.call(KNOWN, k) ? k : "seed";
+  }
+
+  function statusLabel(raw) {
+    const k = String(raw || "").trim().toLowerCase();
+    if (Object.prototype.hasOwnProperty.call(KNOWN, k)) return KNOWN[k];
+    const shown = String(raw || "").trim();
+    return shown || "Seed";
+  }
+
+  function safeUrl(url) {
+    if (!url || typeof url !== "string") return null;
+    try {
+      const u = new URL(url, location.href);
+      if (u.protocol !== "https:" && u.protocol !== "http:") return null;
+      return u.href;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function formatBoardTime(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    try {
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Chicago",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+      }).format(d) + " CT";
+    } catch (e) {
+      return d.toISOString();
+    }
+  }
+
+  function clear(el) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+  }
+
+  function normalizeItem(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const title = String(raw.title || "").trim();
+    if (!title) return null;
+    return {
+      id: String(raw.id || ""),
+      title: title,
+      status: statusKey(raw.status),
+      label: statusLabel(raw.status),
+      detail: String(raw.detail || "").trim(),
+      url: safeUrl(raw.url)
+    };
+  }
+
+  function renderCard(item) {
+    const el = document.createElement(item.url ? "a" : "article");
+    el.className = "card " + item.status;
+    if (item.id) el.dataset.id = item.id;
+    if (item.url) {
+      el.href = item.url;
+      el.target = "_blank";
+      el.rel = "noopener noreferrer";
+    }
+    const rail = document.createElement("div");
+    rail.className = "rail";
+    rail.setAttribute("aria-hidden", "true");
+    const status = document.createElement("div");
+    status.className = "status";
+    status.textContent = item.label;
+    const title = document.createElement("h3");
+    title.textContent = item.title;
+    el.appendChild(rail);
+    el.appendChild(status);
+    el.appendChild(title);
+    if (item.detail) {
+      const detail = document.createElement("p");
+      detail.textContent = item.detail;
+      el.appendChild(detail);
+    }
+    return el;
+  }
+
+  function renderColumn(col) {
+    const section = document.createElement("section");
+    section.className = "col";
+    if (col && col.id) section.dataset.col = String(col.id);
+    const label = document.createElement("h2");
+    label.className = "col-label";
+    label.textContent = (col && (col.label || col.id)) || "";
+    const items = document.createElement("div");
+    items.className = "col-items";
+    const rawItems = col && Array.isArray(col.items) ? col.items : [];
+    const cards = rawItems.map(normalizeItem).filter(Boolean);
+    if (!cards.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "—";
+      items.appendChild(empty);
+    } else {
+      cards.forEach(function (item) { items.appendChild(renderCard(item)); });
+    }
+    section.appendChild(label);
+    section.appendChild(items);
+    return section;
+  }
+
+  function paintBoardStamp(data) {
+    if (!boardStampEl) return;
+    const when = formatBoardTime(data && data.updated_at);
+    boardStampEl.textContent = when ? "board · " + when : "board · visible only";
+  }
+
+  function renderBoard(data) {
+    const ns = (data && data.north_star) || {};
+    headlineEl.textContent = String(ns.headline || "—");
+    bodyEl.textContent = String(ns.body || "");
+    if (subtitleEl) subtitleEl.textContent = String((data && data.subtitle) || "personal os");
+    paintBoardStamp(data);
+    clear(board);
+    const columns = data && Array.isArray(data.columns) ? data.columns : [];
+    columns.forEach(function (col) { board.appendChild(renderColumn(col)); });
+  }
+
+  function validBoard(data) {
+    return data && typeof data === "object" && Array.isArray(data.columns);
+  }
+
+  function applyBoard(data) {
+    if (!validBoard(data)) return false;
+    renderBoard(data);
+    lastGood = data;
+    return true;
+  }
+
+  function boardUrl() {
+    const q = new URLSearchParams();
+    q.set("t", String(Date.now()));
+    if (loadedVersion) q.set("v", loadedVersion);
+    return "./hub-board.json?" + q.toString();
+  }
+
+  async function loadBoard() {
+    if (!pageIsVisible()) return;
+    try {
+      const res = await fetch(boardUrl(), { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (!applyBoard(data) && lastGood) applyBoard(lastGood);
+    } catch (e) {
+      if (lastGood) applyBoard(lastGood);
+    }
+  }
+
+  function disarmBoardRefresh() {
+    if (boardTimer) {
+      clearInterval(boardTimer);
+      boardTimer = null;
+    }
+  }
+
+  function armBoardRefresh() {
+    disarmBoardRefresh();
+    if (!pageIsVisible()) return;
+    boardTimer = setInterval(function () {
+      if (!pageIsVisible()) {
+        disarmBoardRefresh();
+        return;
+      }
+      loadBoard();
+    }, BOARD_REFRESH_MS);
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (pageIsVisible()) {
+      loadBoard();
+      armBoardRefresh();
+    } else {
+      disarmBoardRefresh();
+    }
+  });
+
+  if (pageIsVisible()) {
+    loadBoard();
+    armBoardRefresh();
+  }
+
+  function versionCheckMs() {
+    try {
+      const raw = new URLSearchParams(location.search).get("vcheck");
+      const n = raw ? Number(raw) : NaN;
+      if (Number.isFinite(n) && n >= 1000) return n;
+    } catch (e) {}
+    return VERSION_CHECK_MS;
+  }
+
+  function paintStamp(data) {
+    const el = document.getElementById("ver");
+    if (!el || !data || !data.label) return;
+    const name = el.getAttribute("data-portal") || "HUB";
+    el.textContent = name + " " + data.label;
+  }
+
+  async function fetchVersion() {
+    const url = "./version.json?t=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data || typeof data.v !== "string" || !data.v) {
+      throw new Error("bad version");
+    }
+    paintStamp(data);
+    return data.v;
+  }
+
+  async function captureVersion() {
+    try {
+      loadedVersion = await fetchVersion();
+    } catch (e) {
+      loadedVersion = null;
+    }
+  }
+
+  async function checkVersion() {
+    if (reloadArmed) return;
+    try {
+      const remote = await fetchVersion();
+      if (loadedVersion == null) {
+        loadedVersion = remote;
+        return;
+      }
+      if (remote !== loadedVersion) {
+        reloadArmed = true;
+        location.reload();
+      }
+    } catch (e) {}
+  }
+
+  captureVersion();
+  setInterval(checkVersion, versionCheckMs());
+})();
+  </script>
+</body>
+</html>
