@@ -318,7 +318,7 @@
     </div>
   </header>
   <main id="board" aria-live="polite"></main>
-  <div id="ver" class="ver" data-portal="SPACEWALL">SPACEWALL 26.39.2</div>
+  <div id="ver" class="ver" data-portal="SPACEWALL">SPACEWALL 26.39.3</div>
   <script>
 (function () {
   const REFRESH_MS = 60000;
@@ -399,14 +399,37 @@
   let loadedVersion = null;
   let reloadArmed = false;
 
+  function clipDetail(text) {
+    const s = String(text || "").replace(/\s+/g, " ").trim();
+    const max = 72;
+    if (s.length <= max) return s;
+    let cut = s.slice(0, max - 1);
+    const sp = cut.lastIndexOf(" ");
+    if (sp >= 40) cut = cut.slice(0, sp);
+    return cut.replace(/[\s,;:.–—-]+$/, "") + "…";
+  }
+
+  function statuspageIncident(data) {
+    const list = data && Array.isArray(data.incidents) ? data.incidents : [];
+    for (let i = 0; i < list.length; i++) {
+      const inc = list[i] || {};
+      const st = String(inc.status || "").toLowerCase();
+      if (st === "resolved" || st === "postmortem" || st === "completed") continue;
+      const name = String(inc.name || "").replace(/\s+/g, " ").trim();
+      if (name) return clipDetail(name);
+    }
+    return "";
+  }
+
   function statuspage(data) {
     const ind = (data && data.status && data.status.indicator) || "none";
     const desc = (data && data.status && data.status.description) || "";
     if (ind === "none") return { level: "ok", label: "OK", detail: desc || "All systems operational" };
-    if (ind === "minor") return { level: "degraded", label: "DEGRADED", detail: desc || "Minor issues" };
-    if (ind === "major") return { level: "major", label: "MAJOR", detail: desc || "Major outage" };
-    if (ind === "critical") return { level: "critical", label: "CRITICAL", detail: desc || "Critical outage" };
-    return { level: "degraded", label: String(ind).toUpperCase(), detail: desc };
+    const detail = statuspageIncident(data) || desc;
+    if (ind === "minor") return { level: "degraded", label: "DEGRADED", detail: detail || "Minor issues" };
+    if (ind === "major") return { level: "major", label: "MAJOR", detail: detail || "Major outage" };
+    if (ind === "critical") return { level: "critical", label: "CRITICAL", detail: detail || "Critical outage" };
+    return { level: "degraded", label: String(ind).toUpperCase(), detail: detail };
   }
 
   function slackStatus(data) {
@@ -432,6 +455,20 @@
     return { level: "ok", label: "OK", detail: "All systems operational" };
   }
 
+  function googleBlurb(raw) {
+    const text = String(raw || "").replace(/\*/g, "");
+    const lines = text.split("\n");
+    const labelOnly = /^(title|summary|description|symptoms|workaround|customer symptoms)\s*:?\s*$/i;
+    const labelPrefix = /^(title|summary|description|symptoms|workaround|customer symptoms)\s*:\s*/i;
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i].replace(/\s+/g, " ").trim();
+      if (!line || labelOnly.test(line)) continue;
+      line = line.replace(labelPrefix, "").trim();
+      if (line) return line;
+    }
+    return "";
+  }
+
   function googleIncidents(data) {
     if (!Array.isArray(data)) return { level: "unknown", label: "UNKNOWN", detail: "bad payload" };
     const open = data.filter((inc) => !inc.end);
@@ -440,10 +477,10 @@
     }
     const sev = (open[0].severity || open[0].status_impact || "").toLowerCase();
     const title =
-      (open[0].external_desc || "").split("\n")[0].replace(/^\*+/, "").trim() ||
+      googleBlurb(open[0].external_desc) ||
       open[0].service_name ||
       "Open incident";
-    const short = title.length > 72 ? title.slice(0, 69) + "…" : title;
+    const short = clipDetail(title);
     if (/high|critical/.test(sev)) {
       return { level: "critical", label: "CRITICAL", detail: short };
     }
