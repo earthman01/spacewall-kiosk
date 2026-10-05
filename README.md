@@ -86,7 +86,7 @@ SPACEWALL (`index.html`) and HEARTH (`hearth.html`) poll same-origin [`alert.jso
 
 When the file is a critical alert, the page covers the whole viewport with a red flash: title, short body, and Chicago time. After **10 seconds** — or a tap, click, Escape, or Enter — it settles to a persistent red **ALERT / CRITICAL** tile and stays there until the file is cleared. The full-screen red is brief on purpose (55" OLED). The tile uses the same dark critical treatment as the ops tiles, not a parked white field. On HEARTH the tile sits along the bottom and drifts a few pixels.
 
-A new `id` flashes again. The same `id` does not re-flash on later polls (including a reload in the same session). A fetch failure keeps the last good alert. Only `active: true` with `level: "critical"` (or `level` left off) opens the channel. `active: false`, any other level, `{}`, or an empty file clears it. `active` must be a boolean.
+A new `id` flashes again. The same `id` does not re-flash on later polls, on reload, or when you open the other portal in that same tab — the tile shows instead. The 55" and an iPad are separate sessions, so each one flashes once. A fetch failure keeps the last good alert. Only `active: true` with `level: "critical"` (or `level` left off) opens the channel. `active: false`, any other level, `{}`, or an empty file clears it. `active` must be a boolean.
 
 `?aflash=3` is the flash length in seconds (default 10, inside the 8–12s band). `?aflash=0` skips the flash and shows the tile.
 
