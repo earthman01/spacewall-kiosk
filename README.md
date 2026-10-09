@@ -8,11 +8,11 @@ Chrome / Mac Dock: install **SPACEWALL** from [`index.html`](https://earthman01.
 
 If Chrome already installed SPACEWALL from the site root (directory scope), uninstall that app first (`chrome://apps` → remove SPACEWALL), then reinstall from `index.html` and install HEARTH from `hearth.html`. The old install’s broad scope is what blocked a second Dock icon.
 
-Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes). `v` is a content hash of `index.html` (and any other client assets listed in `scripts/write_version.py`). Deploy Pages regenerates `version.json` into the Pages artifact; the committed file on `main` must match, because GitHub Pages currently publishes the branch. After changing kiosk code, run `python3 scripts/write_version.py`.
+Kiosks auto-reload after deploys (they poll `version.json` every few minutes and refresh once when `v` changes). `v` is a content hash of `index.html` (and any other client assets listed in `scripts/write_version.py`, including `alert.js`). Deploy Pages regenerates `version.json` into the Pages artifact; the committed file on `main` must match, because GitHub Pages currently publishes the branch. After changing kiosk code, run `python3 scripts/write_version.py`. Data files — `x-status.json`, `press-feed.json`, `hub-board.json`, and `alert.json` — are not in that hash, so updating them does not reload the wall.
 
 **Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
 
-Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.39.3` · `HEARTH 26.39.3` · `WAVE 26.39.3` · `PRESS 26.39.3` · `HUB 26.39.3` · `REEL 26.39.3`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.41.1` · `HEARTH 26.41.1` · `WAVE 26.41.1` · `PRESS 26.41.1` · `HUB 26.41.1` · `REEL 26.41.1`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
@@ -79,6 +79,48 @@ All kitchen-sink. Omitted = recommended default. `0` / `off` yanks that piece wi
 | `?swipe=0` / `?deck=0` | off on OLED / desktop | Disable iPad deck. See [iPad deck](#ipad-deck-swipe) |
 
 Recommended living-room URL is bare `hearth.html` (all of the above on, slides included until Mark prunes).
+
+### Living-room critical alert
+
+SPACEWALL (`index.html`) and HEARTH (`hearth.html`) poll same-origin [`alert.json`](./alert.json) on the **same cadence as auto-reload**: once when the page loads, then every ~3 minutes. `?vcheck=` (milliseconds, minimum 1000) speeds both the version watcher and this poll. `alert.json` is not part of the `version.json` hash. Committing it does not reload the wall and does not need `write_version.py`.
+
+When the file is a critical alert, the page covers the whole viewport with a red flash: title, short body, and Chicago time. After **10 seconds** — or a tap, click, Escape, or Enter — it settles to a persistent red **ALERT / CRITICAL** tile and stays there until the file is cleared. The full-screen red is brief on purpose (55" OLED). The tile uses the same dark critical treatment as the ops tiles, not a parked white field. On HEARTH the tile sits along the bottom and drifts a few pixels.
+
+A new `id` flashes again. The same `id` does not re-flash on later polls, on reload, or when you open the other portal in that same tab — the tile shows instead. The 55" and an iPad are separate sessions, so each one flashes once. A fetch failure keeps the last good alert. Only `active: true` with `level: "critical"` (or `level` left off) opens the channel. `active: false`, any other level, `{}`, or an empty file clears it. `active` must be a boolean.
+
+`?aflash=3` is the flash length in seconds (default 10, inside the 8–12s band). `?aflash=0` skips the flash and shows the tile.
+
+#### Fire a test tonight
+
+Wait until the living-room page shows **HEARTH 26.41.1** (this ship). Then edit `alert.json` on `main` and commit. Do not rebuild the kiosk and do not bump `version.json`. Use a new `id` each time you want the flash.
+
+```json
+{
+  "level": "critical",
+  "title": "TEST",
+  "body": "Living room alert test",
+  "at": "2026-10-05T23:30:00Z",
+  "id": "test-2026-10-05-1",
+  "active": true
+}
+```
+
+After GitHub Pages is serving that file, the 55" picks it up on the next poll (about 3 minutes). Reload HEARTH to see it on the next paint. `at` is the clock time drawn on the flash (ISO8601). The wall shows it in America/Chicago.
+
+#### Clear
+
+Commit this, or empty the file. The tile drops on the next poll.
+
+```json
+{
+  "level": "critical",
+  "title": "",
+  "body": "",
+  "at": "",
+  "id": "",
+  "active": false
+}
+```
 
 ### Wave lab (overlay prove-out)
 

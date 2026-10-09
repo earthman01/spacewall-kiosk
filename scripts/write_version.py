@@ -2,10 +2,11 @@
 """Write version.json for SPACEWALL kiosk auto-reload.
 
 `v` is a content hash of kiosk client assets (index.html, wave.html,
-hearth.html, press.html, hub.html, reel.html, deck.js, and any other files
-listed in SOURCES), not the latest git SHA. Pages also deploys when x-status.json,
-press-feed.json, or hub-board.json refresh; hashing code means those
-data-only deploys do not bounce wall iPads.
+hearth.html, press.html, hub.html, reel.html, deck.js, alert.js, and any
+other files listed in SOURCES), not the latest git SHA. Pages also deploys
+when x-status.json, press-feed.json, hub-board.json, or alert.json refresh;
+hashing code means those data-only deploys do not bounce wall iPads.
+alert.json is the living-room critical channel and must stay out of SOURCES.
 
 Human-facing stamp (Mark / Tesla-style decimals) lives in the same file:
 `year`, `week`, `ship`, `hotfix`, and `label` (YEAR.WEEK.SHIP, plus .HOTFIX
@@ -20,6 +21,7 @@ wall iPads actually poll.
 
 Each portal loads deck.js with a content-hash query (`?h=…`) so a deck-only
 change busts the cached script after the version watcher reloads the page.
+SPACEWALL and HEARTH load alert.js the same way.
 """
 
 from __future__ import annotations
@@ -35,7 +37,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 # Portal html that must load deck.js.
 HTML_SOURCES = ("index.html", "wave.html", "hearth.html", "press.html", "hub.html", "reel.html")
-SOURCES = HTML_SOURCES + ("deck.js",)
+SOURCES = HTML_SOURCES + ("deck.js", "alert.js")
+ALERT_HTML = ("index.html", "hearth.html")
 PORTAL_BY_FILE = {
     "index.html": "SPACEWALL",
     "hearth.html": "HEARTH",
@@ -47,6 +50,9 @@ PORTAL_BY_FILE = {
 DEFAULT_OUT = ROOT / "version.json"
 DECK_SCRIPT_RE = re.compile(
     r'<script src="\./deck\.js(?:\?h=[a-f0-9]+)?" defer></script>'
+)
+ALERT_SCRIPT_RE = re.compile(
+    r'<script src="\./alert\.js(?:\?h=[a-f0-9]+)?" defer></script>'
 )
 VER_EL_RE = re.compile(
     r'(<[^>]*\bid="ver"[^>]*>)(SPACEWALL|HEARTH|WAVE|PRESS|HUB|REEL) \d+\.\d+\.\d+(?:\.\d+)?(</)'
@@ -73,6 +79,40 @@ def file_hash(path: Path, n: int = 12) -> str:
 
 def deck_script_tag() -> str:
     return f'<script src="./deck.js?h={file_hash(ROOT / "deck.js")}" defer></script>'
+
+
+def alert_script_tag() -> str:
+    return f'<script src="./alert.js?h={file_hash(ROOT / "alert.js")}" defer></script>'
+
+
+def stamp_alert_src() -> list[str]:
+    tag = alert_script_tag()
+    changed: list[str] = []
+    for rel in ALERT_HTML:
+        path = ROOT / rel
+        text = path.read_text(encoding="utf-8")
+        new, n = ALERT_SCRIPT_RE.subn(tag, text)
+        if n == 0:
+            raise SystemExit(
+                f"FAIL {rel} is missing an alert.js script tag "
+                f"(expected {ALERT_SCRIPT_RE.pattern})"
+            )
+        if new != text:
+            path.write_text(new, encoding="utf-8")
+            changed.append(rel)
+    return changed
+
+
+def check_alert_src() -> str | None:
+    tag = alert_script_tag()
+    for rel in ALERT_HTML:
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        if tag not in text:
+            return (
+                f"FAIL {rel} alert.js src is stale or missing "
+                f"(expected {tag})"
+            )
+    return None
 
 
 def stamp_deck_src() -> list[str]:
@@ -254,7 +294,12 @@ def main() -> int:
     release = load_release(release_src, args.bump_ship, args.bump_hotfix)
 
     if args.check:
-        stamp_err = check_deck_src() or check_ver_labels(release["label"]) or check_release(out)
+        stamp_err = (
+            check_deck_src()
+            or check_alert_src()
+            or check_ver_labels(release["label"])
+            or check_release(out)
+        )
         if stamp_err:
             print(stamp_err, file=sys.stderr, flush=True)
             return 1
@@ -271,7 +316,7 @@ def main() -> int:
         print(f"ok {out} v={expected} label={release['label']}", flush=True)
         return 0
 
-    changed = stamp_ver_labels(release["label"]) + stamp_deck_src()
+    changed = stamp_ver_labels(release["label"]) + stamp_deck_src() + stamp_alert_src()
     if changed:
         print("stamped " + ", ".join(changed), flush=True)
     data = write_payload(out, release)
