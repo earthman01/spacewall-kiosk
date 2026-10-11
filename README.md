@@ -12,7 +12,7 @@ Kiosks auto-reload after deploys (they poll `version.json` every few minutes and
 
 **Standing rule — every UI ship must do both:** (1) bump `version.json` so walls reload, and (2) show a visible on-screen stamp so Mark can tell the deploy landed without guessing. Do not ship a silent hash-only change.
 
-Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.39.3` · `HEARTH 26.39.3` · `WAVE 26.39.3` · `PRESS 26.39.3` · `HUB 26.39.3` · `REEL 26.39.3`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
+Format is Tesla-style decimals: `YEAR.WEEK.SHIP.HOTFIX` (2-digit year, ISO week). Omit `.HOTFIX` when it is 0. Display, muted, corner/bottom: `SPACEWALL 26.41.1` · `HEARTH 26.41.1` · `WAVE 26.41.1` · `PRESS 26.41.1` · `HUB 26.41.1` · `REEL 26.41.1` · `RICH 26.41.1`. Source of truth is `year` / `week` / `ship` / `hotfix` / `label` in `version.json`. Bump `ship` for a real drop (`python3 scripts/write_version.py --bump-ship`) or `hotfix` for a tiny follow-up (`--bump-hotfix`). That restamps the HTML fallbacks and the content hash. A new ISO week starts again at ship 1.
 
 The first time after enabling auto-reload, force-quit the home-screen web app once so it picks up the watcher. Afterward, deploys should self-update within ~3 minutes.
 
@@ -20,7 +20,7 @@ The first time after enabling auto-reload, force-quit the home-screen web app on
 
 On iPad / phone, swipe left or right to move between viewing systems. Shared script: [`deck.js`](./deck.js). Each portal keeps its own URL, look, and `version.json` watcher.
 
-**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`) ↔ PRESS (`press.html`) ↔ HUB (`hub.html`) ↔ REEL (`reel.html`)
+**Order (left → right):** SPACEWALL (`index.html`) ↔ HEARTH (`hearth.html`) ↔ WAVE (`wave.html`) ↔ PRESS (`press.html`) ↔ HUB (`hub.html`) ↔ REEL (`reel.html`) ↔ RICH (`rich.html`)
 
 | Flag | Default | Notes |
 | --- | --- | --- |
@@ -122,6 +122,24 @@ Status vocabulary: `live` | `proved` | `building` | `next` | `waiting` | `parked
   ]
 }
 ```
+
+## RICH
+
+Live: [rich.html](https://earthman01.github.io/spacewall-kiosk/rich.html)
+
+Guest welcome for the 55″ OLED and the iPads. Charcoal gulf night, same care band as HEARTH: luminance floor, slow pixel orbit, APL breathe, soft silver type, no parked white. A canvas sky keeps stars, a low aurora, and the waterline moving. `prefers-reduced-motion` holds a still frame and shows the type immediately.
+
+The clock is America/Chicago. Conditions and sunset are Panama City Beach from [Open-Meteo](https://open-meteo.com/) — no key, no account. The page fetches only while the tab is visible. A failed fetch leaves the dash and retries; it never blocks the welcome.
+
+Linked from the SPACEWALL header and the HEARTH footer. Last stop on the iPad deck, after REEL. The living-room Mac still stays put unless someone opens the link (swipe stays off on the wide / fullscreen OLED).
+
+| Flag | Default | Notes |
+| --- | --- | --- |
+| `?motion=0` | motion on | Freeze the sky, orbit, and the type reveal |
+| `?orbit=0` / `1` / `strong` | `1` (~±7px) | Whole-composition pixel shift. Stars also drift in the canvas |
+| `?wx=0` | on | Skip the weather fetch |
+| `?phase=day` / `dusk` / `night` | follows the clock | Force the sky mix for prove-out |
+| `?hud=1` | off | Tiny flag strip (includes `swipe:on/off`) |
 
 ## REEL
 

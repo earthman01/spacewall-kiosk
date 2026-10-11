@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Rich" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#12161c" />
+  <meta name="color-scheme" content="dark" />
+  <title>Welcome, Rich</title>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var q;
+      try { q = new URLSearchParams(location.search); } catch (e) { q = new URLSearchParams(); }
+      function tok(name) { return (q.get(name) || "").toLowerCase(); }
+      function off(name) {
+        var v = tok(name);
+        return v === "0" || v === "off" || v === "false" || v === "no";
+      }
+      var motionOff = false;
+      try {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) motionOff = true;
+      } catch (e) {}
+      if (off("motion")) motionOff = true;
+      if (motionOff) root.classList.add("motion-off");
+      if (off("orbit") || motionOff) root.classList.add("orbit-off");
+      var orbit = tok("orbit");
+      if (!motionOff && (orbit === "strong" || orbit === "2")) root.classList.add("orbit-strong");
+    })();
+  </script>
+  <script src="./deck.js?h=b757114e5a4f" defer></script>
+  <style>
+    :root {
+      --ink: #d2d6dc;
+      --muted: #7c8490;
+      --quiet: #4a5160;
+      --clock: #c8ced6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { background: #12161c; }
+
+    html, body {
+      height: 100%;
+      background: #12161c;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body { min-height: 100dvh; }
+
+    #sky {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background: #12161c;
+    }
+
+    .veil {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(78% 68% at 50% 40%, transparent 0%, rgba(0, 0, 0, 0.16) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, transparent 20%, transparent 64%, rgba(0, 0, 0, 0.1) 100%);
+    }
+
+    #orbit {
+      position: relative;
+      z-index: 2;
+      height: 100dvh;
+      animation: pixel-orbit 220s ease-in-out infinite alternate;
+    }
+
+    html.orbit-strong #orbit { animation-name: pixel-orbit-strong; animation-duration: 170s; }
+    html.orbit-off #orbit { animation: none; }
+
+    @keyframes pixel-orbit {
+      from { transform: translate3d(-6px, -5px, 0); }
+      to { transform: translate3d(7px, 6px, 0); }
+    }
+
+    @keyframes pixel-orbit-strong {
+      from { transform: translate3d(-11px, -9px, 0); }
+      to { transform: translate3d(12px, 10px, 0); }
+    }
+
+    .stage {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
+      padding:
+        calc(28px + env(safe-area-inset-top))
+        calc(36px + env(safe-area-inset-right))
+        calc(18px + env(safe-area-inset-bottom))
+        calc(36px + env(safe-area-inset-left));
+      pointer-events: none;
+    }
+
+    .stage a { pointer-events: auto; }
+
+    .top, .bottom, .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .top { align-items: flex-start; }
+
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.34em;
+      font-size: 12px;
+      color: #8b939e;
+    }
+
+    .place { text-align: right; }
+
+    .where, .when, .zone, .cond, .sun, .sub, .foot, .kicker {
+      text-transform: uppercase;
+    }
+
+    .where {
+      font-size: 12px;
+      letter-spacing: 0.26em;
+      color: #9aa2ae;
+    }
+
+    .when, .zone, .cond, .sun {
+      margin-top: 6px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      color: var(--quiet);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero {
+      align-self: center;
+      justify-self: center;
+      text-align: center;
+      max-width: min(92vw, 1100px);
+      padding-bottom: 4vh;
+    }
+
+    .kicker {
+      font-size: clamp(15px, 1.7vw, 28px);
+      font-weight: 560;
+      color: #9aa3ae;
+      animation: rise 1.7s cubic-bezier(0.22, 1, 0.36, 1) 0.28s backwards;
+    }
+
+    .kicker span { letter-spacing: 0.46em; }
+
+    .name {
+      margin-top: 6px;
+      font-family: "New York", "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(96px, 13vw, 220px);
+      line-height: 0.86;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      text-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+      animation: name-in 2.1s cubic-bezier(0.22, 1, 0.36, 1) 0.55s backwards;
+    }
+
+    .rule {
+      width: min(34vw, 240px);
+      height: 1px;
+      margin: 22px auto 16px;
+      background: linear-gradient(90deg, transparent, rgba(176, 184, 192, 0.55), transparent);
+      transform-origin: center;
+      animation: rule 1.35s cubic-bezier(0.22, 1, 0.36, 1) 1.45s backwards;
+    }
+
+    .sub {
+      font-size: clamp(11px, 1.15vw, 15px);
+      letter-spacing: 0.32em;
+      color: var(--muted);
+      animation: rise 1.6s ease 1.85s backwards;
+    }
+
+    .bottom {
+      align-items: flex-end;
+      animation: rise 1.8s ease 2.05s backwards;
+    }
+
+    .clock {
+      font-size: clamp(40px, 4.6vw, 72px);
+      font-weight: 560;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      font-variant-numeric: tabular-nums;
+      color: var(--clock);
+    }
+
+    .wx { text-align: right; }
+
+    .temp {
+      font-size: clamp(40px, 4.6vw, 72px);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      font-variant-numeric: tabular-nums;
+      color: var(--clock);
+    }
+
+    .foot {
+      align-items: baseline;
+      margin-top: 18px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: #3a4150;
+      animation: rise 1.6s ease 2.3s backwards;
+    }
+
+    .ver { color: #4a5160; }
+
+    .links { letter-spacing: 0.18em; }
+
+    a {
+      color: #4a5160;
+      text-decoration: none;
+    }
+
+    a:hover { color: #9aa2ae; }
+
+    #hud {
+      position: fixed;
+      left: 16px;
+      bottom: 8px;
+      z-index: 9;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5a6270;
+      pointer-events: none;
+    }
+
+    html.motion-off .kicker,
+    html.motion-off .name,
+    html.motion-off .sub,
+    html.motion-off .bottom,
+    html.motion-off .foot {
+      opacity: 1;
+      filter: none;
+      transform: none;
+      animation: none;
+    }
+
+    html.motion-off .rule {
+      transform: none;
+      animation: none;
+    }
+
+    html.deeper .where,
+    html.deeper .when,
+    html.deeper .sub,
+    html.deeper .zone,
+    html.deeper .cond,
+    html.deeper .sun,
+    html.deeper .foot,
+    html.deeper .brand {
+      opacity: 0.62;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes name-in {
+      from { opacity: 0; transform: translateY(18px); filter: blur(8px); }
+      to { opacity: 1; transform: none; filter: none; }
+    }
+
+    @keyframes rule {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    @media (max-width: 740px) {
+      .stage {
+        padding-left: calc(22px + env(safe-area-inset-left));
+        padding-right: calc(22px + env(safe-area-inset-right));
+      }
+
+      .name { font-size: clamp(84px, 24vw, 150px); }
+
+      .bottom { gap: 12px 20px; }
+    }
+
+    @media (max-height: 740px) and (orientation: landscape) {
+      .hero { padding-bottom: 0; }
+      .name { font-size: clamp(78px, 12vh, 160px); }
+      .rule { margin: 12px 0 10px; }
+      .clock, .temp { font-size: clamp(32px, 6vh, 56px); }
+      .foot { margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="veil" aria-hidden="true"></div>
+  <div id="orbit">
+    <div class="stage">
+      <header class="top">
+        <div class="brand">RICH</div>
+        <div class="place">
+          <div class="where">Panama City Beach</div>
+          <div class="when" id="date">—</div>
+        </div>
+      </header>
+
+      <div class="hero">
+        <p class="kicker"><span>Welcome</span>,</p>
+        <h1 class="name">Rich</h1>
+        <div class="rule" aria-hidden="true"></div>
+        <p class="sub" id="gulf">the gulf today</p>
+      </div>
+
+      <div class="bottom">
+        <div class="clockblock">
+          <div class="clock" id="clock" aria-label="Central time">—</div>
+          <div class="zone">Central</div>
+        </div>
+        <div class="wx" id="wx" aria-live="polite">
+          <div class="temp" id="temp">—</div>
+          <div class="cond" id="cond"></div>
+          <div class="sun" id="sun"></div>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <div id="ver" class="ver" data-portal="RICH">RICH 26.41.1</div>
+        <div class="links">
+          <a href="./hearth.html">hearth</a>
+          ·
+          <a href="./">spacewall</a>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <div id="hud" hidden></div>
+
+  <script>
+(function () {
+  const VERSION_CHECK_MS = 3 * 60 * 1000;
+  const WX_OK_MS = 15 * 60 * 1000;
+  const WX_ERR_MS = 2 * 60 * 1000;
+  const TZ = "America/Chicago";
+  const WX_URL = "https://api.open-meteo.com/v1/forecast?latitude=30.213&longitude=-85.878&current=temperature_2m,weather_code,wind_speed_10m&daily=sunset,sunrise&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FChicago&forecast_days=1";
+
+  const canvas = document.getElementById("sky");
+  const ctx = canvas.getContext("2d", { alpha: false });
+  const clockEl = document.getElementById("clock");
+  const dateEl = document.getElementById("date");
+  const gulfEl = document.getElementById("gulf");
+  const tempEl = document.getElementById("temp");
+  const condEl = document.getElementById("cond");
+  const sunEl = document.getElementById("sun");
+  const hudEl = document.getElementById("hud");
+
+  const params = new URLSearchParams(location.search);
+  const stars = [];
+  let loadedVersion = null;
+  let reloadArmed = false;
+  let raf = 0;
+  let running = false;
+  let deepTimer = null;
+  let wxTimer = null;
+  let lastDraw = 0;
+  const sky = {
+    night: 0.22,
+    sun: null,
+    wx: "pending",
+    bolt: null,
+    nextBolt: 12
+  };
+
+  function raw(name) {
+    const v = params.get(name);
+    return v == null ? null : String(v).toLowerCase();
+  }
+
+  function isOff(name) {
+    const v = raw(name);
+    return v === "0" || v === "off" || v === "false" || v === "no";
+  }
+
+  const flags = {
+    motion: !document.documentElement.classList.contains("motion-off"),
+    orbit: (function () {
+      if (document.documentElement.classList.contains("orbit-off")) return "off";
+      if (document.documentElement.classList.contains("orbit-strong")) return "strong";
+      return "on";
+    })(),
+    wx: !isOff("wx"),
+    hud: raw("hud") === "1" || raw("hud") === "on",
+    phase: (function () {
+      const v = raw("phase");
+      if (v === "day" || v === "dusk" || v === "night") return v;
+      return null;
+    })()
+  };
+
+  function seedStars() {
+    let s = 0x51f1e;
+    function rnd() {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      return s / 4294967296;
+    }
+    for (let i = 0; i < 170; i++) {
+      const hero = rnd() < 0.16;
+      stars.push({
+        x: rnd(),
+        y: rnd() * 0.6,
+        r: hero ? 1.7 + rnd() * 1.5 : 0.7 + rnd() * 1.05,
+        a: hero ? 0.7 + rnd() * 0.22 : 0.4 + rnd() * 0.32,
+        tw: 0.45 + rnd() * 0.9,
+        phase: rnd() * Math.PI * 2,
+        drift: 0.00055 + rnd() * 0.0011,
+        cool: rnd() < 0.78,
+        spark: hero || rnd() < 0.08
+      });
+    }
+  }
+
+  function chicagoParts(d) {
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      timeZone: TZ,
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h12"
+    });
+    const map = {};
+    fmt.formatToParts(d).forEach(function (p) {
+      if (p.type !== "literal") map[p.type] = p.value;
+    });
+    return map;
+  }
+
+  function chicagoHour(d) {
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      timeZone: TZ,
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hourCycle: "h23"
+    });
+    const map = {};
+    fmt.formatToParts(d).forEach(function (p) {
+      if (p.type !== "literal") map[p.type] = Number(p.value);
+    });
+    let h = map.hour || 0;
+    if (h === 24) h = 0;
+    return h + (map.minute || 0) / 60 + (map.second || 0) / 3600;
+  }
+
+  function parseChicago(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(iso || "");
+    if (!m) return null;
+    const want = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      timeZone: TZ,
+      hourCycle: "h23",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    let utc = want;
+    for (let i = 0; i < 3; i++) {
+      const parts = {};
+      fmt.formatToParts(new Date(utc)).forEach(function (p) {
+        if (p.type !== "literal") parts[p.type] = p.value;
+      });
+      let hour = +parts.hour;
+      if (hour === 24) hour = 0;
+      const asUTC = Date.UTC(+parts.year, +parts.month - 1, +parts.day, hour, +parts.minute);
+      utc += want - asUTC;
+    }
+    return utc;
+  }
+
+  function formatHM(iso) {
+    const m = /T(\d{2}):(\d{2})/.exec(iso || "");
+    if (!m) return "";
+    let h = Number(m[1]);
+    const ap = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return h + ":" + m[2] + " " + ap;
+  }
+
+  function fallbackNight(hour) {
+    if (hour < 5 || hour >= 20.2) return 1;
+    if (hour < 7) return 1 - ((hour - 5) / 2) * 0.78;
+    if (hour < 17.2) return 0.22;
+    return 0.22 + ((hour - 17.2) / 3) * 0.78;
+  }
+
+  function nightAmount(now) {
+    if (flags.phase === "night") return 1;
+    if (flags.phase === "day") return 0.22;
+    if (flags.phase === "dusk") return 0.62;
+    const sun = sky.sun;
+    if (!sun) return fallbackNight(chicagoHour(now));
+    const t = now.getTime();
+    const dawn0 = sun.rise - 50 * 60 * 1000;
+    const day1 = sun.rise + 40 * 60 * 1000;
+    const dusk0 = sun.set - 50 * 60 * 1000;
+    const night1 = sun.set + 40 * 60 * 1000;
+    if (t < dawn0 || t >= night1) return 1;
+    if (t < day1) return 1 - ((t - dawn0) / (day1 - dawn0)) * 0.78;
+    if (t < dusk0) return 0.22;
+    return 0.22 + ((t - dusk0) / (night1 - dusk0)) * 0.78;
+  }
+
+  function gulfLine(night) {
+    if (night > 0.72) return "the gulf tonight";
+    if (night > 0.4) return "the gulf at dusk";
+    return "the gulf today";
+  }
+
+  function weatherLabel(code) {
+    const c = Number(code);
+    if (c === 0) return "Clear";
+    if (c === 1) return "Mostly clear";
+    if (c === 2) return "Partly cloudy";
+    if (c === 3) return "Overcast";
+    if (c === 45 || c === 48) return "Fog";
+    if (c >= 51 && c <= 57) return "Drizzle";
+    if (c >= 61 && c <= 67) return "Rain";
+    if (c >= 71 && c <= 77) return "Snow";
+    if (c >= 80 && c <= 82) return "Showers";
+    if (c === 85 || c === 86) return "Snow showers";
+    if (c >= 95) return "Thunder";
+    return "";
+  }
+
+  function paintClock() {
+    const d = new Date();
+    const p = chicagoParts(d);
+    const day = (p.dayPeriod || "").toUpperCase();
+    clockEl.textContent = (p.hour || "—") + ":" + (p.minute || "00") + ":" + (p.second || "00");
+    clockEl.setAttribute("aria-label", clockEl.textContent + " " + day + " Central");
+    const zone = document.querySelector(".zone");
+    if (zone) zone.textContent = (day ? day + "  ·  " : "") + "Central";
+    dateEl.textContent = ((p.weekday || "") + "  ·  " + (p.month || "") + " " + (p.day || "")).toUpperCase();
+    sky.night = nightAmount(d);
+    const line = gulfLine(sky.night);
+    if (gulfEl.textContent !== line) gulfEl.textContent = line;
+    paintHud();
+  }
+
+  function paintHud() {
+    if (!flags.hud) return;
+    hudEl.hidden = false;
+    const ver = document.getElementById("ver");
+    hudEl.textContent = [
+      ver ? ver.textContent : "RICH",
+      "motion:" + (flags.motion ? "on" : "off"),
+      "orbit:" + flags.orbit,
+      "wx:" + sky.wx,
+      "phase:" + (flags.phase || sky.night.toFixed(2)),
+      "swipe:" + (document.documentElement.getAttribute("data-deck") || "off")
+    ].join("  ·  ");
+  }
+
+  function paintWeather(data) {
+    const cur = data && data.current;
+    if (!cur || cur.temperature_2m == null) throw new Error("bad weather");
+    const temp = Math.round(Number(cur.temperature_2m));
+    const wind = Math.round(Number(cur.wind_speed_10m));
+    const label = weatherLabel(cur.weather_code);
+    tempEl.textContent = (Number.isFinite(temp) ? temp : "—") + "°";
+    condEl.textContent = label
+      ? label + (Number.isFinite(wind) ? "  ·  " + wind + " mph" : "")
+      : "";
+    const daily = data.daily || {};
+    const setIso = daily.sunset && daily.sunset[0];
+    const riseIso = daily.sunrise && daily.sunrise[0];
+    const setAt = parseChicago(setIso);
+    const riseAt = parseChicago(riseIso);
+    if (setAt && riseAt) sky.sun = { rise: riseAt, set: setAt };
+    const setLabel = formatHM(setIso);
+    sunEl.textContent = setLabel ? "Sunset " + setLabel : "";
+    sky.wx = tempEl.textContent;
+    paintClock();
+  }
+
+  function scheduleWx(ms) {
+    if (wxTimer) clearTimeout(wxTimer);
+    wxTimer = setTimeout(loadWeather, ms);
+  }
+
+  async function loadWeather() {
+    if (!flags.wx) {
+      sky.wx = "off";
+      paintHud();
+      return;
+    }
+    if (document.hidden) {
+      scheduleWx(WX_ERR_MS);
+      return;
+    }
+    try {
+      const res = await fetch(WX_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      paintWeather(await res.json());
+      scheduleWx(WX_OK_MS);
+    } catch (e) {
+      sky.wx = "—";
+      paintHud();
+      scheduleWx(WX_ERR_MS);
+    }
+  }
+
+  function rgba(r, g, b, a) {
+    return "rgba(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + "," + a + ")";
+  }
+
+  function mix(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = Math.max(1, Math.floor(w * dpr));
+    canvas.height = Math.max(1, Math.floor(h * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function draw(now) {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const t = now / 1000;
+    const night = sky.night;
+    const day = 1 - night;
+    const horizon = h * 0.64;
+
+    const top = [mix(26, 18, night), mix(30, 22, night), mix(40, 32, night)];
+    const mid = [mix(30, 20, night), mix(38, 28, night), mix(50, 40, night)];
+    const hz = [mix(64, 30, night), mix(48, 40, night), mix(42, 54, night)];
+
+    const g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, rgba(top[0], top[1], top[2], 1));
+    g.addColorStop(0.42, rgba(mid[0], mid[1], mid[2], 1));
+    g.addColorStop(0.6, rgba(hz[0], hz[1], hz[2], 1));
+    g.addColorStop(0.66, rgba(mix(24, 16, night), mix(36, 28, night), mix(42, 34, night), 1));
+    g.addColorStop(1, rgba(mix(22, 18, night), mix(34, 28, night), mix(40, 34, night), 1));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.save();
+    ctx.translate(w * (0.46 + Math.sin(t / 90) * 0.02), h * 0.3);
+    ctx.rotate(-0.42 + Math.sin(t / 120) * 0.03);
+    const band = ctx.createLinearGradient(-w, 0, w, 0);
+    band.addColorStop(0, "rgba(0,0,0,0)");
+    band.addColorStop(0.5, rgba(168, 176, 190, 0.09 * (0.55 + night)));
+    band.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = band;
+    ctx.fillRect(-w, -h * 0.07, w * 2, h * 0.14);
+    ctx.restore();
+
+    const hazeA = 0.2 * (0.62 + night);
+    blob(
+      w * (0.22 + Math.sin(t / 28) * 0.06),
+      h * (0.22 + Math.cos(t / 34) * 0.03),
+      w * 0.28,
+      rgba(46, 110, 120, hazeA)
+    );
+    blob(
+      w * (0.72 + Math.cos(t / 32) * 0.05),
+      h * (0.18 + Math.sin(t / 26) * 0.03),
+      w * 0.24,
+      rgba(92, 48, 72, hazeA * 0.85)
+    );
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, w, horizon);
+    ctx.clip();
+    ribbon(t, w, h, 0.16, 0.04, 5.2, 0.16, 0.4, rgba(78, 168, 172, 1), 0.1, 0.16 + night * 0.16);
+    ribbon(t, w, h, 0.24, 0.032, 4.1, 0.11, 1.7, rgba(138, 72, 104, 1), 0.08, 0.12 + night * 0.12);
+    ribbon(t, w, h, 0.2, 0.024, 7.4, 0.19, 2.8, rgba(86, 118, 168, 1), 0.055, 0.1 + night * 0.1);
+    ctx.restore();
+
+    const wanderX = Math.sin(t / 140) * 7;
+    const wanderY = Math.cos(t / 170) * 6;
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      const tw = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(t * s.tw + s.phase));
+      const alpha = Math.min(0.74, s.a * tw * (0.74 + 0.26 * night));
+      const x = ((s.x + t * s.drift) % 1) * w + wanderX;
+      const y = (s.y + Math.sin(t * 0.05 + s.phase) * 0.006) * h + wanderY;
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = s.cool ? "#c5d0dc" : "#d2c8b8";
+      ctx.beginPath();
+      ctx.arc(x, y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      if (s.spark && night > 0.45) {
+        ctx.globalAlpha = alpha * 0.45;
+        ctx.fillRect(x - s.r * 2.4, y - 0.4, s.r * 4.8, 0.8);
+        ctx.fillRect(x - 0.4, y - s.r * 2.4, 0.8, s.r * 4.8);
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    const hour = chicagoHour(new Date());
+    let frac = (hour - 6.7) / (18.3 - 6.7);
+    if (sky.sun) {
+      const span = sky.sun.set - sky.sun.rise;
+      if (span > 0) frac = (Date.now() - sky.sun.rise) / span;
+    }
+    const alt = frac > 0 && frac < 1 ? Math.sin(Math.min(1, Math.max(0, frac)) * Math.PI) : 0;
+    const sunX = w * (0.1 + 0.8 * Math.min(1, Math.max(0, frac)));
+    const sunY = horizon - alt * h * 0.34;
+    const glowA = alt * day * 0.32;
+    if (glowA > 0.01) {
+      blob(sunX, sunY, w * 0.22, rgba(186, 112, 64, glowA));
+      blob(sunX, sunY, w * 0.07, rgba(204, 156, 102, glowA * 0.45));
+    }
+
+    const moonX = w * (0.8 + Math.sin(t / 80) * 0.012) + wanderX;
+    const moonY = h * (0.16 + Math.cos(t / 96) * 0.008) + wanderY;
+    const moonA = 0.42 + night * 0.28;
+    blob(moonX, moonY, w * 0.2, rgba(186, 200, 208, moonA * 0.28));
+    ctx.beginPath();
+    ctx.fillStyle = rgba(214, 216, 206, Math.min(0.74, moonA));
+    ctx.arc(moonX, moonY, Math.max(12, w * 0.016), 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, horizon, w, h - horizon);
+    ctx.clip();
+    const srcX = sunX * day + moonX * night;
+    const reflA = (0.07 + night * 0.08) * (0.75 + 0.25 * Math.sin(t * 0.8));
+    const refl = ctx.createLinearGradient(srcX, horizon, srcX, h);
+    refl.addColorStop(0, rgba(190, 198, 196, reflA));
+    refl.addColorStop(0.45, rgba(160, 176, 178, reflA * 0.35));
+    refl.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = refl;
+    ctx.fillRect(srcX - w * 0.04, horizon, w * 0.08, h - horizon);
+
+    for (let i = 0; i < 16; i++) {
+      const p = (t * (0.03 + (i % 5) * 0.008) + i * 0.17) % 1;
+      const x = srcX + Math.sin(t * 0.6 + i) * w * 0.02 + ((i % 3) - 1) * 8;
+      const y = horizon + 12 + p * (h - horizon - 20);
+      const a = Math.min(0.42, (0.12 + 0.16 * (0.5 + 0.5 * Math.sin(t * 1.4 + i))) * (0.55 + night));
+      ctx.fillStyle = rgba(196, 206, 202, a);
+      ctx.fillRect(x, y, 8 + (i % 4) * 7, 1.1);
+    }
+    ctx.restore();
+
+    ctx.beginPath();
+    ctx.moveTo(0, horizon + 0.5);
+    ctx.lineTo(w, horizon + 0.5);
+    ctx.strokeStyle = rgba(168, 188, 190, 0.38);
+    ctx.lineWidth = 1.25;
+    ctx.stroke();
+    swell(t, w, horizon + h * 0.018, 7, 1.15, 0.9, 0.34, 1.5);
+    swell(t, w, horizon + h * 0.055, 9, 0.8, 2.1, 0.24, 1.25);
+    swell(t, w, horizon + h * 0.1, 6.2, 0.62, 0.3, 0.18, 1.1);
+    swell(t, w, horizon + h * 0.16, 8.4, 0.5, 1.4, 0.14, 1);
+
+    if (flags.motion && night > 0.5) drawBolt(t, w, h, night);
+
+    const lift = Math.sin(t / 22) * 0.035;
+    ctx.fillStyle = lift > 0 ? rgba(186, 196, 204, lift) : rgba(0, 0, 0, -lift);
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  function blob(x, y, r, color) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color);
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function ribbon(t, w, h, yBase, amp, freq, speed, phase, color, width, alpha) {
+    if (alpha < 0.012) return;
+    ctx.beginPath();
+    const steps = 36;
+    for (let i = 0; i <= steps; i++) {
+      const u = i / steps;
+      const x = (u * 1.12 - 0.06) * w;
+      const y = h * yBase
+        + Math.sin(u * freq + t * speed + phase) * h * amp
+        + Math.sin(u * freq * 2.05 - t * speed * 0.55 + phase) * h * amp * 0.38;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = h * width;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function swell(t, w, y0, freq, speed, phase, alpha, width) {
+    ctx.beginPath();
+    const step = Math.max(8, w / 180);
+    for (let x = 0; x <= w; x += step) {
+      const u = x / w;
+      const y = y0
+        + Math.sin(u * freq + t * speed + phase) * 7
+        + Math.sin(u * freq * 0.41 - t * speed * 0.65) * 3;
+      if (x === 0) ctx.moveTo(0, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = rgba(176, 198, 196, alpha);
+    ctx.lineWidth = width;
+    ctx.stroke();
+  }
+
+  function drawBolt(t, w, h, night) {
+    if (!sky.bolt && t > sky.nextBolt) {
+      sky.bolt = {
+        x: Math.random() * w * 0.72 + w * 0.04,
+        y: h * (0.06 + Math.random() * 0.22),
+        vx: 240 + Math.random() * 180,
+        vy: 70 + Math.random() * 70,
+        born: t,
+        life: 0.55 + Math.random() * 0.25
+      };
+    }
+    const b = sky.bolt;
+    if (!b) return;
+    const u = (t - b.born) / b.life;
+    if (u >= 1) {
+      sky.bolt = null;
+      sky.nextBolt = t + 16 + Math.random() * 26;
+      return;
+    }
+    const a = Math.sin(u * Math.PI) * 0.38 * night;
+    const x = b.x + b.vx * (t - b.born);
+    const y = b.y + b.vy * (t - b.born);
+    ctx.strokeStyle = rgba(198, 206, 204, a);
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - b.vx * 0.08, y - b.vy * 0.08);
+    ctx.stroke();
+  }
+
+  function frame(now) {
+    if (!running) return;
+    if (now - lastDraw > 14 || !flags.motion) {
+      lastDraw = now;
+      draw(now);
+    }
+    if (flags.motion) raf = requestAnimationFrame(frame);
+  }
+
+  function startLoop() {
+    if (running) return;
+    running = true;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(frame);
+  }
+
+  function stopLoop() {
+    running = false;
+    cancelAnimationFrame(raf);
+  }
+
+  function armDeep() {
+    if (deepTimer) clearTimeout(deepTimer);
+    document.documentElement.classList.remove("deeper");
+    if (!flags.motion) return;
+    deepTimer = setTimeout(function () {
+      document.documentElement.classList.add("deeper");
+    }, 8 * 60 * 1000);
+  }
+
+  ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (type) {
+    window.addEventListener(type, armDeep, { passive: true });
+  });
+
+  function versionCheckMs() {
+    const n = Number(raw("vcheck"));
+    if (Number.isFinite(n) && n >= 1000) return n;
+    return VERSION_CHECK_MS;
+  }
+
+  function paintStamp(data) {
+    const el = document.getElementById("ver");
+    if (!el || !data || !data.label) return;
+    const name = el.getAttribute("data-portal") || "RICH";
+    el.textContent = name + " " + data.label;
+  }
+
+  async function fetchVersion() {
+    const res = await fetch("./version.json?t=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data || typeof data.v !== "string" || !data.v) throw new Error("bad version");
+    paintStamp(data);
+    return data.v;
+  }
+
+  async function captureVersion() {
+    try { loadedVersion = await fetchVersion(); } catch (e) { loadedVersion = null; }
+  }
+
+  async function checkVersion() {
+    if (reloadArmed) return;
+    try {
+      const remote = await fetchVersion();
+      if (loadedVersion == null) { loadedVersion = remote; return; }
+      if (remote !== loadedVersion) {
+        reloadArmed = true;
+        location.reload();
+      }
+    } catch (e) {}
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) stopLoop();
+    else {
+      paintClock();
+      startLoop();
+      if (flags.wx) loadWeather();
+    }
+  });
+
+  window.addEventListener("resize", function () {
+    resize();
+    if (!flags.motion) draw(performance.now());
+  });
+
+  seedStars();
+  resize();
+  paintClock();
+  setInterval(paintClock, 1000);
+  armDeep();
+  startLoop();
+  loadWeather();
+  captureVersion();
+  setInterval(checkVersion, versionCheckMs());
+  paintHud();
+})();
+  </script>
+</body>
+</html>

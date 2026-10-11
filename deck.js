@@ -1,7 +1,7 @@
 /* SPACEWALL portal deck — iPad swipe across same-origin pages.
  *
  * Order (left → right):
- *   SPACEWALL  ↔  HEARTH  ↔  WAVE  ↔  PRESS  ↔  HUB  ↔  REEL
+ *   SPACEWALL  ↔  HEARTH  ↔  WAVE  ↔  PRESS  ↔  HUB  ↔  REEL  ↔  RICH
  *
  * A new portal: append a row to PAGES, add the html to write_version.py
  * HTML_SOURCES and PORTAL_BY_FILE, the pages.yml copy list, and this
@@ -20,7 +20,8 @@
     { id: "wave", file: "wave.html", label: "WAVE" },
     { id: "press", file: "press.html", label: "PRESS" },
     { id: "hub", file: "hub.html", label: "HUB" },
-    { id: "reel", file: "reel.html", label: "REEL" }
+    { id: "reel", file: "reel.html", label: "REEL" },
+    { id: "rich", file: "rich.html", label: "RICH" }
   ];
 
   const STORE_DIR = "spacewall-deck-dir";
