@@ -105,11 +105,12 @@
       position: fixed;
       left: calc(12px + env(safe-area-inset-left));
       bottom: calc(8px + env(safe-area-inset-bottom));
-      z-index: 4;
+      z-index: 6;
       font-size: 10px;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: #3a3a42;
+      color: #8e8e98;
+      text-shadow: 0 1px 8px rgba(6, 6, 8, 0.9);
       pointer-events: none;
     }
 
@@ -319,7 +320,7 @@
     </div>
   </header>
   <main id="board" aria-live="polite"></main>
-  <div id="ver" class="ver" data-portal="SPACEWALL">SPACEWALL 26.41.1</div>
+  <div id="ver" class="ver" data-portal="SPACEWALL">SPACEWALL 26.41.1.1</div>
   <script>
 (function () {
   const REFRESH_MS = 60000;
