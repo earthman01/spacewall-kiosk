@@ -1,6 +1,6 @@
 {
-  "status": "ok",
-  "updated_at": "2026-10-16T21:10:36Z",
+  "status": "outage",
+  "updated_at": "2026-10-16T23:40:34Z",
   "source": "developer.x.com/status",
-  "detail": "Developer platform operational (degraded=2, no_data=5, operational=374, outage=3)"
+  "detail": "Actively investigating a platform outage. (degraded=1, no_data=5, operational=377, outage=1)"
 }
