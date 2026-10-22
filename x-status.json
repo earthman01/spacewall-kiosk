@@ -1,6 +1,6 @@
 {
-  "status": "unknown",
-  "updated_at": "2026-10-22T00:58:26Z",
+  "status": "ok",
+  "updated_at": "2026-10-22T05:58:46Z",
   "source": "developer.x.com/status",
-  "detail": "no HTML signal; api fallback failed: HTTPError"
+  "detail": "Developer platform operational (degraded=2, operational=382, outage=2)"
 }
