@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T17:05:00Z",
+  "updated_at": "2026-10-29T17:30:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -18,29 +18,42 @@
           "status": "live",
           "detail": "Goal is to get both off the deck. Quick local pickup. $650 OBO. Includes 2 towers, cage, dolly, reservoir, nutrients, and a pH kit.",
           "url": null,
-          "status_text": "All three listings are live. Waiting for buyers.",
+          "status_text": "Ads are live. Next is buyer inquiries. Stays on the board until sold and paid.",
           "steps": [
             {
-              "id": "marketplace",
-              "label": "Marketplace",
-              "status": "live",
-              "url": "https://www.facebook.com/marketplace/item/1461771412720139/"
+              "id": "ads-live",
+              "label": "Ads live",
+              "status": "done",
+              "done": true,
+              "show": true,
+              "links": [
+                {
+                  "label": "Marketplace",
+                  "url": "https://www.facebook.com/marketplace/item/1461771412720139/"
+                },
+                {
+                  "label": "Craigslist",
+                  "url": "https://panamacity.craigslist.org/grd/d/panama-city-beach-two-tower-garden/7991916681.html"
+                },
+                {
+                  "label": "OfferUp",
+                  "url": "https://offerup.com/item/detail/2b411045-978d-3c7e-99c6-9c5b432e6e82"
+                }
+              ]
             },
             {
-              "id": "craigslist",
-              "label": "Craigslist",
-              "status": "live",
-              "url": "https://panamacity.craigslist.org/grd/d/panama-city-beach-two-tower-garden/7991916681.html"
+              "id": "inquiries",
+              "label": "Buyer inquiries",
+              "status": "next"
             },
             {
-              "id": "offerup",
-              "label": "OfferUp",
-              "status": "live",
-              "url": "https://offerup.com/item/detail/2b411045-978d-3c7e-99c6-9c5b432e6e82"
+              "id": "pickup",
+              "label": "Pickup scheduled",
+              "status": "waiting"
             },
             {
-              "id": "buyers",
-              "label": "Waiting for buyers",
+              "id": "sold",
+              "label": "Sold and paid",
               "status": "waiting"
             }
           ],

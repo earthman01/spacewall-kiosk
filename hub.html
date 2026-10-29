@@ -372,12 +372,20 @@
 
     .step {
       display: flex;
-      align-items: baseline;
-      gap: 8px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 3px;
       min-width: 0;
       font-size: clamp(11px, 0.95vw, 14px);
       line-height: 1.25;
       color: #9a9aa4;
+    }
+
+    .step-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
     }
 
     .step i {
@@ -422,7 +430,21 @@
     .step.parked i { background: var(--parked); }
     .step.seed i { background: var(--seed); }
     .step.done { color: #5c5c66; }
-    .step.done .step-label { text-decoration: line-through; }
+    .step.done .step-row .step-label { text-decoration: line-through; }
+
+    .step-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      margin-left: 14px;
+    }
+
+    .step-links a {
+      color: #b4b4be;
+      text-decoration: none;
+    }
+
+    .step-links a:hover { color: #e4e4ea; }
     .step.mark {
       color: #ffe0a8;
       background: rgba(255, 176, 32, 0.1);
@@ -990,7 +1012,7 @@
       </div>
     </div>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2.1</div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2.2</div>
 
   <script>
 (function () {
@@ -1090,17 +1112,36 @@
     return null;
   }
 
+  function normalizeLink(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const url = safeUrl(raw.url);
+    const label = String(raw.label || "").trim();
+    if (!url || !label) return null;
+    return { label: label, url: url };
+  }
+
   function normalizeStep(raw) {
     if (!raw || typeof raw !== "object") return null;
     const label = String(raw.label || raw.title || "").trim();
     if (!label) return null;
     const status = statusKey(raw.status);
+    const links = [];
+    if (Array.isArray(raw.links)) {
+      raw.links.forEach(function (link) {
+        const item = normalizeLink(link);
+        if (item) links.push(item);
+      });
+    }
+    const ownUrl = safeUrl(raw.url);
+    if (ownUrl && !links.length) links.push({ label: label, url: ownUrl });
     return {
       id: String(raw.id || ""),
       label: label,
       status: status,
       labelStatus: statusLabel(raw.status),
-      url: safeUrl(raw.url),
+      url: ownUrl,
+      links: links,
+      show: raw.show === true,
       done: raw.done === true || raw.archived === true || isDoneStatus(raw.status)
     };
   }
@@ -1315,15 +1356,17 @@
     const list = document.createElement("div");
     list.className = "steps";
     steps.forEach(function (step) {
-      if (!includeDone && step.done) return;
+      if (!includeDone && step.done && !step.show && !step.links.length) return;
       const row = document.createElement("div");
       row.className = "step " + step.status;
+      const line = document.createElement("div");
+      line.className = "step-row";
       const dot = document.createElement("i");
       dot.setAttribute("aria-hidden", "true");
-      const label = step.url ? document.createElement("a") : document.createElement("span");
+      const label = (!step.links.length && step.url) ? document.createElement("a") : document.createElement("span");
       label.className = "step-label";
       label.textContent = step.label;
-      if (step.url) {
+      if (label.tagName === "A") {
         label.href = step.url;
         label.target = "_blank";
         label.rel = "noopener noreferrer";
@@ -1331,9 +1374,23 @@
       const state = document.createElement("span");
       state.className = "step-state";
       state.textContent = step.done ? "Done" : step.labelStatus;
-      row.appendChild(dot);
-      row.appendChild(label);
-      row.appendChild(state);
+      line.appendChild(dot);
+      line.appendChild(label);
+      line.appendChild(state);
+      row.appendChild(line);
+      if (step.links.length && !(step.links.length === 1 && step.links[0].label === step.label)) {
+        const links = document.createElement("div");
+        links.className = "step-links";
+        step.links.forEach(function (link) {
+          const a = document.createElement("a");
+          a.href = link.url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.textContent = link.label;
+          links.appendChild(a);
+        });
+        row.appendChild(links);
+      }
       list.appendChild(row);
     });
     return list.childNodes.length ? list : null;

@@ -195,7 +195,7 @@ Board fields added on an item in `hub-board.json`:
 }
 ```
 
-`status` may also be `mark` (Waiting on Mark), `done`, or `archived`. A step `url` (`http` or `https`) makes that label a link. Top-level `watch` is `{ "title": "Everything we oversee", "items": [ … ] }`.
+`status` may also be `mark` (Waiting on Mark), `done`, or `archived`. A step `url`, or a `links` list of `{ "label", "url" }`, shows listing links. A done step stays on the card when `show` is true or it has links. The card leaves the board once every step is done, including Sold and paid. Top-level `watch` is `{ "title": "Everything we oversee", "items": [ … ] }`.
 
 ## RICH
 
