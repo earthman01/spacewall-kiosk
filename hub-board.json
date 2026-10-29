@@ -1,36 +1,57 @@
 {
-  "updated_at": "2026-09-22T22:55:00Z",
-  "source": "cos-voice-call-abed2dda-sep22",
+  "updated_at": "2026-10-29T02:52:50Z",
+  "source": "earthbot-hub-notes-oct28",
   "title": "HUB",
-  "subtitle": "Personal OS · planning & build",
+  "subtitle": "Personal OS · ops & notes",
   "north_star": {
     "headline": "Be a hub, not a leaf",
-    "body": "Tesla × cabin Grok × CoS × calendar/mail × house displays × life logistics through one personal OS. Navy career pays the bills ~7 more years. This layer is life admin, not a startup. Plant edges now so the phase change finds you already connected."
+    "body": "Type a note on any card and hit Send — it emails earthbot. Visibility into every live area of operation. Navy career pays the bills; this layer is life admin through one personal OS."
   },
   "columns": [
     {
-      "id": "sprouted",
-      "label": "Sprouted",
+      "id": "live-ops",
+      "label": "Live ops",
       "items": [
         {
-          "id": "spacewall",
-          "title": "SPACEWALL / HEARTH",
+          "id": "cashflow",
+          "title": "Money / Cashflow",
           "status": "live",
-          "detail": "House display platform — iPads + 55″ OLED. Mind-blown seed.",
-          "url": "https://earthman01.github.io/spacewall-kiosk/"
-        },
-        {
-          "id": "cabin-cal",
-          "title": "Cabin calendar connector",
-          "status": "proved",
-          "detail": "Wrote “A and W trailer” today (~3:41 PM CT).",
+          "detail": "Daily fold, lanes, budget cushion, transfers — first working proof.",
           "url": null
         },
         {
-          "id": "cos-team",
-          "title": "CoS team",
+          "id": "food-cook",
+          "title": "Food / cooking",
           "status": "live",
-          "detail": "earthbot + CFO + admin + explorer + air — density, not five apps.",
+          "detail": "Silent food log, Posha, one-pot guides, calorie day-total only.",
+          "url": null
+        },
+        {
+          "id": "health-med",
+          "title": "Health / medical",
+          "status": "live",
+          "detail": "Sleep/vitals ingest, B12, General Medicine portal parked, visit prep.",
+          "url": null
+        },
+        {
+          "id": "house-air",
+          "title": "House / lights / TV",
+          "status": "live",
+          "detail": "All lights via air on MacBook Air — never phone. Wind-down + scenes.",
+          "url": null
+        },
+        {
+          "id": "eve-calls",
+          "title": "Eve phone calls",
+          "status": "live",
+          "detail": "Telnyx dials, listen-first, hangup-first, store/vendor IVR.",
+          "url": null
+        },
+        {
+          "id": "admin-mail",
+          "title": "Admin / email",
+          "status": "live",
+          "detail": "Gmail digests, earthbot mail watch, AgentMail, Slack #earthbot.",
           "url": null
         },
         {
@@ -39,6 +60,61 @@
           "status": "live",
           "detail": "Morning brief + lean X digests + voice-safe try-this.",
           "url": null
+        },
+        {
+          "id": "cos-team",
+          "title": "CoS team",
+          "status": "live",
+          "detail": "earthbot + CFO + admin + explorer + air — density, not five apps.",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "building",
+      "label": "Building",
+      "items": [
+        {
+          "id": "hub-portal",
+          "title": "HUB portal (this board)",
+          "status": "building",
+          "detail": "Per-item notes → earthbot. Expand visibility; keep the dark UI.",
+          "url": null
+        },
+        {
+          "id": "air-winddown",
+          "title": "Air Winddown / Normal scenes",
+          "status": "building",
+          "detail": "HomeKit scenes + shortcuts when lid next open; Apple Home from Mac.",
+          "url": null
+        },
+        {
+          "id": "house-wake",
+          "title": "House wake MVP",
+          "status": "building",
+          "detail": "Kitchen dock Air + openWakeWord → voice handoff.",
+          "url": null
+        },
+        {
+          "id": "spacewall",
+          "title": "SPACEWALL / HEARTH",
+          "status": "live",
+          "detail": "House display platform — iPads + 55″ OLED.",
+          "url": "https://earthman01.github.io/spacewall-kiosk/"
+        },
+        {
+          "id": "press",
+          "title": "PRESS",
+          "status": "live",
+          "detail": "Floating newspaper portal on the same platform.",
+          "url": "https://earthman01.github.io/spacewall-kiosk/press.html"
+        },
+        {
+          "id": "reel",
+          "title": "REEL",
+          "status": "live",
+          "detail": "Slow cinema float — original mood packs.",
+          "url": "https://earthman01.github.io/spacewall-kiosk/reel.html"
         },
         {
           "id": "voice-ingest",
@@ -54,52 +130,53 @@
       "label": "This week",
       "items": [
         {
-          "id": "cabin-gmail",
-          "title": "Cabin edge #2 — Gmail/files",
-          "status": "next",
-          "detail": "When parked: connect Gmail (or files) like calendar; one real ask.",
-          "url": null
-        },
-        {
-          "id": "cross-surface",
-          "title": "Cross-surface SPACEWALL briefing",
-          "status": "next",
-          "detail": "Once, tell cabin Grok the house-stack one-liner so car and CoS share the win.",
-          "url": null
-        },
-        {
-          "id": "spearhead",
-          "title": "Spearhead habit",
-          "status": "next",
-          "detail": "CoS pushes one no-brainer when a needle drops or a seed needs water.",
-          "url": null
-        }
-      ]
-    },
-    {
-      "id": "building",
-      "label": "Building",
-      "items": [
-        {
-          "id": "hub-portal",
-          "title": "HUB portal (this board)",
+          "id": "salary-cfo",
+          "title": "Salary / CFO fixes",
           "status": "building",
-          "detail": "SPACEWALL-style planning/build wall for the personal OS.",
+          "detail": "COLA, review raise path, bonus net, live sheet moves.",
           "url": null
         },
         {
-          "id": "press",
-          "title": "PRESS",
-          "status": "live",
-          "detail": "Floating newspaper portal on the same platform.",
-          "url": "https://earthman01.github.io/spacewall-kiosk/press.html"
+          "id": "prop-tax",
+          "title": "Bay County property tax",
+          "status": "next",
+          "detail": "4% early-pay window ahead of Nov 3.",
+          "url": null
         },
         {
-          "id": "reel",
-          "title": "REEL",
+          "id": "lab112",
+          "title": "Lab 112 hangup-first",
+          "status": "waiting",
+          "detail": "Eve retest when Mark says dial — callee hangs up first.",
+          "url": null
+        },
+        {
+          "id": "insurance",
+          "title": "Insurance / Sea Tow",
+          "status": "proved",
+          "detail": "Progressive auto autopay + Sea Tow Gold renew path settled.",
+          "url": null
+        },
+        {
+          "id": "x-site-fund",
+          "title": "X / site / funding",
           "status": "live",
-          "detail": "Slow cinema float — original mood packs, no film stills.",
-          "url": "https://earthman01.github.io/spacewall-kiosk/reel.html"
+          "detail": "X Premium+, digests, Earthman AI / funding seeds.",
+          "url": null
+        },
+        {
+          "id": "sleep-walk",
+          "title": "Sleep / walk",
+          "status": "live",
+          "detail": "Sleep email ingest, lights-out cues, walk logging.",
+          "url": null
+        },
+        {
+          "id": "tesla",
+          "title": "Tesla",
+          "status": "next",
+          "detail": "Keep Climate Bluetooth automations — webhook later.",
+          "url": null
         }
       ]
     },
@@ -109,16 +186,51 @@
       "items": [
         {
           "id": "boat-week",
-          "title": "Boat / trailer week",
+          "title": "Boat / trailer",
           "status": "waiting",
-          "detail": "Eric A&W estimate by tomorrow AM; Gary logistics; Daniel Thompson repair.",
+          "detail": "Estimates and logistics — amounts when they land.",
           "url": null
         },
         {
-          "id": "cabin-hub",
-          "title": "Cabin as edge of personal OS",
+          "id": "findmy",
+          "title": "Find My live location",
+          "status": "parked",
+          "detail": "iCloud Find My + iPhone location-log automation.",
+          "url": null
+        },
+        {
+          "id": "cabin-gmail",
+          "title": "Cabin Gmail / files edge",
           "status": "seed",
-          "detail": "More connectors + memory continuity across car and CoS.",
+          "detail": "Connect Gmail or files like calendar; one real ask.",
+          "url": null
+        },
+        {
+          "id": "cross-surface",
+          "title": "Cross-surface briefing",
+          "status": "seed",
+          "detail": "Tell cabin Grok the house-stack one-liner once.",
+          "url": null
+        },
+        {
+          "id": "spearhead",
+          "title": "Spearhead habit",
+          "status": "seed",
+          "detail": "CoS pushes one no-brainer when a needle drops.",
+          "url": null
+        },
+        {
+          "id": "neo-body",
+          "title": "NEO / body later",
+          "status": "seed",
+          "detail": "1X NEO pre-order — house cameras + wake first.",
+          "url": null
+        },
+        {
+          "id": "ascension-fund",
+          "title": "Ascension funding assist",
+          "status": "parked",
+          "detail": "Sacred Heart Emerald Funding — no submit unless asked.",
           "url": null
         }
       ]
