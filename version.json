@@ -1,9 +1,9 @@
 {
-  "v": "a8793cac9d4b5af7",
-  "built_at": "2026-10-29T18:29:49Z",
+  "v": "be4890dda64af2b2",
+  "built_at": "2026-10-29T18:53:13Z",
   "year": 26,
   "week": 44,
   "ship": 2,
-  "hotfix": 4,
-  "label": "26.44.2.4"
+  "hotfix": 5,
+  "label": "26.44.2.5"
 }

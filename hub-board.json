@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T18:30:00Z",
+  "updated_at": "2026-10-29T18:55:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -144,8 +144,9 @@
         {
           "id": "dentist",
           "title": "Dentist",
-          "status": "next",
-          "detail": "Book a visit. Nudge Nov 2.",
+          "status": "waiting",
+          "status_text": "Waiting on the dental office to get back to us. Request sent Oct 29 on the Bay Smile Docs web form for Thu Jun 24, 2027 at 10 AM, with Wed Jun 30 as the backup.",
+          "detail": "",
           "url": null
         },
         {
