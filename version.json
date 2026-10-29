@@ -1,9 +1,9 @@
 {
-  "v": "hub-notes-26441",
-  "built_at": "2026-10-29T02:52:50Z",
+  "v": "b8d0d29fbaec141a",
+  "built_at": "2026-10-29T15:31:39Z",
   "year": 26,
   "week": 44,
   "ship": 1,
-  "hotfix": 0,
-  "label": "26.44.1"
+  "hotfix": 1,
+  "label": "26.44.1.1"
 }

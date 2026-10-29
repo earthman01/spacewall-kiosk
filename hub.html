@@ -432,14 +432,28 @@
 
     <main id="board" aria-live="polite" aria-label="Planning board"></main>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.1</div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.1.1</div>
 
   <script>
 (function () {
   const VERSION_CHECK_MS = 3 * 60 * 1000;
   const BOARD_REFRESH_MS = 20 * 60 * 1000;
   const NOTE_TO = "earthbot@mail.grokbot.com";
-  const FORM_ENDPOINT = "https://formsubmit.co/ajax/" + NOTE_TO;
+  const NOTE_TIMEOUT_MS = 8000;
+  // Public form endpoints only. Each URL accepts a submission and emails
+  // NOTE_TO. There is no API key in this page.
+  const NOTE_PROVIDERS = [
+    {
+      name: "form.taxi",
+      url: "https://form.taxi/s/rvzzhd31",
+      accepted: function (data) { return !!(data && data.success === true); }
+    },
+    {
+      name: "sendm8",
+      url: "https://sendm8.com/f/" + NOTE_TO,
+      accepted: function (data) { return !!(data && data.ok === true); }
+    }
+  ];
   const KNOWN = {
     live: "Live",
     proved: "Proved",
@@ -524,22 +538,6 @@
     };
   }
 
-  function mailtoFallback(item, text) {
-    const subject = "[HUB] " + item.title;
-    const body = [
-      text,
-      "",
-      "—",
-      "item_id: " + (item.id || ""),
-      "item_title: " + item.title,
-      "source: hub"
-    ].join("\n");
-    const href = "mailto:" + encodeURIComponent(NOTE_TO).replace(/%40/g, "@")
-      + "?subject=" + encodeURIComponent(subject)
-      + "&body=" + encodeURIComponent(body);
-    window.location.href = href;
-  }
-
   function withTimeout(promise, ms) {
     return new Promise(function (resolve, reject) {
       const t = setTimeout(function () { reject(new Error("timeout")); }, ms);
@@ -548,58 +546,80 @@
     });
   }
 
-  async function sendNote(item, text, btn, input) {
+  function notePayload(item, text, providerName) {
     const payload = {
       _subject: "[HUB] " + item.title,
-      _template: "box",
-      _captcha: "false",
       message: text,
       item_id: item.id || "",
       item_title: item.title,
       source: "hub",
       page: location.href.split("?")[0]
     };
+    if (providerName === "sendm8") payload._gotcha = "";
+    return payload;
+  }
+
+  async function postNote(provider, item, text) {
+    const res = await withTimeout(fetch(provider.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(notePayload(item, text, provider.name))
+    }), NOTE_TIMEOUT_MS);
+    let data = null;
+    try { data = await res.json(); } catch (e) { data = null; }
+    if (!res.ok || !provider.accepted(data)) {
+      const err = new Error(provider.name + " HTTP " + res.status);
+      err.status = res.status;
+      throw err;
+    }
+    return res.status;
+  }
+
+  function markSent(btn, input) {
+    btn.textContent = "Sent";
+    btn.classList.add("ok");
+    btn.classList.remove("err");
+    input.value = "";
+    setTimeout(function () {
+      btn.textContent = "Send";
+      btn.classList.remove("ok");
+      btn.disabled = false;
+    }, 1800);
+  }
+
+  function markFailed(btn) {
+    btn.textContent = "Failed";
+    btn.classList.add("err");
+    btn.classList.remove("ok");
+    btn.disabled = false;
+    setTimeout(function () {
+      if (btn.textContent !== "Failed") return;
+      btn.textContent = "Send";
+      btn.classList.remove("err");
+    }, 4000);
+  }
+
+  async function sendNote(item, text, btn, input) {
     btn.disabled = true;
     btn.textContent = "…";
     btn.classList.remove("ok", "err");
-    try {
-      const res = await withTimeout(fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(payload)
-      }), 4500);
-      let data = null;
-      try { data = await res.json(); } catch (e) { data = null; }
-      if (!res.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-      btn.textContent = "Sent";
-      btn.classList.add("ok");
-      input.value = "";
-      setTimeout(function () {
-        btn.textContent = "Send";
-        btn.classList.remove("ok");
-        btn.disabled = false;
-      }, 1800);
-    } catch (err) {
-      // FormSubmit down/unreachable → open mail client to earthbot (reliable)
-      mailtoFallback(item, text);
-      btn.textContent = "Mail";
-      btn.classList.add("ok");
-      input.value = "";
-      setTimeout(function () {
-        btn.textContent = "Send";
-        btn.classList.remove("ok", "err");
-        btn.disabled = false;
-      }, 2200);
+    for (let i = 0; i < NOTE_PROVIDERS.length; i++) {
+      try {
+        await postNote(NOTE_PROVIDERS[i], item, text);
+        markSent(btn, input);
+        return;
+      } catch (err) {}
     }
+    markFailed(btn);
   }
 
   function renderNote(item) {
     const row = document.createElement("form");
     row.className = "note";
-    row.setAttribute("action", "https://formsubmit.co/" + NOTE_TO);
+    row.setAttribute("action", NOTE_PROVIDERS[0].url);
     row.setAttribute("method", "POST");
     const input = document.createElement("input");
     input.type = "text";

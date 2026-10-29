@@ -92,7 +92,9 @@ Live: [hub.html](https://earthman01.github.io/spacewall-kiosk/hub.html)
 
 Planning and build status wall for the personal OS — glance where planning and building stand, on an iPad or the 55" OLED. Near-black, full viewport. A north-star band (headline + short body) sits above four columns of status cards: Sprouted, This week, Building, Parked. Status words use the house palette (green live, amber building, dim parked) so the wall reads from across the room. Sparse chrome. No bright whites.
 
-The page only reads same-origin [`hub-board.json`](./hub-board.json), and only while `document.visibilityState === "visible"`. Hidden tabs and background iPads do not poll the board. While visible, a slow refresh (about 20 minutes) can pick up a new file. Fetch failure keeps the last good board.
+The page reads same-origin [`hub-board.json`](./hub-board.json), and only while `document.visibilityState === "visible"`. Hidden tabs and background iPads do not poll the board. While visible, a slow refresh (about 20 minutes) can pick up a new file. Fetch failure keeps the last good board.
+
+Each card can take a short note. Send posts it to earthbot@mail.grokbot.com. Form.taxi is tried first (`https://form.taxi/s/rvzzhd31`); if that request fails, sendm8 is tried (`https://sendm8.com/f/earthbot@mail.grokbot.com`). Both are public form endpoints — no API key in the page. The button shows Sent or Failed and does not open a mail draft. A failed send leaves the text in the field so it can be tried again.
 
 **No X API, Grok API, or secrets in the client.** CosS refreshes `hub-board.json` offline (commit or drop a new JSON file). The page does not call those APIs. `hub-board.json` is data-only — like `press-feed.json` and `x-status.json` — and is not part of the `version.json` content hash, so a board-only update does not bounce the wall iPads.
 
