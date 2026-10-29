@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T19:00:00Z",
+  "updated_at": "2026-10-29T19:05:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -196,13 +196,6 @@
           "title": "CVI and Beach Derm",
           "status": "next",
           "detail": "Healow portal access and Beach Derm portal.",
-          "url": null
-        },
-        {
-          "id": "powerwall",
-          "title": "Powerwall price",
-          "status": "next",
-          "detail": "$18k to $14.5k. Tesla or a named installer.",
           "url": null
         },
         {
