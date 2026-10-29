@@ -540,6 +540,14 @@
     window.location.href = href;
   }
 
+  function withTimeout(promise, ms) {
+    return new Promise(function (resolve, reject) {
+      const t = setTimeout(function () { reject(new Error("timeout")); }, ms);
+      promise.then(function (v) { clearTimeout(t); resolve(v); },
+                   function (e) { clearTimeout(t); reject(e); });
+    });
+  }
+
   async function sendNote(item, text, btn, input) {
     const payload = {
       _subject: "[HUB] " + item.title,
@@ -555,14 +563,14 @@
     btn.textContent = "…";
     btn.classList.remove("ok", "err");
     try {
-      const res = await fetch(FORM_ENDPOINT, {
+      const res = await withTimeout(fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
         body: JSON.stringify(payload)
-      });
+      }), 4500);
       let data = null;
       try { data = await res.json(); } catch (e) { data = null; }
       if (!res.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -575,12 +583,14 @@
         btn.disabled = false;
       }, 1800);
     } catch (err) {
-      btn.textContent = "Mail";
-      btn.classList.add("err");
+      // FormSubmit down/unreachable → open mail client to earthbot (reliable)
       mailtoFallback(item, text);
+      btn.textContent = "Mail";
+      btn.classList.add("ok");
+      input.value = "";
       setTimeout(function () {
         btn.textContent = "Send";
-        btn.classList.remove("err");
+        btn.classList.remove("ok", "err");
         btn.disabled = false;
       }, 2200);
     }
