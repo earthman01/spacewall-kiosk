@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T17:55:00Z",
+  "updated_at": "2026-10-29T18:30:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -105,29 +105,6 @@
       "id": "this-week",
       "label": "This week",
       "items": [
-        {
-          "id": "boat-week",
-          "title": "Boat trailer",
-          "status": "next",
-          "detail": "2026 annual maintenance is done.",
-          "url": null,
-          "steps": [
-            {
-              "id": "amw-inspection",
-              "label": "AMW trailer inspection, Dec 2026",
-              "status": "next"
-            },
-            {
-              "id": "amw-if-good",
-              "label": "If AMW is good with it, no trailer maintenance until the following year"
-            },
-            {
-              "id": "thompson-2027",
-              "label": "Likely annual boat maintenance with Thompson Marine, Jan 2027",
-              "status": "waiting"
-            }
-          ]
-        },
         {
           "id": "carmax-dothan",
           "title": "CarMax Dothan",
@@ -302,7 +279,7 @@
           "title": "Boat trailer 2026 maintenance",
           "status": "done",
           "archived": true,
-          "detail": "Done. The open work is on the Boat trailer card: schedule 2027."
+          "detail": "Done. The trailer was overhauled about a month before Nov 2026. Next dates are on Everything we oversee."
         }
       ]
     },
@@ -387,7 +364,12 @@
     "title": "Everything we oversee",
     "items": [
       {
-        "id": "boat-week"
+        "id": "boat-week",
+        "title": "Boat trailer",
+        "status": "live",
+        "status_text": "trailer inspection Dec 2027, boat annual service around Jan 2028",
+        "detail": "2026 cycle is done. The trailer was fully overhauled about a month before Nov 2026. Trailer inspection Dec 2027, boat annual service around Jan 2028.",
+        "url": null
       },
       {
         "id": "cashflow",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T17:50:00Z",
+  "updated_at": "2026-10-29T18:30:00Z",
   "source": "mark-hub-note",
   "timezone": "America/Chicago",
   "buffer_minutes": 15,
@@ -21,22 +21,22 @@
       "url": "https://www.google.com/maps/search/?api=1&query=CarMax%20Dothan%202756%20Ross%20Clark%20Cir%2C%20Dothan%2C%20AL%2036301"
     },
     {
-      "id": "amw-trailer-2026-12-01",
-      "title": "AMW boat trailer inspection",
+      "id": "trailer-inspection-2027-12-01",
+      "title": "Trailer inspection",
       "kind": "event",
       "all_day": true,
-      "starts_at": "2026-12-01T00:00:00-06:00",
+      "starts_at": "2027-12-01T00:00:00-06:00",
       "ends_at": null,
-      "detail": "Dec 2026. If AMW is good with it, no trailer maintenance until the following year."
+      "detail": "Boat trailer. Dec 1, 2027."
     },
     {
-      "id": "thompson-marine-2027-01-08",
-      "title": "Likely Thompson Marine boat maintenance",
+      "id": "boat-annual-2028-01-08",
+      "title": "Boat annual",
       "kind": "event",
       "all_day": true,
-      "starts_at": "2027-01-08T00:00:00-06:00",
+      "starts_at": "2028-01-08T00:00:00-06:00",
       "ends_at": null,
-      "detail": "Date TBD. Placeholder day is Jan 8, 2027."
+      "detail": "About Jan 8, 2028."
     }
   ]
 }

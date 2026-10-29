@@ -497,15 +497,26 @@
     .oversee-list[hidden] { display: none !important; }
 
     .oversee-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
       background: #121216;
       border: 1px solid #222228;
       color: #9a9aa4;
-      border-radius: 999px;
+      border-radius: 10px;
       font: inherit;
       font-size: 12px;
-      line-height: 1.2;
+      line-height: 1.25;
       padding: 5px 10px;
       cursor: pointer;
+      text-align: left;
+    }
+
+    .oversee-line {
+      font-size: 11px;
+      letter-spacing: 0.01em;
+      color: #8a8a94;
     }
 
     .oversee-item:hover { color: #e4e4ea; border-color: #3a3a44; }
@@ -1012,7 +1023,7 @@
       </div>
     </div>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2.3</div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2.4</div>
 
   <script>
 (function () {
@@ -1535,7 +1546,15 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "oversee-item";
-      btn.textContent = item.title;
+      const name = document.createElement("span");
+      name.textContent = item.title;
+      btn.appendChild(name);
+      if (item.statusText) {
+        const line = document.createElement("span");
+        line.className = "oversee-line";
+        line.textContent = item.statusText;
+        btn.appendChild(line);
+      }
       btn.addEventListener("click", function () { openTask(item); });
       list.appendChild(btn);
     });
