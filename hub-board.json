@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T17:50:00Z",
+  "updated_at": "2026-10-29T17:55:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -160,7 +160,8 @@
           "id": "health-auto-export",
           "title": "Health Auto Export",
           "status": "waiting",
-          "detail": "Not saving to Drive since Oct 23. Reconnect on iPhone.",
+          "status_text": "Drive still empty after Oct 23 (last upload Oct 24, 7:18 PM CT). Premium is active. Waiting on one phone step: Manual Export in the app.",
+          "detail": "",
           "url": null
         },
         {
