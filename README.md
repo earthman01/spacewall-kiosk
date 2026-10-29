@@ -183,13 +183,11 @@ Board fields added on an item in `hub-board.json`:
 {
   "id": "tower-garden",
   "title": "Tower Garden sale",
-  "status": "building",
-  "status_text": "Ads approved by Mark at 11:33 AM, posting on Marketplace, Craigslist and OfferUp now, with listing links to follow.",
+  "status": "live",
+  "status_text": "All three listings are live. Waiting for buyers.",
   "detail": "…",
   "steps": [
-    { "id": "marketplace", "label": "Posting on Marketplace", "status": "live" },
-    { "id": "craigslist", "label": "Craigslist", "status": "building" },
-    { "id": "offerup", "label": "OfferUp", "status": "waiting" }
+    { "id": "marketplace", "label": "Marketplace", "status": "live", "url": "https://…" }
   ],
   "photos": [
     { "src": "hub-media/tower-garden-towers.jpg", "alt": "Both Tower Garden towers on the deck" }
@@ -197,7 +195,7 @@ Board fields added on an item in `hub-board.json`:
 }
 ```
 
-`status` may also be `mark` (Waiting on Mark), `done`, or `archived`. Top-level `watch` is `{ "title": "Everything we oversee", "items": [ … ] }`.
+`status` may also be `mark` (Waiting on Mark), `done`, or `archived`. A step `url` (`http` or `https`) makes that label a link. Top-level `watch` is `{ "title": "Everything we oversee", "items": [ … ] }`.
 
 ## RICH
 

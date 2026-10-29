@@ -15,24 +15,32 @@
         {
           "id": "tower-garden",
           "title": "Tower Garden sale",
-          "status": "building",
+          "status": "live",
           "detail": "Goal is to get both off the deck. Quick local pickup. $650 OBO. Includes 2 towers, cage, dolly, reservoir, nutrients, and a pH kit.",
           "url": null,
-          "status_text": "Ads approved by Mark at 11:33 AM, posting on Marketplace, Craigslist and OfferUp now, with listing links to follow.",
+          "status_text": "All three listings are live. Waiting for buyers.",
           "steps": [
             {
               "id": "marketplace",
-              "label": "Posting on Marketplace",
-              "status": "live"
+              "label": "Marketplace",
+              "status": "live",
+              "url": "https://www.facebook.com/marketplace/item/1461771412720139/"
             },
             {
               "id": "craigslist",
               "label": "Craigslist",
-              "status": "building"
+              "status": "live",
+              "url": "https://panamacity.craigslist.org/grd/d/panama-city-beach-two-tower-garden/7991916681.html"
             },
             {
               "id": "offerup",
               "label": "OfferUp",
+              "status": "live",
+              "url": "https://offerup.com/item/detail/2b411045-978d-3c7e-99c6-9c5b432e6e82"
+            },
+            {
+              "id": "buyers",
+              "label": "Waiting for buyers",
               "status": "waiting"
             }
           ],

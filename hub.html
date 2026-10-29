@@ -394,7 +394,10 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      color: inherit;
     }
+
+    a.step-label:hover { color: #e4e4ea; }
 
     .step .step-state {
       margin-left: auto;
@@ -987,7 +990,7 @@
       </div>
     </div>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2</div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2.1</div>
 
   <script>
 (function () {
@@ -1097,6 +1100,7 @@
       label: label,
       status: status,
       labelStatus: statusLabel(raw.status),
+      url: safeUrl(raw.url),
       done: raw.done === true || raw.archived === true || isDoneStatus(raw.status)
     };
   }
@@ -1316,9 +1320,14 @@
       row.className = "step " + step.status;
       const dot = document.createElement("i");
       dot.setAttribute("aria-hidden", "true");
-      const label = document.createElement("span");
+      const label = step.url ? document.createElement("a") : document.createElement("span");
       label.className = "step-label";
       label.textContent = step.label;
+      if (step.url) {
+        label.href = step.url;
+        label.target = "_blank";
+        label.rel = "noopener noreferrer";
+      }
       const state = document.createElement("span");
       state.className = "step-state";
       state.textContent = step.done ? "Done" : step.labelStatus;
