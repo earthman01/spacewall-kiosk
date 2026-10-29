@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-29T15:55:00Z",
+  "updated_at": "2026-10-29T17:05:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
-  "subtitle": "Personal OS · ops & notes",
+  "subtitle": "Personal OS \u00b7 ops & notes",
   "north_star": {
     "headline": "Be a hub, not a leaf",
-    "body": "Type a note on any card and hit Send — it emails earthbot. Visibility into every live area of operation. Navy career pays the bills; this layer is life admin through one personal OS."
+    "body": "Type a note on any card and hit Send \u2014 it emails earthbot. Visibility into every live area of operation. Navy career pays the bills; this layer is life admin through one personal OS."
   },
   "columns": [
     {
@@ -15,65 +15,41 @@
         {
           "id": "tower-garden",
           "title": "Tower Garden sale",
-          "status": "waiting",
+          "status": "building",
           "detail": "Goal is to get both off the deck. Quick local pickup. $650 OBO. Includes 2 towers, cage, dolly, reservoir, nutrients, and a pH kit.",
-          "url": null
-        },
-        {
-          "id": "cashflow",
-          "title": "Money / Cashflow",
-          "status": "live",
-          "detail": "Daily fold, lanes, budget cushion, transfers — first working proof.",
-          "url": null
-        },
-        {
-          "id": "food-cook",
-          "title": "Food / cooking",
-          "status": "live",
-          "detail": "Silent food log, Posha, one-pot guides, calorie day-total only.",
-          "url": null
-        },
-        {
-          "id": "health-med",
-          "title": "Health / medical",
-          "status": "live",
-          "detail": "Sleep/vitals ingest, B12, General Medicine portal parked, visit prep.",
-          "url": null
-        },
-        {
-          "id": "house-air",
-          "title": "House / lights / TV",
-          "status": "live",
-          "detail": "All lights via air on MacBook Air — never phone. Wind-down + scenes.",
-          "url": null
-        },
-        {
-          "id": "eve-calls",
-          "title": "Eve phone calls",
-          "status": "live",
-          "detail": "Telnyx dials, listen-first, hangup-first, store/vendor IVR.",
-          "url": null
-        },
-        {
-          "id": "admin-mail",
-          "title": "Admin / email",
-          "status": "live",
-          "detail": "Gmail digests, earthbot mail watch, AgentMail, Slack #earthbot.",
-          "url": null
-        },
-        {
-          "id": "awareness",
-          "title": "Awareness loop",
-          "status": "live",
-          "detail": "Morning brief + lean X digests + voice-safe try-this.",
-          "url": null
-        },
-        {
-          "id": "cos-team",
-          "title": "CoS team",
-          "status": "live",
-          "detail": "earthbot + CFO + admin + explorer + air — density, not five apps.",
-          "url": null
+          "url": null,
+          "status_text": "Ads approved by Mark at 11:33 AM, posting on Marketplace, Craigslist and OfferUp now, with listing links to follow.",
+          "steps": [
+            {
+              "id": "marketplace",
+              "label": "Posting on Marketplace",
+              "status": "live"
+            },
+            {
+              "id": "craigslist",
+              "label": "Craigslist",
+              "status": "building"
+            },
+            {
+              "id": "offerup",
+              "label": "OfferUp",
+              "status": "waiting"
+            }
+          ],
+          "photos": [
+            {
+              "src": "hub-media/tower-garden-towers.jpg",
+              "alt": "Both Tower Garden towers on the deck"
+            },
+            {
+              "src": "hub-media/tower-garden-accessories.jpg",
+              "alt": "Nutrients, net cups, and accessories"
+            },
+            {
+              "src": "hub-media/tower-garden-reservoir.jpg",
+              "alt": "Gray Brute reservoir bucket, upright"
+            }
+          ]
         }
       ]
     },
@@ -85,7 +61,7 @@
           "id": "hub-portal",
           "title": "HUB portal (this board)",
           "status": "building",
-          "detail": "Per-item notes → earthbot. Expand visibility; keep the dark UI.",
+          "detail": "Per-item notes \u2192 earthbot. Expand visibility; keep the dark UI.",
           "url": null
         },
         {
@@ -99,35 +75,7 @@
           "id": "house-wake",
           "title": "House wake MVP",
           "status": "building",
-          "detail": "Kitchen dock Air + openWakeWord → voice handoff.",
-          "url": null
-        },
-        {
-          "id": "spacewall",
-          "title": "SPACEWALL / HEARTH",
-          "status": "live",
-          "detail": "House display platform — iPads + 55″ OLED.",
-          "url": "https://earthman01.github.io/spacewall-kiosk/"
-        },
-        {
-          "id": "press",
-          "title": "PRESS",
-          "status": "live",
-          "detail": "Floating newspaper portal on the same platform.",
-          "url": "https://earthman01.github.io/spacewall-kiosk/press.html"
-        },
-        {
-          "id": "reel",
-          "title": "REEL",
-          "status": "live",
-          "detail": "Slow cinema float — original mood packs.",
-          "url": "https://earthman01.github.io/spacewall-kiosk/reel.html"
-        },
-        {
-          "id": "voice-ingest",
-          "title": "Voice hang-up ingest",
-          "status": "live",
-          "detail": "Transcripts on disk; skill locked so hang-ups don’t go blank.",
+          "detail": "Kitchen dock Air + openWakeWord \u2192 voice handoff.",
           "url": null
         }
       ]
@@ -136,6 +84,26 @@
       "id": "this-week",
       "label": "This week",
       "items": [
+        {
+          "id": "boat-week",
+          "title": "Boat trailer",
+          "status": "next",
+          "detail": "2026 annual maintenance is done.",
+          "url": null,
+          "steps": [
+            {
+              "id": "maint-2026",
+              "label": "2026 annual maintenance",
+              "status": "done",
+              "done": true
+            },
+            {
+              "id": "maint-2027",
+              "label": "Schedule 2027 annual maintenance",
+              "status": "next"
+            }
+          ]
+        },
         {
           "id": "carmax-dothan",
           "title": "CarMax Dothan",
@@ -153,16 +121,30 @@
         {
           "id": "card-payment-sep29",
           "title": "Sep 29 card payment",
-          "status": "waiting",
+          "status": "mark",
           "detail": "$341.33 ambiguous. Mark to confirm.",
-          "url": null
+          "url": null,
+          "steps": [
+            {
+              "id": "confirm-charge",
+              "label": "Confirm the $341.33 charge",
+              "status": "mark"
+            }
+          ]
         },
         {
           "id": "cashflow-end",
           "title": "Apple Cashflow End",
-          "status": "waiting",
+          "status": "mark",
           "detail": "Must not go negative. Waiting on Mark.",
-          "url": null
+          "url": null,
+          "steps": [
+            {
+              "id": "confirm-cushion",
+              "label": "Confirm it will not go negative",
+              "status": "mark"
+            }
+          ]
         },
         {
           "id": "health-auto-export",
@@ -217,7 +199,7 @@
           "id": "heart-cac",
           "title": "Heart / CAC briefing",
           "status": "next",
-          "detail": "Before the Jan Mullis visit. CVI January booking — nudge Nov 17.",
+          "detail": "Before the Jan Mullis visit. CVI January booking \u2014 nudge Nov 17.",
           "url": null
         },
         {
@@ -237,7 +219,7 @@
         {
           "id": "gmail-filters",
           "title": "Gmail filters",
-          "status": "waiting",
+          "status": "mark",
           "detail": "AgentMail and sleep. Mark sets them in Gmail.",
           "url": null
         },
@@ -286,8 +268,8 @@
         {
           "id": "lab112",
           "title": "Lab 112 hangup-first",
-          "status": "waiting",
-          "detail": "Eve retest when Mark says dial — callee hangs up first.",
+          "status": "mark",
+          "detail": "Eve retest when Mark says dial \u2014 callee hangs up first.",
           "url": null
         },
         {
@@ -298,25 +280,18 @@
           "url": null
         },
         {
-          "id": "x-site-fund",
-          "title": "X / site / funding",
-          "status": "live",
-          "detail": "X Premium+, digests, Earthman AI / funding seeds.",
-          "url": null
-        },
-        {
-          "id": "sleep-walk",
-          "title": "Sleep / walk",
-          "status": "live",
-          "detail": "Sleep email ingest, lights-out cues, walk logging.",
-          "url": null
-        },
-        {
           "id": "tesla",
           "title": "Tesla",
           "status": "next",
-          "detail": "Keep Climate Bluetooth automations — webhook later.",
+          "detail": "Keep Climate Bluetooth automations \u2014 webhook later.",
           "url": null
+        },
+        {
+          "id": "boat-maint-2026",
+          "title": "Boat trailer 2026 maintenance",
+          "status": "done",
+          "archived": true,
+          "detail": "Done. The open work is on the Boat trailer card: schedule 2027."
         }
       ]
     },
@@ -353,13 +328,6 @@
           "url": null
         },
         {
-          "id": "boat-week",
-          "title": "Boat / trailer",
-          "status": "waiting",
-          "detail": "Estimates and logistics — amounts when they land.",
-          "url": null
-        },
-        {
           "id": "findmy",
           "title": "Find My live location",
           "status": "parked",
@@ -391,17 +359,123 @@
           "id": "neo-body",
           "title": "NEO / body later",
           "status": "seed",
-          "detail": "1X NEO pre-order — house cameras + wake first.",
+          "detail": "1X NEO pre-order \u2014 house cameras + wake first.",
           "url": null
         },
         {
           "id": "ascension-fund",
           "title": "Ascension funding assist",
           "status": "parked",
-          "detail": "Sacred Heart Emerald Funding — no submit unless asked.",
+          "detail": "Sacred Heart Emerald Funding \u2014 no submit unless asked.",
           "url": null
         }
       ]
     }
-  ]
+  ],
+  "watch": {
+    "title": "Everything we oversee",
+    "items": [
+      {
+        "id": "boat-week"
+      },
+      {
+        "id": "cashflow",
+        "title": "Money / Cashflow",
+        "status": "live",
+        "detail": "Daily fold, lanes, budget cushion, transfers \u2014 first working proof.",
+        "url": null
+      },
+      {
+        "id": "food-cook",
+        "title": "Food / cooking",
+        "status": "live",
+        "detail": "Silent food log, Posha, one-pot guides, calorie day-total only.",
+        "url": null
+      },
+      {
+        "id": "health-med",
+        "title": "Health / medical",
+        "status": "live",
+        "detail": "Sleep/vitals ingest, B12, General Medicine portal parked, visit prep.",
+        "url": null
+      },
+      {
+        "id": "house-air",
+        "title": "House / lights / TV",
+        "status": "live",
+        "detail": "All lights via air on MacBook Air \u2014 never phone. Wind-down + scenes.",
+        "url": null
+      },
+      {
+        "id": "eve-calls",
+        "title": "Eve phone calls",
+        "status": "live",
+        "detail": "Telnyx dials, listen-first, hangup-first, store/vendor IVR.",
+        "url": null
+      },
+      {
+        "id": "admin-mail",
+        "title": "Admin / email",
+        "status": "live",
+        "detail": "Gmail digests, earthbot mail watch, AgentMail, Slack #earthbot.",
+        "url": null
+      },
+      {
+        "id": "awareness",
+        "title": "Awareness loop",
+        "status": "live",
+        "detail": "Morning brief + lean X digests + voice-safe try-this.",
+        "url": null
+      },
+      {
+        "id": "cos-team",
+        "title": "CoS team",
+        "status": "live",
+        "detail": "earthbot + CFO + admin + explorer + air \u2014 density, not five apps.",
+        "url": null
+      },
+      {
+        "id": "spacewall",
+        "title": "SPACEWALL / HEARTH",
+        "status": "live",
+        "detail": "House display platform \u2014 iPads + 55\u2033 OLED.",
+        "url": "https://earthman01.github.io/spacewall-kiosk/"
+      },
+      {
+        "id": "press",
+        "title": "PRESS",
+        "status": "live",
+        "detail": "Floating newspaper portal on the same platform.",
+        "url": "https://earthman01.github.io/spacewall-kiosk/press.html"
+      },
+      {
+        "id": "reel",
+        "title": "REEL",
+        "status": "live",
+        "detail": "Slow cinema float \u2014 original mood packs.",
+        "url": "https://earthman01.github.io/spacewall-kiosk/reel.html"
+      },
+      {
+        "id": "voice-ingest",
+        "title": "Voice hang-up ingest",
+        "status": "live",
+        "detail": "Transcripts on disk; skill locked so hang-ups don\u2019t go blank.",
+        "url": null
+      },
+      {
+        "id": "x-site-fund",
+        "title": "X / site / funding",
+        "status": "live",
+        "detail": "X Premium+, digests, Earthman AI / funding seeds.",
+        "url": null
+      },
+      {
+        "id": "sleep-walk",
+        "title": "Sleep / walk",
+        "status": "live",
+        "detail": "Sleep email ingest, lights-out cues, walk logging.",
+        "url": null
+      }
+    ]
+  }
 }

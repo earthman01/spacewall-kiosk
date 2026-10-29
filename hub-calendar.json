@@ -1,0 +1,24 @@
+{
+  "updated_at": "2026-10-29T16:45:00Z",
+  "source": "mark-hub-note",
+  "timezone": "America/Chicago",
+  "buffer_minutes": 15,
+  "events": [
+    {
+      "id": "carmax-dothan-2026-10-30",
+      "title": "CarMax Dothan",
+      "kind": "appointment",
+      "starts_at": "2026-10-30T15:40:00-05:00",
+      "ends_at": null,
+      "location": "CarMax Dothan",
+      "address": "2756 Ross Clark Cir, Dothan, AL 36301",
+      "detail": "Tesla recheck.",
+      "drive_minutes": 120,
+      "drive_approx": true,
+      "distance_miles": 90,
+      "buffer_minutes": 15,
+      "leave_by": "2026-10-30T13:25:00-05:00",
+      "url": "https://www.google.com/maps/search/?api=1&query=CarMax%20Dothan%202756%20Ross%20Clark%20Cir%2C%20Dothan%2C%20AL%2036301"
+    }
+  ]
+}

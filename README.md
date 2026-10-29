@@ -94,9 +94,19 @@ Planning and build status wall for the personal OS — glance where planning and
 
 The page reads same-origin [`hub-board.json`](./hub-board.json), and only while `document.visibilityState === "visible"`. Hidden tabs and background iPads do not poll the board. While visible, a slow refresh (about 20 minutes) can pick up a new file. Fetch failure keeps the last good board.
 
-Each card can take a short note. Send posts it to earthbot@mail.grokbot.com. Form.taxi is tried first (`https://form.taxi/s/rvzzhd31`); if that request fails, sendm8 is tried (`https://sendm8.com/f/earthbot@mail.grokbot.com`). Both are public form endpoints — no API key in the page. The button shows Sent or Failed and does not open a mail draft. A failed send leaves the text in the field so it can be tried again.
+**Board** is the landing view. **Calendar** (header toggle, or `?view=calendar`) is an upcoming agenda in the same dark cards. Tap an event for the detail sheet: when, place, and — when the event has a location — **Leave by**. Leave-by is the arrival time minus drive minutes minus a buffer. The page does not call a maps API. Drive minutes and the leave-by timestamp are written into the file ahead of time. There is no home street address in the repo or on the page; the place fields are the destination only.
 
-**No X API, Grok API, or secrets in the client.** CosS refreshes `hub-board.json` offline (commit or drop a new JSON file). The page does not call those APIs. `hub-board.json` is data-only — like `press-feed.json` and `x-status.json` — and is not part of the `version.json` content hash, so a board-only update does not bounce the wall iPads.
+The calendar reads same-origin [`hub-calendar.json`](./hub-calendar.json) on the same visibility rule as the board (slow refresh about every 20 minutes, last good file kept on failure). No iCal feed is wired up: a private Google/iCloud feed URL is a secret, and a world-public calendar would publish the agenda. Same rule as the board — no API key, no OAuth client secret, no token in this page.
+
+Each card can take a short note, and the detail view has the same message box. Send posts only to [Form.taxi](https://form.taxi/s/rvzzhd31), which emails earthbot@mail.grokbot.com. The JSON body includes `item_id` and `item_title` so the note is tagged to that card. There is no sendm8 or FormSubmit path, and no API key in the page. The button shows Sent or Failed and does not open a mail draft. A failed send leaves the text in the field so it can be tried again.
+
+Click a card (not its note field or links) for a detail sheet: status, the longer status line, open and done sub-steps, photos, and the message box. `photos` are same-origin files under `hub-media/` (or an `http`/`https` url). Sub-steps come from `steps` on the item.
+
+A card stays on the board only while it has open work. `archived: true`, `done: true`, or `status: "done"` / `"archived"` drops the whole card. If `steps` is non-empty, a step with `done: true` or `status: "done"` is finished; the card drops off once every step is done. The card face shows only the open steps. `status: "mark"` is the highlighted **Waiting on Mark** state, on the card and on a step.
+
+`watch` is one tucked-away card, **Everything we oversee**, collapsed until opened. It lists areas we only keep an eye on. An entry that is just `{ "id": "…" }` uses the matching board card. Boat trailer is first: the asset stays on that list, and the board card remains because **Schedule 2027 annual maintenance** is still open (2026 maintenance is done).
+
+**No X API, Grok API, or secrets in the client.** CosS refreshes `hub-board.json` and `hub-calendar.json` offline (commit or drop a new JSON file). The page does not call those APIs. Both files are data-only — like `press-feed.json` and `x-status.json` — and are not part of the `version.json` content hash, so a data-only update does not bounce the wall iPads.
 
 Status vocabulary: `live` | `proved` | `building` | `next` | `waiting` | `parked` | `seed`.
 
@@ -124,6 +134,70 @@ Status vocabulary: `live` | `proved` | `building` | `next` | `waiting` | `parked
   ]
 }
 ```
+
+### Calendar file
+
+Write [`hub-calendar.json`](./hub-calendar.json). Times are ISO-8601 with a numeric offset. Display uses `timezone` (default `America/Chicago`) and labels clocks `CT`.
+
+Leave-by rule, in order:
+
+1. Show a leave-by only when `location` or `address` is non-empty.
+2. If `leave_by` is a valid time, the page shows that exact clock. This is the value to edit when you already know the departure.
+3. If `leave_by` is null and `drive_minutes` is a number, the page computes `starts_at - drive_minutes - buffer_minutes`. An event `buffer_minutes` overrides the file-level default. A missing buffer means `0` unless the file default is set.
+4. If the event has a place and neither `leave_by` nor `drive_minutes`, the sheet says leave-by is not set yet.
+
+Do not put a home street, origin, or “from” address in this file. `address` is the destination. `drive_minutes` and `distance_miles` are precomputed offline. `drive_approx: true` renders the drive as “about”. `url` is optional (`http`/`https` only) and shows as **Map**. The page lists events whose end is still in the future, or, when there is no end, whose start date in `timezone` is today or later. Past rows can stay in the file; they drop off the wall on their own.
+
+```json
+{
+  "updated_at": "2026-10-29T16:45:00Z",
+  "source": "mark-hub-note",
+  "timezone": "America/Chicago",
+  "buffer_minutes": 15,
+  "events": [
+    {
+      "id": "carmax-dothan-2026-10-30",
+      "title": "CarMax Dothan",
+      "kind": "appointment",
+      "starts_at": "2026-10-30T15:40:00-05:00",
+      "ends_at": null,
+      "location": "CarMax Dothan",
+      "address": "2756 Ross Clark Cir, Dothan, AL 36301",
+      "detail": "Tesla recheck.",
+      "drive_minutes": 120,
+      "drive_approx": true,
+      "distance_miles": 90,
+      "buffer_minutes": 15,
+      "leave_by": "2026-10-30T13:25:00-05:00",
+      "url": "https://www.google.com/maps/search/?api=1&query=…"
+    }
+  ]
+}
+```
+
+`kind` is `appointment`, `event`, or `reminder` (anything else displays as written). `starts_at` is required. Seeded appointment: Friday, Oct 30, 2026, 3:40 PM CT at CarMax Dothan. Drive is about 2 hr (120 minutes, 90 mi) plus a 15 minute buffer, so leave-by is 1:25 PM CT (`15:40 − 120 − 15 = 13:25`).
+
+Board fields added on an item in `hub-board.json`:
+
+```json
+{
+  "id": "tower-garden",
+  "title": "Tower Garden sale",
+  "status": "building",
+  "status_text": "Ads approved by Mark at 11:33 AM, posting on Marketplace, Craigslist and OfferUp now, with listing links to follow.",
+  "detail": "…",
+  "steps": [
+    { "id": "marketplace", "label": "Posting on Marketplace", "status": "live" },
+    { "id": "craigslist", "label": "Craigslist", "status": "building" },
+    { "id": "offerup", "label": "OfferUp", "status": "waiting" }
+  ],
+  "photos": [
+    { "src": "hub-media/tower-garden-towers.jpg", "alt": "Both Tower Garden towers on the deck" }
+  ]
+}
+```
+
+`status` may also be `mark` (Waiting on Mark), `done`, or `archived`. Top-level `watch` is `{ "title": "Everything we oversee", "items": [ … ] }`.
 
 ## RICH
 

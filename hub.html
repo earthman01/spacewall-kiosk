@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#070708" />
   <meta name="color-scheme" content="dark" />
   <title>HUB</title>
-  <script src="./deck.js?h=b757114e5a4f" defer></script>
+  <script src="./deck.js?h=8b9f564be5a7" defer></script>
   <style>
     :root {
       --bg: #070708;
@@ -127,12 +127,20 @@
     #board {
       flex: 1;
       min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 14px 18px;
+    }
+
+    .board-cols {
+      flex: 1;
+      min-height: 0;
       display: grid;
       grid-auto-flow: column;
       grid-auto-columns: minmax(0, 1fr);
       grid-template-rows: minmax(0, 1fr);
       gap: 10px;
-      padding: 12px 14px 26px;
     }
 
     .col {
@@ -335,6 +343,272 @@
     .card.seed .status { color: var(--seed); }
     .card.seed h3 { color: #b0b0b8; }
 
+    .card.mark {
+      background: linear-gradient(160deg, #2a1a08 0%, #120e08 100%);
+      border-color: #a86a10;
+      box-shadow: inset 0 0 0 1px rgba(255, 176, 32, 0.35);
+    }
+    .card.mark .rail { background: var(--amber); }
+    .card.mark .status {
+      color: #ffb020;
+      letter-spacing: 0.08em;
+    }
+
+    .card.clickable { cursor: pointer; }
+    .card.clickable:hover { border-color: #2e2e38; }
+    .card.mark.clickable:hover { border-color: #c48420; }
+
+    .card .status-line {
+      font-size: clamp(12px, 1.02vw, 15px);
+      line-height: 1.3;
+      color: #c8c8d0;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .step {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
+      font-size: clamp(11px, 0.95vw, 14px);
+      line-height: 1.25;
+      color: #9a9aa4;
+    }
+
+    .step i {
+      width: 6px;
+      height: 6px;
+      margin-top: 0.4em;
+      border-radius: 50%;
+      background: #3a3a42;
+      flex: 0 0 auto;
+    }
+
+    .step .step-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .step .step-state {
+      margin-left: auto;
+      flex: 0 0 auto;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5a5a64;
+    }
+
+    .step.live i { background: var(--ok); }
+    .step.live .step-state { color: var(--ok); }
+    .step.proved i { background: var(--proved); }
+    .step.proved .step-state { color: var(--proved); }
+    .step.building i { background: var(--amber); }
+    .step.building .step-state { color: var(--amber); }
+    .step.next i { background: var(--next); }
+    .step.next .step-state { color: var(--next); }
+    .step.waiting i { background: var(--waiting); }
+    .step.waiting .step-state { color: var(--waiting); }
+    .step.parked i { background: var(--parked); }
+    .step.seed i { background: var(--seed); }
+    .step.done { color: #5c5c66; }
+    .step.done .step-label { text-decoration: line-through; }
+    .step.mark {
+      color: #ffe0a8;
+      background: rgba(255, 176, 32, 0.1);
+      border: 1px solid rgba(255, 176, 32, 0.35);
+      border-radius: 6px;
+      padding: 3px 6px;
+    }
+    .step.mark i { background: var(--amber); }
+    .step.mark .step-state { color: #ffb020; }
+
+    .oversee {
+      flex-shrink: 0;
+      border: 1px solid #1a1a1f;
+      border-radius: 10px;
+      background: #0c0c0e;
+    }
+
+    .oversee-toggle {
+      width: 100%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      text-align: left;
+      background: none;
+      border: 0;
+      color: #6a6a74;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .oversee-toggle:hover { color: #c4c4cc; }
+    .oversee-toggle:focus-visible {
+      outline: 1px solid #3a3a44;
+      outline-offset: -2px;
+    }
+
+    .oversee-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 12px 10px;
+    }
+
+    .oversee-list[hidden] { display: none !important; }
+
+    .oversee-item {
+      background: #121216;
+      border: 1px solid #222228;
+      color: #9a9aa4;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.2;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .oversee-item:hover { color: #e4e4ea; border-color: #3a3a44; }
+
+    #task-reader {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+      background: rgba(7, 7, 8, 0.78);
+    }
+
+    #task-reader[hidden] { display: none !important; }
+
+    .task-sheet {
+      width: min(52rem, 100%);
+      max-height: 100%;
+      overflow: auto;
+      overscroll-behavior: contain;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 28%),
+        var(--paper);
+      border: 1px solid #1a1a1f;
+      border-radius: 14px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+      padding: 22px 26px 28px;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .task-bar {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .task-back {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .task-back:hover { color: #d0d0d8; }
+
+    .task-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--next);
+    }
+
+    .task-kicker.mark { color: #ffb020; }
+
+    #task-title {
+      margin-top: 8px;
+      font-size: clamp(26px, 3vw, 42px);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--title);
+    }
+
+    .task-status-line,
+    .task-detail {
+      margin-top: 12px;
+      font-size: clamp(15px, 1.2vw, 18px);
+      line-height: 1.4;
+      color: #c8c8d0;
+    }
+
+    .task-detail { color: #8a8a94; }
+
+    .task-steps { margin-top: 16px; gap: 6px; }
+
+    .task-photos {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .task-photos figure { margin: 0; }
+
+    .task-photos img {
+      width: 100%;
+      height: auto;
+      max-height: 42vh;
+      object-fit: contain;
+      background: #08080a;
+      border-radius: 8px;
+      border: 1px solid #1a1a1f;
+    }
+
+    .task-photos figcaption {
+      margin-top: 4px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: #6a6a74;
+    }
+
+    .task-note {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #1a1a20;
+    }
+
+    .task-note .note { margin-top: 8px; }
+
+    .task-note-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
     .empty {
       flex: 1;
       display: flex;
@@ -358,6 +632,233 @@
       pointer-events: none;
     }
 
+    .views {
+      display: flex;
+      gap: 14px;
+    }
+
+    .views button {
+      appearance: none;
+      -webkit-appearance: none;
+      background: none;
+      border: 0;
+      padding: 4px 0 5px;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      cursor: pointer;
+    }
+
+    .views button[aria-selected="true"] {
+      color: #e4e4ea;
+      box-shadow: inset 0 -1px 0 #8a8a94;
+    }
+
+    .views button:hover { color: #c4c4cc; }
+
+    .views button:focus-visible {
+      outline: 1px solid #3a3a44;
+      outline-offset: 3px;
+    }
+
+    #board[hidden],
+    #calendar[hidden],
+    #cal-reader[hidden] {
+      display: none !important;
+    }
+
+    #calendar {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 12px 22px 36px;
+    }
+
+    .cal-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .cal-list {
+      width: min(880px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .day {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    button.cal-card {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    button.cal-card:hover { border-color: #2e2e38; }
+
+    .cal-card .when,
+    .cal-when,
+    .cal-where {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cal-card .when {
+      font-size: clamp(12px, 1.05vw, 16px);
+      letter-spacing: 0.02em;
+      color: #9a9aa4;
+    }
+
+    .cal-card .leave-line {
+      font-size: clamp(14px, 1.25vw, 20px);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      color: var(--title);
+    }
+
+    .cal-card .leave-line.pending {
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    #cal-reader {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+      background: rgba(7, 7, 8, 0.78);
+    }
+
+    body.reader-open { overflow: hidden; }
+    body.reader-open #orbit { pointer-events: none; }
+
+    .cal-sheet {
+      width: min(40rem, 100%);
+      max-height: 100%;
+      overflow: auto;
+      overscroll-behavior: contain;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 28%),
+        var(--paper);
+      border: 1px solid #1a1a1f;
+      border-radius: 14px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+      padding: 22px 26px 28px;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .cal-bar {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .cal-back,
+    .cal-map {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .cal-back:hover,
+    .cal-map:hover { color: #d0d0d8; }
+
+    .cal-map { color: #6a6a78; }
+
+    .cal-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--next);
+    }
+
+    #cal-title {
+      margin-top: 8px;
+      font-size: clamp(26px, 3vw, 44px);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--title);
+    }
+
+    .cal-when {
+      margin-top: 10px;
+      font-size: clamp(14px, 1.2vw, 18px);
+      color: #9a9aa4;
+    }
+
+    .cal-where {
+      margin-top: 4px;
+      font-size: clamp(14px, 1.15vw, 18px);
+      line-height: 1.35;
+      color: #8a8a94;
+    }
+
+    .cal-leave {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid #1a1a20;
+    }
+
+    .cal-leave-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    .cal-leave-time {
+      margin-top: 6px;
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--title);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cal-leave.pending .cal-leave-time {
+      font-size: clamp(22px, 2.4vw, 32px);
+      color: var(--amber);
+    }
+
+    .cal-leave-meta,
+    .cal-detail {
+      margin-top: 10px;
+      font-size: clamp(14px, 1.15vw, 17px);
+      line-height: 1.4;
+      color: #8a8a94;
+    }
+
+    .cal-detail { margin-top: 18px; }
+
     @keyframes pixel-orbit {
       from { transform: translate3d(-6px, -5px, 0); }
       to { transform: translate3d(7px, 6px, 0); }
@@ -375,7 +876,9 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
       }
-      #board { padding: 8px 12px 22px; gap: 8px; }
+      #board { padding: 8px 12px 14px; gap: 6px; }
+      .board-cols { gap: 8px; }
+      #calendar { padding: 8px 16px 28px; }
       .card { padding: 8px 10px 8px 14px; gap: 2px; }
       .card p.detail { -webkit-line-clamp: 4; }
     }
@@ -383,7 +886,8 @@
     @media (max-width: 1080px) and (orientation: portrait) {
       html, body { overflow: auto; }
       #orbit { height: auto; min-height: 100dvh; animation: none; }
-      #board {
+      #calendar { overflow: visible; }
+      .board-cols {
         grid-auto-flow: row;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: none;
@@ -396,7 +900,12 @@
     @media (max-width: 700px) {
       header { flex-direction: column; align-items: flex-start; gap: 8px; }
       .mast { align-items: flex-start; }
-      #board { grid-template-columns: 1fr; padding-bottom: 48px; }
+      #board { padding-bottom: 48px; }
+      .board-cols { grid-template-columns: 1fr; }
+      .task-photos { grid-template-columns: 1fr; }
+      .task-sheet { padding: 18px 16px 24px; }
+      #calendar { padding-bottom: 48px; overflow: visible; }
+      .cal-sheet { padding: 18px 16px 24px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -409,6 +918,10 @@
     <header>
       <div class="brand">HU<span>B</span></div>
       <div class="mast">
+        <div class="views" role="tablist" aria-label="Hub view">
+          <button type="button" id="tab-board" role="tab" aria-selected="true" aria-controls="board">Board</button>
+          <button type="button" id="tab-calendar" role="tab" aria-selected="false" aria-controls="calendar">Calendar</button>
+        </div>
         <div class="tag" id="subtitle">personal os</div>
         <div class="board-stamp" id="board-stamp">board · —</div>
         <div class="hint">
@@ -430,30 +943,63 @@
       <p id="ns-body"></p>
     </section>
 
-    <main id="board" aria-live="polite" aria-label="Planning board"></main>
+    <main id="board" role="tabpanel" aria-labelledby="tab-board" aria-live="polite" aria-label="Planning board"></main>
+    <main id="calendar" role="tabpanel" aria-labelledby="tab-calendar" aria-live="polite" aria-label="Calendar" hidden>
+      <div class="cal-head">
+        <h2 class="col-label" id="cal-heading">Upcoming</h2>
+        <div class="board-stamp" id="cal-stamp"></div>
+      </div>
+      <div class="cal-list" id="cal-list"></div>
+    </main>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.1.2</div>
+  <div id="cal-reader" role="dialog" aria-modal="true" aria-labelledby="cal-title" hidden>
+    <div class="cal-sheet">
+      <div class="cal-bar">
+        <button type="button" class="cal-back" id="cal-back">← calendar</button>
+        <a class="cal-map" id="cal-map" href="#" rel="noopener noreferrer" target="_blank" hidden>Map</a>
+      </div>
+      <div class="cal-kicker" id="cal-kicker"></div>
+      <h2 id="cal-title"></h2>
+      <p class="cal-when" id="cal-when"></p>
+      <p class="cal-where" id="cal-where" hidden></p>
+      <div class="cal-leave" id="cal-leave" hidden>
+        <div class="cal-leave-kicker">Leave by</div>
+        <div class="cal-leave-time" id="cal-leave-time"></div>
+        <p class="cal-leave-meta" id="cal-leave-meta" hidden></p>
+      </div>
+      <p class="cal-detail" id="cal-detail" hidden></p>
+    </div>
+  </div>
+  <div id="task-reader" role="dialog" aria-modal="true" aria-labelledby="task-title" hidden>
+    <div class="task-sheet">
+      <div class="task-bar">
+        <button type="button" class="task-back" id="task-back">← board</button>
+      </div>
+      <div class="task-kicker" id="task-kicker"></div>
+      <h2 id="task-title"></h2>
+      <p class="task-status-line" id="task-status-line" hidden></p>
+      <p class="task-detail" id="task-detail" hidden></p>
+      <div class="steps task-steps" id="task-steps" hidden></div>
+      <div class="task-photos" id="task-photos" hidden></div>
+      <div class="task-note">
+        <div class="task-note-label">Message earthbot</div>
+        <div id="task-note"></div>
+      </div>
+    </div>
+  </div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2</div>
 
   <script>
 (function () {
   const VERSION_CHECK_MS = 3 * 60 * 1000;
   const BOARD_REFRESH_MS = 20 * 60 * 1000;
-  const NOTE_TO = "earthbot@mail.grokbot.com";
   const NOTE_TIMEOUT_MS = 8000;
-  // Public form endpoints only. Each URL accepts a submission and emails
-  // NOTE_TO. There is no API key in this page.
-  const NOTE_PROVIDERS = [
-    {
-      name: "form.taxi",
-      url: "https://form.taxi/s/rvzzhd31",
-      accepted: function (data) { return !!(data && data.success === true); }
-    },
-    {
-      name: "sendm8",
-      url: "https://sendm8.com/f/" + NOTE_TO,
-      accepted: function (data) { return !!(data && data.ok === true); }
-    }
-  ];
+  // Public Form.taxi endpoint only. It emails earthbot@mail.grokbot.com.
+  // No API key, and no sendm8 / FormSubmit fallback.
+  const FORM_TAXI = {
+    name: "form.taxi",
+    url: "https://form.taxi/s/rvzzhd31"
+  };
   const KNOWN = {
     live: "Live",
     proved: "Proved",
@@ -461,7 +1007,10 @@
     next: "Next",
     waiting: "Waiting",
     parked: "Parked",
-    seed: "Seed"
+    seed: "Seed",
+    mark: "Waiting on Mark",
+    done: "Done",
+    archived: "Archived"
   };
 
   const board = document.getElementById("board");
@@ -524,18 +1073,63 @@
     while (el.firstChild) el.removeChild(el.firstChild);
   }
 
+  function isDoneStatus(raw) {
+    const k = String(raw || "").trim().toLowerCase();
+    return k === "done" || k === "archived";
+  }
+
+  function safePhoto(src) {
+    if (!src || typeof src !== "string") return null;
+    const trimmed = src.trim();
+    if (!trimmed || trimmed.indexOf("..") !== -1) return null;
+    if (/^https?:\/\//i.test(trimmed)) return safeUrl(trimmed);
+    if (/^hub-media\/[A-Za-z0-9._-]+$/.test(trimmed)) return trimmed;
+    return null;
+  }
+
+  function normalizeStep(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const label = String(raw.label || raw.title || "").trim();
+    if (!label) return null;
+    const status = statusKey(raw.status);
+    return {
+      id: String(raw.id || ""),
+      label: label,
+      status: status,
+      labelStatus: statusLabel(raw.status),
+      done: raw.done === true || raw.archived === true || isDoneStatus(raw.status)
+    };
+  }
+
   function normalizeItem(raw) {
     if (!raw || typeof raw !== "object") return null;
     const title = String(raw.title || "").trim();
     if (!title) return null;
+    const steps = Array.isArray(raw.steps) ? raw.steps.map(normalizeStep).filter(Boolean) : [];
+    const photos = Array.isArray(raw.photos) ? raw.photos.map(function (photo) {
+      if (!photo || typeof photo !== "object") return null;
+      const src = safePhoto(photo.src);
+      if (!src) return null;
+      return { src: src, alt: String(photo.alt || title).trim() || title };
+    }).filter(Boolean) : [];
     return {
       id: String(raw.id || ""),
       title: title,
       status: statusKey(raw.status),
       label: statusLabel(raw.status),
+      statusText: String(raw.status_text || "").trim(),
       detail: String(raw.detail || "").trim(),
-      url: safeUrl(raw.url)
+      url: safeUrl(raw.url),
+      archived: raw.archived === true || raw.done === true || isDoneStatus(raw.status),
+      steps: steps,
+      photos: photos
     };
+  }
+
+  function hasOpenWork(item) {
+    if (!item || item.archived) return false;
+    if (item.steps.length) return item.steps.some(function (step) { return !step.done; });
+    return true;
   }
 
   function withTimeout(promise, ms) {
@@ -546,8 +1140,8 @@
     });
   }
 
-  function notePayload(item, text, providerName) {
-    const payload = {
+  function notePayload(item, text) {
+    return {
       _subject: "[HUB] " + item.title,
       message: text,
       item_id: item.id || "",
@@ -555,23 +1149,21 @@
       source: "hub",
       page: location.href.split("?")[0]
     };
-    if (providerName === "sendm8") payload._gotcha = "";
-    return payload;
   }
 
-  async function postNote(provider, item, text) {
-    const res = await withTimeout(fetch(provider.url, {
+  async function postNote(item, text) {
+    const res = await withTimeout(fetch(FORM_TAXI.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(notePayload(item, text, provider.name))
+      body: JSON.stringify(notePayload(item, text))
     }), NOTE_TIMEOUT_MS);
     let data = null;
     try { data = await res.json(); } catch (e) { data = null; }
-    if (!res.ok || !provider.accepted(data)) {
-      const err = new Error(provider.name + " HTTP " + res.status);
+    if (!res.ok || !data || data.success !== true) {
+      const err = new Error("form.taxi HTTP " + res.status);
       err.status = res.status;
       throw err;
     }
@@ -606,20 +1198,18 @@
     btn.disabled = true;
     btn.textContent = "…";
     btn.classList.remove("ok", "err");
-    for (let i = 0; i < NOTE_PROVIDERS.length; i++) {
-      try {
-        await postNote(NOTE_PROVIDERS[i], item, text);
-        markSent(btn, input);
-        return;
-      } catch (err) {}
+    try {
+      await postNote(item, text);
+      markSent(btn, input);
+    } catch (err) {
+      markFailed(btn);
     }
-    markFailed(btn);
   }
 
   function renderNote(item) {
     const row = document.createElement("form");
     row.className = "note";
-    row.setAttribute("action", NOTE_PROVIDERS[0].url);
+    row.setAttribute("action", FORM_TAXI.url);
     row.setAttribute("method", "POST");
     const input = document.createElement("input");
     input.type = "text";
@@ -646,9 +1236,106 @@
     return row;
   }
 
+  const taskReader = document.getElementById("task-reader");
+  const taskBack = document.getElementById("task-back");
+  const taskKicker = document.getElementById("task-kicker");
+  const taskTitle = document.getElementById("task-title");
+  const taskStatusLine = document.getElementById("task-status-line");
+  const taskDetail = document.getElementById("task-detail");
+  const taskSteps = document.getElementById("task-steps");
+  const taskPhotos = document.getElementById("task-photos");
+  const taskNote = document.getElementById("task-note");
+  let taskReturn = null;
+
+  function showBlock(el, text) {
+    el.hidden = !text;
+    el.textContent = text || "";
+  }
+
+  function closeTask() {
+    if (!taskReader || taskReader.hidden) return;
+    taskReader.hidden = true;
+    const cal = document.getElementById("cal-reader");
+    if (!cal || cal.hidden) document.body.classList.remove("reader-open");
+    const back = taskReturn;
+    taskReturn = null;
+    if (back && back.focus) back.focus();
+  }
+
+  function openTask(item) {
+    if (!taskReader || !item) return;
+    taskReturn = document.activeElement;
+    taskKicker.textContent = item.label;
+    taskKicker.classList.toggle("mark", item.status === "mark");
+    taskTitle.textContent = item.title;
+    showBlock(taskStatusLine, item.statusText);
+    showBlock(taskDetail, item.detail);
+    clear(taskSteps);
+    const steps = renderSteps(item.steps, true);
+    taskSteps.hidden = !steps;
+    if (steps) taskSteps.appendChild(steps);
+    clear(taskPhotos);
+    taskPhotos.hidden = !item.photos.length;
+    item.photos.forEach(function (photo) {
+      const fig = document.createElement("figure");
+      const img = document.createElement("img");
+      img.src = photo.src;
+      img.alt = photo.alt;
+      const cap = document.createElement("figcaption");
+      cap.textContent = photo.alt;
+      fig.appendChild(img);
+      fig.appendChild(cap);
+      taskPhotos.appendChild(fig);
+    });
+    clear(taskNote);
+    taskNote.appendChild(renderNote(item));
+    taskReader.hidden = false;
+    document.body.classList.add("reader-open");
+    taskBack.focus();
+  }
+
+  if (taskBack) taskBack.addEventListener("click", closeTask);
+  if (taskReader) {
+    taskReader.addEventListener("click", function (ev) {
+      if (ev.target === taskReader) closeTask();
+    });
+  }
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && taskReader && !taskReader.hidden) {
+      ev.preventDefault();
+      closeTask();
+    }
+  });
+
+  function renderSteps(steps, includeDone) {
+    const list = document.createElement("div");
+    list.className = "steps";
+    steps.forEach(function (step) {
+      if (!includeDone && step.done) return;
+      const row = document.createElement("div");
+      row.className = "step " + step.status;
+      const dot = document.createElement("i");
+      dot.setAttribute("aria-hidden", "true");
+      const label = document.createElement("span");
+      label.className = "step-label";
+      label.textContent = step.label;
+      const state = document.createElement("span");
+      state.className = "step-state";
+      state.textContent = step.done ? "Done" : step.labelStatus;
+      row.appendChild(dot);
+      row.appendChild(label);
+      row.appendChild(state);
+      list.appendChild(row);
+    });
+    return list.childNodes.length ? list : null;
+  }
+
   function renderCard(item) {
     const el = document.createElement("article");
-    el.className = "card " + item.status;
+    el.className = "card clickable " + item.status;
+    el.tabIndex = 0;
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", item.title);
     if (item.id) el.dataset.id = item.id;
     const rail = document.createElement("div");
     rail.className = "rail";
@@ -661,6 +1348,14 @@
     el.appendChild(rail);
     el.appendChild(status);
     el.appendChild(title);
+    if (item.statusText) {
+      const line = document.createElement("p");
+      line.className = "status-line";
+      line.textContent = item.statusText;
+      el.appendChild(line);
+    }
+    const openSteps = renderSteps(item.steps, false);
+    if (openSteps) el.appendChild(openSteps);
     if (item.detail) {
       const detail = document.createElement("p");
       detail.className = "detail";
@@ -677,6 +1372,17 @@
       el.appendChild(link);
     }
     el.appendChild(renderNote(item));
+    el.addEventListener("click", function (ev) {
+      const t = ev.target;
+      if (t && t.closest && t.closest("form, a, button, input, textarea")) return;
+      openTask(item);
+    });
+    el.addEventListener("keydown", function (ev) {
+      if (ev.key !== "Enter" && ev.key !== " ") return;
+      if (ev.target !== el) return;
+      ev.preventDefault();
+      openTask(item);
+    });
     return el;
   }
 
@@ -690,7 +1396,7 @@
     const items = document.createElement("div");
     items.className = "col-items";
     const rawItems = col && Array.isArray(col.items) ? col.items : [];
-    const cards = rawItems.map(normalizeItem).filter(Boolean);
+    const cards = rawItems.map(normalizeItem).filter(Boolean).filter(hasOpenWork);
     if (!cards.length) {
       const empty = document.createElement("div");
       empty.className = "empty";
@@ -710,15 +1416,87 @@
     boardStampEl.textContent = when ? "board · " + when : "board · visible only";
   }
 
+  let itemsById = {};
+
+  function indexItems(data) {
+    const map = {};
+    const columns = data && Array.isArray(data.columns) ? data.columns : [];
+    columns.forEach(function (col) {
+      const rawItems = col && Array.isArray(col.items) ? col.items : [];
+      rawItems.forEach(function (raw) {
+        const item = normalizeItem(raw);
+        if (item && item.id) map[item.id] = item;
+      });
+    });
+    const watch = data && data.watch && Array.isArray(data.watch.items) ? data.watch.items : [];
+    watch.forEach(function (raw) {
+      const item = normalizeItem(raw);
+      if (item && item.id && !map[item.id]) map[item.id] = item;
+    });
+    itemsById = map;
+  }
+
+  function resolveWatch(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const id = String(raw.id || "").trim();
+    if (id && itemsById[id] && !String(raw.title || "").trim()) return itemsById[id];
+    const item = normalizeItem(raw);
+    if (item) return item;
+    return id && itemsById[id] ? itemsById[id] : null;
+  }
+
+  function renderOversee(watch) {
+    const items = (watch.items || []).map(resolveWatch).filter(Boolean);
+    const wrap = document.createElement("section");
+    wrap.className = "oversee";
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "oversee-toggle";
+    toggle.setAttribute("aria-expanded", "false");
+    const title = document.createElement("span");
+    title.textContent = String(watch.title || "Everything we oversee");
+    const count = document.createElement("span");
+    count.textContent = String(items.length);
+    toggle.appendChild(title);
+    toggle.appendChild(count);
+    const list = document.createElement("div");
+    list.className = "oversee-list";
+    list.hidden = true;
+    items.forEach(function (item) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "oversee-item";
+      btn.textContent = item.title;
+      btn.addEventListener("click", function () { openTask(item); });
+      list.appendChild(btn);
+    });
+    toggle.addEventListener("click", function () {
+      const open = list.hidden;
+      list.hidden = !open;
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    wrap.appendChild(toggle);
+    wrap.appendChild(list);
+    return wrap;
+  }
+
   function renderBoard(data) {
     const ns = (data && data.north_star) || {};
     headlineEl.textContent = String(ns.headline || "—");
     bodyEl.textContent = String(ns.body || "");
     if (subtitleEl) subtitleEl.textContent = String((data && data.subtitle) || "personal os");
     paintBoardStamp(data);
+    indexItems(data);
     clear(board);
+    const cols = document.createElement("div");
+    cols.className = "board-cols";
     const columns = data && Array.isArray(data.columns) ? data.columns : [];
-    columns.forEach(function (col) { board.appendChild(renderColumn(col)); });
+    columns.forEach(function (col) { cols.appendChild(renderColumn(col)); });
+    board.appendChild(cols);
+    const watch = data && data.watch && typeof data.watch === "object" ? data.watch : null;
+    if (watch && Array.isArray(watch.items) && watch.items.length) {
+      board.appendChild(renderOversee(watch));
+    }
   }
 
   function validBoard(data) {
@@ -837,6 +1615,474 @@
 
   captureVersion();
   setInterval(checkVersion, versionCheckMs());
+})();
+  </script>
+  <script>
+(function () {
+  const CAL_REFRESH_MS = 20 * 60 * 1000;
+  const DEFAULT_TZ = "America/Chicago";
+  const KINDS = {
+    appointment: "Appointment",
+    event: "Event",
+    reminder: "Reminder"
+  };
+
+  const tabBoard = document.getElementById("tab-board");
+  const tabCalendar = document.getElementById("tab-calendar");
+  const board = document.getElementById("board");
+  const calendar = document.getElementById("calendar");
+  const listEl = document.getElementById("cal-list");
+  const stampEl = document.getElementById("cal-stamp");
+  const reader = document.getElementById("cal-reader");
+  const backBtn = document.getElementById("cal-back");
+  const mapEl = document.getElementById("cal-map");
+  const kickerEl = document.getElementById("cal-kicker");
+  const titleEl = document.getElementById("cal-title");
+  const whenEl = document.getElementById("cal-when");
+  const whereEl = document.getElementById("cal-where");
+  const leaveEl = document.getElementById("cal-leave");
+  const leaveTimeEl = document.getElementById("cal-leave-time");
+  const leaveMetaEl = document.getElementById("cal-leave-meta");
+  const detailEl = document.getElementById("cal-detail");
+
+  let tz = DEFAULT_TZ;
+  let lastGood = null;
+  let timer = null;
+  let openId = "";
+  let returnFocus = null;
+
+  function pageIsVisible() {
+    return document.visibilityState === "visible";
+  }
+
+  function clear(el) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+  }
+
+  function parseTime(iso) {
+    if (!iso || typeof iso !== "string") return null;
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function finiteNumber(n) {
+    const x = typeof n === "number" ? n : (typeof n === "string" && String(n).trim() !== "" ? Number(n) : NaN);
+    return Number.isFinite(x) && x >= 0 ? x : null;
+  }
+
+  function safeUrl(url) {
+    if (!url || typeof url !== "string") return null;
+    try {
+      const u = new URL(url, location.href);
+      if (u.protocol !== "https:" && u.protocol !== "http:") return null;
+      return u.href;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function setZone(next) {
+    if (!next || typeof next !== "string") return;
+    try {
+      new Intl.DateTimeFormat("en-US", { timeZone: next }).format(new Date());
+      tz = next;
+    } catch (e) {}
+  }
+
+  function zoneSuffix() {
+    return tz === DEFAULT_TZ ? " CT" : "";
+  }
+
+  function ymd(date) {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: tz,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).format(date);
+  }
+
+  function addDays(ymdStr, n) {
+    const parts = ymdStr.split("-").map(Number);
+    const utc = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2] + n));
+    const y = utc.getUTCFullYear();
+    const m = String(utc.getUTCMonth() + 1).padStart(2, "0");
+    const d = String(utc.getUTCDate()).padStart(2, "0");
+    return y + "-" + m + "-" + d;
+  }
+
+  function formatClock(date) {
+    const t = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true
+    }).format(date);
+    return t + zoneSuffix();
+  }
+
+  function formatStamp(iso) {
+    const d = parseTime(iso);
+    if (!d) return "";
+    try {
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+      }).format(d) + zoneSuffix();
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function kindLabel(kind) {
+    if (Object.prototype.hasOwnProperty.call(KINDS, kind)) return KINDS[kind];
+    const shown = String(kind || "").trim();
+    return shown || "Event";
+  }
+
+  function formatSpan(mins) {
+    const whole = Math.round(mins);
+    const h = Math.floor(whole / 60);
+    const m = whole % 60;
+    if (h && m) return h + " hr " + m + " min";
+    if (h) return h + " hr";
+    return m + " min";
+  }
+
+  function normalizeEvent(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const title = String(raw.title || "").trim();
+    const starts = parseTime(raw.starts_at);
+    if (!title || !starts) return null;
+    const location = String(raw.location || "").trim();
+    const address = String(raw.address || "").trim();
+    const kindRaw = String(raw.kind || "").trim().toLowerCase();
+    return {
+      id: String(raw.id || "").trim(),
+      title: title,
+      kind: kindRaw || (location || address ? "appointment" : "event"),
+      starts: starts,
+      ends: parseTime(raw.ends_at),
+      allDay: raw.all_day === true,
+      location: location,
+      address: address,
+      detail: String(raw.detail || "").trim(),
+      drive: finiteNumber(raw.drive_minutes),
+      buffer: finiteNumber(raw.buffer_minutes),
+      driveApprox: raw.drive_approx === true,
+      distance: finiteNumber(raw.distance_miles),
+      leaveBy: parseTime(raw.leave_by),
+      url: safeUrl(raw.url)
+    };
+  }
+
+  function isUpcoming(event, now) {
+    if (event.ends) return event.ends.getTime() >= now.getTime();
+    return ymd(event.starts) >= ymd(now);
+  }
+
+  function resolveLeave(event, fileBuffer) {
+    if (!event.location && !event.address) return null;
+    const buffer = event.buffer != null ? event.buffer : (fileBuffer != null ? fileBuffer : 0);
+    let computed = null;
+    if (event.drive != null && !event.allDay) {
+      computed = new Date(event.starts.getTime() - (event.drive + buffer) * 60000);
+    }
+    const at = event.leaveBy || computed;
+    return {
+      at: at,
+      pending: !at,
+      drive: event.drive,
+      buffer: buffer,
+      approx: event.driveApprox,
+      distance: event.distance
+    };
+  }
+
+  function leaveMeta(info) {
+    if (!info || info.pending) return "";
+    const parts = [];
+    if (info.drive != null) {
+      parts.push((info.approx ? "about " : "") + formatSpan(info.drive) + " drive");
+    }
+    if (info.distance != null) parts.push(Math.round(info.distance) + " mi");
+    if (info.buffer) parts.push(formatSpan(info.buffer) + " buffer");
+    return parts.join(" · ");
+  }
+
+  function whereLine(event) {
+    if (event.address) return event.address;
+    if (event.location && event.location !== event.title) return event.location;
+    return "";
+  }
+
+  function cardWhen(event) {
+    if (event.allDay) return "All day";
+    if (event.ends && ymd(event.ends) === ymd(event.starts)) {
+      const suffix = zoneSuffix();
+      const start = formatClock(event.starts).replace(suffix, "");
+      return start + "–" + formatClock(event.ends);
+    }
+    return formatClock(event.starts);
+  }
+
+  function sheetWhen(event) {
+    const datePart = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      weekday: "long",
+      month: "short",
+      day: "numeric"
+    }).format(event.starts);
+    if (event.allDay) return datePart + " · All day";
+    return datePart + " · " + formatClock(event.starts);
+  }
+
+  function dayHeading(event, now) {
+    const key = ymd(event.starts);
+    const today = ymd(now);
+    const tomorrow = addDays(today, 1);
+    const datePart = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      weekday: "short",
+      month: "short",
+      day: "numeric"
+    }).format(event.starts);
+    if (key === today) return "Today · " + datePart;
+    if (key === tomorrow) return "Tomorrow · " + datePart;
+    return datePart;
+  }
+
+  function showText(el, text) {
+    el.hidden = !text;
+    el.textContent = text || "";
+  }
+
+  function openEvent(event, fileBuffer, opener, opts) {
+    const keep = !!(opts && opts.keepFocus);
+    if (!keep) returnFocus = opener || null;
+    openId = event.id || "";
+    kickerEl.textContent = kindLabel(event.kind);
+    titleEl.textContent = event.title;
+    whenEl.textContent = sheetWhen(event);
+    showText(whereEl, whereLine(event));
+    const leave = resolveLeave(event, fileBuffer);
+    if (!leave) {
+      leaveEl.hidden = true;
+    } else {
+      leaveEl.hidden = false;
+      leaveEl.classList.toggle("pending", !!leave.pending);
+      leaveTimeEl.textContent = leave.pending ? "Not set yet" : formatClock(leave.at);
+      showText(leaveMetaEl, leaveMeta(leave));
+    }
+    showText(detailEl, event.detail);
+    if (event.url) {
+      mapEl.hidden = false;
+      mapEl.href = event.url;
+    } else {
+      mapEl.hidden = true;
+      mapEl.removeAttribute("href");
+    }
+    reader.hidden = false;
+    document.body.classList.add("reader-open");
+    if (!keep) backBtn.focus();
+  }
+
+  function closeReader() {
+    if (reader.hidden) return;
+    reader.hidden = true;
+    openId = "";
+    document.body.classList.remove("reader-open");
+    const back = returnFocus;
+    returnFocus = null;
+    if (back && back.focus) back.focus();
+  }
+
+  function renderCalCard(event, fileBuffer) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "card next cal-card";
+    if (event.id) btn.dataset.id = event.id;
+    const rail = document.createElement("div");
+    rail.className = "rail";
+    rail.setAttribute("aria-hidden", "true");
+    const status = document.createElement("div");
+    status.className = "status";
+    status.textContent = kindLabel(event.kind);
+    const title = document.createElement("h3");
+    title.textContent = event.title;
+    const when = document.createElement("p");
+    when.className = "when";
+    when.textContent = cardWhen(event);
+    btn.appendChild(rail);
+    btn.appendChild(status);
+    btn.appendChild(title);
+    btn.appendChild(when);
+    const leave = resolveLeave(event, fileBuffer);
+    if (leave) {
+      const line = document.createElement("p");
+      line.className = "leave-line" + (leave.pending ? " pending" : "");
+      line.textContent = leave.pending ? "Leave by not set" : "Leave by " + formatClock(leave.at);
+      btn.appendChild(line);
+    }
+    if (event.detail) {
+      const detail = document.createElement("p");
+      detail.className = "detail";
+      detail.textContent = event.detail;
+      btn.appendChild(detail);
+    }
+    btn.addEventListener("click", function () {
+      openEvent(event, fileBuffer, btn);
+    });
+    return btn;
+  }
+
+  function renderCalendar(data) {
+    const fileBuffer = finiteNumber(data && data.buffer_minutes);
+    setZone(data && data.timezone);
+    stampEl.textContent = formatStamp(data && data.updated_at) || "—";
+    clear(listEl);
+    const raw = data && Array.isArray(data.events) ? data.events : [];
+    const now = new Date();
+    const events = raw.map(normalizeEvent).filter(Boolean).filter(function (event) {
+      return isUpcoming(event, now);
+    }).sort(function (a, b) {
+      return a.starts.getTime() - b.starts.getTime();
+    });
+    if (!events.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "Nothing upcoming";
+      listEl.appendChild(empty);
+    } else {
+      let group = null;
+      events.forEach(function (event) {
+        const key = ymd(event.starts);
+        if (!group || group.dataset.day !== key) {
+          group = document.createElement("section");
+          group.className = "day";
+          group.dataset.day = key;
+          const label = document.createElement("h3");
+          label.className = "col-label";
+          label.textContent = dayHeading(event, now);
+          group.appendChild(label);
+          listEl.appendChild(group);
+        }
+        group.appendChild(renderCalCard(event, fileBuffer));
+      });
+    }
+    if (openId) {
+      let match = null;
+      events.forEach(function (event) {
+        if (event.id && event.id === openId) match = event;
+      });
+      if (match) openEvent(match, fileBuffer, returnFocus, { keepFocus: true });
+      else closeReader();
+    }
+  }
+
+  function showView(name) {
+    const cal = name === "calendar";
+    board.hidden = cal;
+    calendar.hidden = !cal;
+    tabBoard.setAttribute("aria-selected", cal ? "false" : "true");
+    tabCalendar.setAttribute("aria-selected", cal ? "true" : "false");
+    if (!cal) closeReader();
+  }
+
+  function initialView() {
+    try {
+      const v = new URLSearchParams(location.search).get("view");
+      if (v && String(v).toLowerCase() === "calendar") return "calendar";
+    } catch (e) {}
+    return "board";
+  }
+
+  function validCalendar(data) {
+    return !!(data && typeof data === "object" && Array.isArray(data.events));
+  }
+
+  function applyCalendar(data) {
+    if (!validCalendar(data)) return false;
+    renderCalendar(data);
+    lastGood = data;
+    return true;
+  }
+
+  function paintUnavailable() {
+    clear(listEl);
+    stampEl.textContent = "—";
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "—";
+    listEl.appendChild(empty);
+  }
+
+  async function loadCalendar() {
+    if (!pageIsVisible()) return;
+    try {
+      const res = await fetch("./hub-calendar.json?t=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (!applyCalendar(data)) {
+        if (lastGood) applyCalendar(lastGood);
+        else paintUnavailable();
+      }
+    } catch (e) {
+      if (lastGood) applyCalendar(lastGood);
+      else paintUnavailable();
+    }
+  }
+
+  function disarm() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  function arm() {
+    disarm();
+    if (!pageIsVisible()) return;
+    timer = setInterval(function () {
+      if (!pageIsVisible()) {
+        disarm();
+        return;
+      }
+      loadCalendar();
+    }, CAL_REFRESH_MS);
+  }
+
+  tabBoard.addEventListener("click", function () { showView("board"); });
+  tabCalendar.addEventListener("click", function () { showView("calendar"); });
+  backBtn.addEventListener("click", closeReader);
+  reader.addEventListener("click", function (ev) {
+    if (ev.target === reader) closeReader();
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && !reader.hidden) {
+      ev.preventDefault();
+      closeReader();
+    }
+  });
+
+  document.addEventListener("visibilitychange", function () {
+    if (pageIsVisible()) {
+      loadCalendar();
+      arm();
+    } else {
+      disarm();
+    }
+  });
+
+  showView(initialView());
+  if (pageIsVisible()) {
+    loadCalendar();
+    arm();
+  }
 })();
   </script>
 </body>

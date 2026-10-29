@@ -4,8 +4,8 @@
 `v` is a content hash of kiosk client assets (index.html, wave.html,
 hearth.html, press.html, hub.html, reel.html, rich.html, deck.js, and any other files
 listed in SOURCES), not the latest git SHA. Pages also deploys when x-status.json,
-press-feed.json, or hub-board.json refresh; hashing code means those
-data-only deploys do not bounce wall iPads.
+press-feed.json, hub-board.json, or hub-calendar.json refresh; hashing code
+means those data-only deploys do not bounce wall iPads.
 
 Human-facing stamp (Mark / Tesla-style decimals) lives in the same file:
 `year`, `week`, `ship`, `hotfix`, and `label` (YEAR.WEEK.SHIP, plus .HOTFIX

@@ -321,7 +321,12 @@
     });
   }
 
+  function overlayOpen() {
+    return !!(document.body && document.body.classList.contains("reader-open"));
+  }
+
   function onDown(ev) {
+    if (overlayOpen()) return;
     if (ev.isPrimary === false) return;
     if (ev.pointerType === "mouse" && ev.button !== 0) return;
     startX = ev.clientX;
@@ -393,6 +398,7 @@
   window.addEventListener("pointercancel", onUp, { passive: false });
 
   window.addEventListener("keydown", function (ev) {
+    if (overlayOpen()) return;
     if (ev.defaultPrevented || ev.metaKey || ev.ctrlKey || ev.altKey) return;
     if (ev.key === "ArrowRight") {
       ev.preventDefault();
