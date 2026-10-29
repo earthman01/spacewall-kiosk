@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T19:05:00Z",
+  "updated_at": "2026-10-29T19:10:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -135,11 +135,33 @@
         },
         {
           "id": "health-auto-export",
-          "title": "Health Auto Export",
-          "status": "waiting",
-          "status_text": "Drive still empty after Oct 23 (last upload Oct 24, 7:18 PM CT). Premium is active. Waiting on one phone step: Manual Export in the app.",
+          "title": "Health Auto Export: one-time phone fix",
+          "status": "mark",
+          "status_text": "Waiting on Mark's one phone sitting.",
           "detail": "",
-          "url": null
+          "url": null,
+          "steps": [
+            {
+              "id": "icloud-destination",
+              "label": "Switch the export destination from Google Drive to iCloud Drive, sleep metrics only, daily",
+              "status": "mark"
+            },
+            {
+              "id": "hae-widget",
+              "label": "Add the HAE Automations widget to the first Home Screen",
+              "status": "mark"
+            },
+            {
+              "id": "shortcuts-845",
+              "label": "Add one Shortcuts automation at ~8:45 AM, Run After Confirmation, that runs the export",
+              "status": "mark"
+            },
+            {
+              "id": "ingest-icloud",
+              "label": "earthbot re-points sleep ingest to iCloud Drive/AutoExport",
+              "status": "next"
+            }
+          ]
         },
         {
           "id": "dentist",
