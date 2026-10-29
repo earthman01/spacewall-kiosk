@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T17:30:00Z",
+  "updated_at": "2026-10-29T17:42:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -138,20 +138,6 @@
           "status": "next",
           "detail": "Oct 31 stability check. Feb 2027 gate. ~Jul 27 2027 normalize TSP, Honda, cash.",
           "url": null
-        },
-        {
-          "id": "card-payment-sep29",
-          "title": "Sep 29 card payment",
-          "status": "mark",
-          "detail": "$341.33 ambiguous. Mark to confirm.",
-          "url": null,
-          "steps": [
-            {
-              "id": "confirm-charge",
-              "label": "Confirm the $341.33 charge",
-              "status": "mark"
-            }
-          ]
         },
         {
           "id": "cashflow-end",
