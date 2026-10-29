@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-29T02:52:50Z",
-  "source": "earthbot-hub-notes-oct28",
+  "updated_at": "2026-10-29T15:40:00Z",
+  "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS · ops & notes",
   "north_star": {
@@ -12,6 +12,13 @@
       "id": "live-ops",
       "label": "Live ops",
       "items": [
+        {
+          "id": "tower-garden",
+          "title": "Tower Garden sale",
+          "status": "waiting",
+          "detail": "Waiting on Mark: where to post. Pair $650 OBO; backup HOME $450 / FLEX $325.",
+          "url": null
+        },
         {
           "id": "cashflow",
           "title": "Money / Cashflow",
@@ -130,6 +137,139 @@
       "label": "This week",
       "items": [
         {
+          "id": "carmax-dothan",
+          "title": "CarMax Dothan",
+          "status": "next",
+          "detail": "Tesla recheck Oct 30.",
+          "url": null
+        },
+        {
+          "id": "plan-gates",
+          "title": "Plan gates",
+          "status": "next",
+          "detail": "Oct 31 stability check. Feb 2027 gate. ~Jul 27 2027 normalize TSP, Honda, cash.",
+          "url": null
+        },
+        {
+          "id": "card-payment-sep29",
+          "title": "Sep 29 card payment",
+          "status": "waiting",
+          "detail": "$341.33 ambiguous. Mark to confirm.",
+          "url": null
+        },
+        {
+          "id": "cashflow-end",
+          "title": "Apple Cashflow End",
+          "status": "waiting",
+          "detail": "Must not go negative. Waiting on Mark.",
+          "url": null
+        },
+        {
+          "id": "health-auto-export",
+          "title": "Health Auto Export",
+          "status": "waiting",
+          "detail": "Not saving to Drive since Oct 23. Reconnect on iPhone.",
+          "url": null
+        },
+        {
+          "id": "dentist",
+          "title": "Dentist",
+          "status": "next",
+          "detail": "Book a visit. Nudge Nov 2.",
+          "url": null
+        },
+        {
+          "id": "burman-coffee",
+          "title": "Burman green coffee",
+          "status": "next",
+          "detail": "Place the order. Nudge Nov 2.",
+          "url": null
+        },
+        {
+          "id": "eve-next-calls",
+          "title": "Eve next calls",
+          "status": "next",
+          "detail": "Ascension Portal, Rich test call, IVR keypad, warm transfer.",
+          "url": null
+        },
+        {
+          "id": "micah-shortlist",
+          "title": "Micah shortlist",
+          "status": "next",
+          "detail": "Eve retry on the shortlist.",
+          "url": null
+        },
+        {
+          "id": "pcb-water",
+          "title": "PCB Water",
+          "status": "next",
+          "detail": "Tighten the estimate after the next bill.",
+          "url": null
+        },
+        {
+          "id": "x-ultra",
+          "title": "X Ultra switch",
+          "status": "next",
+          "detail": "Window opens Nov 16.",
+          "url": null
+        },
+        {
+          "id": "heart-cac",
+          "title": "Heart / CAC briefing",
+          "status": "next",
+          "detail": "Before the Jan Mullis visit. CVI January booking — nudge Nov 17.",
+          "url": null
+        },
+        {
+          "id": "health-portals",
+          "title": "CVI and Beach Derm",
+          "status": "next",
+          "detail": "Healow portal access and Beach Derm portal.",
+          "url": null
+        },
+        {
+          "id": "powerwall",
+          "title": "Powerwall price",
+          "status": "next",
+          "detail": "$18k to $14.5k. Tesla or a named installer.",
+          "url": null
+        },
+        {
+          "id": "gmail-filters",
+          "title": "Gmail filters",
+          "status": "waiting",
+          "detail": "AgentMail and sleep. Mark sets them in Gmail.",
+          "url": null
+        },
+        {
+          "id": "instagram",
+          "title": "Instagram hardening",
+          "status": "next",
+          "detail": "Unsolicited recovery codes.",
+          "url": null
+        },
+        {
+          "id": "amol-karim",
+          "title": "Amol / Karim",
+          "status": "next",
+          "detail": "Warm follow-ups on the funding path.",
+          "url": null
+        },
+        {
+          "id": "nixle",
+          "title": "Nixle SMS",
+          "status": "next",
+          "detail": "Resume alerts.",
+          "url": null
+        },
+        {
+          "id": "lab112-desk",
+          "title": "Lab 112 desk contact",
+          "status": "next",
+          "detail": "Put the desk contact on the Air.",
+          "url": null
+        },
+        {
           "id": "salary-cfo",
           "title": "Salary / CFO fixes",
           "status": "building",
@@ -140,7 +280,7 @@
           "id": "prop-tax",
           "title": "Bay County property tax",
           "status": "next",
-          "detail": "4% early-pay window ahead of Nov 3.",
+          "detail": "4% early pay. Nudge Nov 18.",
           "url": null
         },
         {
@@ -153,8 +293,8 @@
         {
           "id": "insurance",
           "title": "Insurance / Sea Tow",
-          "status": "proved",
-          "detail": "Progressive auto autopay + Sea Tow Gold renew path settled.",
+          "status": "next",
+          "detail": "Quote shopping Nov 10. Renews Dec 23, about $987 / 6 mo.",
           "url": null
         },
         {
@@ -184,6 +324,34 @@
       "id": "parked",
       "label": "Parked / later",
       "items": [
+        {
+          "id": "site-domain",
+          "title": "Site domain",
+          "status": "parked",
+          "detail": "Choice parked. Update the X bio link once the site is live.",
+          "url": null
+        },
+        {
+          "id": "tv-slideshow",
+          "title": "TV photo slideshow",
+          "status": "parked",
+          "detail": "Shelved until someone can watch. Screensaver stays.",
+          "url": null
+        },
+        {
+          "id": "google-account",
+          "title": "Google Account",
+          "status": "parked",
+          "detail": "Hardening parked.",
+          "url": null
+        },
+        {
+          "id": "bath-toilet",
+          "title": "2nd-bath toilet",
+          "status": "seed",
+          "detail": "Plumbing TBD.",
+          "url": null
+        },
         {
           "id": "boat-week",
           "title": "Boat / trailer",
