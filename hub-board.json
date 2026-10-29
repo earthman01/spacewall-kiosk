@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T17:42:00Z",
+  "updated_at": "2026-10-29T17:50:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -113,15 +113,18 @@
           "url": null,
           "steps": [
             {
-              "id": "maint-2026",
-              "label": "2026 annual maintenance",
-              "status": "done",
-              "done": true
+              "id": "amw-inspection",
+              "label": "AMW trailer inspection, Dec 2026",
+              "status": "next"
             },
             {
-              "id": "maint-2027",
-              "label": "Schedule 2027 annual maintenance",
-              "status": "next"
+              "id": "amw-if-good",
+              "label": "If AMW is good with it, no trailer maintenance until the following year"
+            },
+            {
+              "id": "thompson-2027",
+              "label": "Likely annual boat maintenance with Thompson Marine, Jan 2027",
+              "status": "waiting"
             }
           ]
         },

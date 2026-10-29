@@ -1012,7 +1012,7 @@
       </div>
     </div>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2.2</div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.2.3</div>
 
   <script>
 (function () {
@@ -1124,7 +1124,8 @@
     if (!raw || typeof raw !== "object") return null;
     const label = String(raw.label || raw.title || "").trim();
     if (!label) return null;
-    const status = statusKey(raw.status);
+    const given = String(raw.status || "").trim();
+    const status = given ? statusKey(given) : "";
     const links = [];
     if (Array.isArray(raw.links)) {
       raw.links.forEach(function (link) {
@@ -1138,7 +1139,7 @@
       id: String(raw.id || ""),
       label: label,
       status: status,
-      labelStatus: statusLabel(raw.status),
+      labelStatus: given ? statusLabel(given) : "",
       url: ownUrl,
       links: links,
       show: raw.show === true,
@@ -1371,12 +1372,14 @@
         label.target = "_blank";
         label.rel = "noopener noreferrer";
       }
-      const state = document.createElement("span");
-      state.className = "step-state";
-      state.textContent = step.done ? "Done" : step.labelStatus;
       line.appendChild(dot);
       line.appendChild(label);
-      line.appendChild(state);
+      if (step.done || step.labelStatus) {
+        const state = document.createElement("span");
+        state.className = "step-state";
+        state.textContent = step.done ? "Done" : step.labelStatus;
+        line.appendChild(state);
+      }
       row.appendChild(line);
       if (step.links.length && !(step.links.length === 1 && step.links[0].label === step.label)) {
         const links = document.createElement("div");
