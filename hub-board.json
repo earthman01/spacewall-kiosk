@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T19:10:00Z",
+  "updated_at": "2026-10-29T19:15:00Z",
   "source": "mark-hub-tasks-oct29",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
@@ -164,6 +164,32 @@
           ]
         },
         {
+          "id": "alertbay",
+          "title": "AlertBay account (Bay County emergency alerts)",
+          "status": "mark",
+          "status_text": "Waiting on Mark at iPhone/Air.",
+          "detail": "Name, address, email, and mobile are already known. Mark sets the password in his vault.",
+          "url": "https://member.everbridge.net/892807736724661/new",
+          "steps": [
+            {
+              "id": "create-account",
+              "label": "Create the account from iPhone or the Air and save the password in the vault",
+              "status": "mark",
+              "links": [
+                {
+                  "label": "Sign up",
+                  "url": "https://member.everbridge.net/892807736724661/new"
+                }
+              ]
+            },
+            {
+              "id": "alert-categories",
+              "label": "earthbot picks alert categories",
+              "status": "next"
+            }
+          ]
+        },
+        {
           "id": "dentist",
           "title": "Dentist",
           "status": "waiting",
@@ -239,13 +265,6 @@
           "title": "Amol / Karim",
           "status": "next",
           "detail": "Warm follow-ups on the funding path.",
-          "url": null
-        },
-        {
-          "id": "nixle",
-          "title": "Nixle SMS",
-          "status": "next",
-          "detail": "Resume alerts.",
           "url": null
         },
         {
