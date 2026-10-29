@@ -160,25 +160,24 @@
       flex-direction: column;
       gap: 8px;
       overflow: auto;
+      padding-bottom: 4px;
     }
 
     .card {
       position: relative;
-      flex: 1 1 0;
-      min-height: 72px;
+      flex: 0 0 auto;
+      min-height: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 4px;
-      padding: 12px 14px 12px 16px;
+      padding: 12px 14px 10px 16px;
       background: var(--paper);
       border: 1px solid #1a1a1f;
       border-radius: 10px;
       overflow: hidden;
       color: inherit;
     }
-
-    a.card { cursor: pointer; }
 
     .card:focus-visible {
       outline: 1px solid #3a3a44;
@@ -204,7 +203,7 @@
     }
 
     .card h3 {
-      font-size: clamp(16px, 1.45vw, 26px);
+      font-size: clamp(15px, 1.35vw, 22px);
       font-weight: 650;
       letter-spacing: -0.02em;
       line-height: 1.12;
@@ -215,8 +214,8 @@
       overflow: hidden;
     }
 
-    .card p {
-      font-size: clamp(12px, 1.02vw, 16px);
+    .card p.detail {
+      font-size: clamp(12px, 1.02vw, 15px);
       line-height: 1.3;
       color: #8a8a94;
       display: -webkit-box;
@@ -224,6 +223,66 @@
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
+
+    .card .open-link {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6a6a78;
+      width: fit-content;
+    }
+
+    .card .open-link:hover { color: #c4c4cc; }
+
+    .note {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+      align-items: stretch;
+    }
+
+    .note input {
+      flex: 1;
+      min-width: 0;
+      background: #0a0a0c;
+      border: 1px solid #24242c;
+      border-radius: 6px;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.3;
+      padding: 7px 9px;
+      outline: none;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .note input::placeholder { color: #4a4a54; }
+
+    .note input:focus {
+      border-color: #3a3a48;
+      background: #0c0c10;
+    }
+
+    .note button {
+      flex-shrink: 0;
+      border: 1px solid #2a2a34;
+      background: #16161c;
+      color: #b4b4be;
+      border-radius: 6px;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+
+    .note button:hover { color: #e4e4ea; border-color: #3a3a44; }
+    .note button:disabled { opacity: 0.45; cursor: default; }
+    .note button.ok { color: var(--ok); border-color: #1c3d28; }
+    .note button.err { color: var(--amber); border-color: #5a3a0a; }
 
     .card.live {
       background: linear-gradient(160deg, #0b1a12 0%, #0a0e0c 100%);
@@ -317,8 +376,8 @@
         overflow: hidden;
       }
       #board { padding: 8px 12px 22px; gap: 8px; }
-      .card { padding: 8px 10px 8px 14px; min-height: 58px; gap: 2px; }
-      .card p { -webkit-line-clamp: 2; }
+      .card { padding: 8px 10px 8px 14px; gap: 2px; }
+      .card p.detail { -webkit-line-clamp: 2; }
     }
 
     @media (max-width: 1080px) and (orientation: portrait) {
@@ -373,12 +432,14 @@
 
     <main id="board" aria-live="polite" aria-label="Planning board"></main>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.41.1.1</div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.1</div>
 
   <script>
 (function () {
   const VERSION_CHECK_MS = 3 * 60 * 1000;
   const BOARD_REFRESH_MS = 20 * 60 * 1000;
+  const NOTE_TO = "earthbot@mail.grokbot.com";
+  const FORM_ENDPOINT = "https://formsubmit.co/ajax/" + NOTE_TO;
   const KNOWN = {
     live: "Live",
     proved: "Proved",
@@ -463,15 +524,102 @@
     };
   }
 
+  function mailtoFallback(item, text) {
+    const subject = "[HUB] " + item.title;
+    const body = [
+      text,
+      "",
+      "—",
+      "item_id: " + (item.id || ""),
+      "item_title: " + item.title,
+      "source: hub"
+    ].join("\n");
+    const href = "mailto:" + encodeURIComponent(NOTE_TO).replace(/%40/g, "@")
+      + "?subject=" + encodeURIComponent(subject)
+      + "&body=" + encodeURIComponent(body);
+    window.location.href = href;
+  }
+
+  async function sendNote(item, text, btn, input) {
+    const payload = {
+      _subject: "[HUB] " + item.title,
+      _template: "box",
+      _captcha: "false",
+      message: text,
+      item_id: item.id || "",
+      item_title: item.title,
+      source: "hub",
+      page: location.href.split("?")[0]
+    };
+    btn.disabled = true;
+    btn.textContent = "…";
+    btn.classList.remove("ok", "err");
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      let data = null;
+      try { data = await res.json(); } catch (e) { data = null; }
+      if (!res.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+      btn.textContent = "Sent";
+      btn.classList.add("ok");
+      input.value = "";
+      setTimeout(function () {
+        btn.textContent = "Send";
+        btn.classList.remove("ok");
+        btn.disabled = false;
+      }, 1800);
+    } catch (err) {
+      btn.textContent = "Mail";
+      btn.classList.add("err");
+      mailtoFallback(item, text);
+      setTimeout(function () {
+        btn.textContent = "Send";
+        btn.classList.remove("err");
+        btn.disabled = false;
+      }, 2200);
+    }
+  }
+
+  function renderNote(item) {
+    const row = document.createElement("form");
+    row.className = "note";
+    row.setAttribute("action", "https://formsubmit.co/" + NOTE_TO);
+    row.setAttribute("method", "POST");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "message";
+    input.autocomplete = "off";
+    input.spellcheck = true;
+    input.maxLength = 500;
+    input.placeholder = "note → earthbot";
+    input.setAttribute("aria-label", "Note for " + item.title);
+    const btn = document.createElement("button");
+    btn.type = "submit";
+    btn.textContent = "Send";
+    row.appendChild(input);
+    row.appendChild(btn);
+    row.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      const text = String(input.value || "").trim();
+      if (!text) {
+        input.focus();
+        return;
+      }
+      sendNote(item, text, btn, input);
+    });
+    return row;
+  }
+
   function renderCard(item) {
-    const el = document.createElement(item.url ? "a" : "article");
+    const el = document.createElement("article");
     el.className = "card " + item.status;
     if (item.id) el.dataset.id = item.id;
-    if (item.url) {
-      el.href = item.url;
-      el.target = "_blank";
-      el.rel = "noopener noreferrer";
-    }
     const rail = document.createElement("div");
     rail.className = "rail";
     rail.setAttribute("aria-hidden", "true");
@@ -485,9 +633,20 @@
     el.appendChild(title);
     if (item.detail) {
       const detail = document.createElement("p");
+      detail.className = "detail";
       detail.textContent = item.detail;
       el.appendChild(detail);
     }
+    if (item.url) {
+      const link = document.createElement("a");
+      link.className = "open-link";
+      link.href = item.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Open";
+      el.appendChild(link);
+    }
+    el.appendChild(renderNote(item));
     return el;
   }
 
