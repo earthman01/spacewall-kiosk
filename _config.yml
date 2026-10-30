@@ -1,13 +1,10 @@
-# GitHub Pages legacy/Jekyll builds. Publish public board HTML so a race
-# with pages-build-deployment never leaves "/" as "Moved." / "Hub moved".
-# Keep private-ish Hub data and build scripts out of github.io.
+# GitHub Pages legacy/Jekyll builds. Keep racing with Actions deploy from
+# leaving gaps — publish hub JSON/media/version and dinner menu assets too.
+# Private scripts and source trees stay out of github.io.
 exclude:
   - press-feed.json
-  - hub-board.json
-  - hub-calendar.json
-  - hub-media
   - scripts
   - site
-  - version.json
   - "*.md"
   - .github
+  - docs

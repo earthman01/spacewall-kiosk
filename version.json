@@ -1,10 +1,10 @@
 {
-  "v": "030e7e970a10de95",
-  "built_at": "2026-10-30T20:03:30Z",
+  "v": "781a394a69c5e665",
+  "built_at": "2026-10-30T20:08:49Z",
   "year": 26,
   "week": 44,
   "ship": 3,
-  "hotfix": 6,
-  "label": "oct30-dinner-hub-calendar-notes",
-  "updated_at": "2026-10-30T20:03:30Z"
+  "hotfix": 7,
+  "label": "oct30-dinner-hub-jekyll-json",
+  "updated_at": "2026-10-30T20:08:49Z"
 }
