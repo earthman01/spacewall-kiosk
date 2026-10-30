@@ -1,10 +1,10 @@
 {
-  "v": "77c28f559858ea78",
-  "built_at": "2026-10-30T20:35:50Z",
+  "v": "fb00419e87f7b532",
+  "built_at": "2026-10-30T21:11:03Z",
   "year": 26,
   "week": 44,
   "ship": 3,
-  "hotfix": 11,
-  "label": "oct30-clandestine-only",
-  "updated_at": "2026-10-30T20:35:50Z"
+  "hotfix": 12,
+  "label": "oct30-five-restaurants-restored",
+  "updated_at": "2026-10-30T21:11:03Z"
 }
