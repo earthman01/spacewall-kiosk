@@ -23,6 +23,7 @@
       --edge: #1c2433;
       --accent: #9eb0c8;
       --soft: #c4a882;
+      --gold: #d4a853;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -46,13 +47,25 @@
     .wrap {
       position: relative; z-index: 1;
       min-height: 100dvh;
-      display: flex; flex-direction: column; gap: 28px;
+      display: flex; flex-direction: column; gap: 24px;
       padding:
         calc(56px + env(safe-area-inset-top))
         calc(28px + env(safe-area-inset-right))
         calc(32px + env(safe-area-inset-bottom))
         calc(28px + env(safe-area-inset-left));
       max-width: 1100px;
+    }
+    .congrats {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px;
+      background: linear-gradient(90deg, rgba(212,168,83,0.12), rgba(212,168,83,0.04));
+      border: 1px solid rgba(212,168,83,0.35);
+      border-radius: 14px;
+      color: #f0e6d2;
+      font-size: 15px; line-height: 1.4; font-weight: 500;
+    }
+    .congrats .star {
+      color: var(--gold); font-size: 18px; flex-shrink: 0;
     }
     .kicker {
       font-size: 11px; font-weight: 700; letter-spacing: 0.28em;
@@ -65,18 +78,24 @@
       margin-bottom: 12px;
     }
     .sub {
-      font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 40rem;
+      font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 42rem;
     }
+    .assist-note {
+      font-size: 14px; line-height: 1.5; color: var(--muted);
+      max-width: 42rem; margin-top: 10px;
+      padding-left: 12px; border-left: 2px solid rgba(212,168,83,0.45);
+    }
+    .assist-note strong { color: var(--soft); font-weight: 600; }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 14px;
       flex: 1;
       align-content: start;
     }
-    a.card, .card.slot {
+    a.card, .card.slot, .card.idea {
       display: flex; flex-direction: column; gap: 10px;
-      min-height: 160px;
+      min-height: 168px;
       padding: 22px 20px 18px;
       background: var(--card);
       border: 1px solid var(--edge);
@@ -87,6 +106,10 @@
     a.card:hover, a.card:focus-visible {
       border-color: #3a465c; background: #0c0f14; outline: none;
       transform: translateY(-1px);
+    }
+    .card.idea {
+      border-color: #2a3344;
+      cursor: default;
     }
     .card.slot {
       border-style: dashed;
@@ -100,8 +123,9 @@
       text-transform: uppercase; color: var(--quiet);
     }
     a.card .k { color: var(--soft); }
+    .card.idea .k { color: var(--gold); }
     .card .n {
-      font-size: clamp(20px, 3vw, 24px); font-weight: 600;
+      font-size: clamp(18px, 3vw, 22px); font-weight: 600;
       letter-spacing: -0.02em; color: #e8ecf2;
     }
     .card.slot .n { color: var(--quiet); font-weight: 500; font-size: 16px; }
@@ -109,6 +133,11 @@
       font-size: 13px; line-height: 1.45; color: var(--muted); margin-top: auto;
     }
     .card.slot .d { color: #3a404a; }
+    .card .hand {
+      font-size: 12px; line-height: 1.4; color: #6a7382;
+      margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--line);
+    }
+    .card .hand em { color: var(--accent); font-style: normal; }
     .foot {
       font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--quiet); padding-top: 8px; border-top: 1px solid var(--line);
@@ -119,32 +148,44 @@
 <body>
   <div class="veil" aria-hidden="true"></div>
   <div class="wrap">
+    <div class="congrats" role="status">
+      <span class="star" aria-hidden="true">✦</span>
+      <span>Congrats, Lisa, on closing your first deal! 🎉</span>
+    </div>
     <header>
       <p class="kicker"><span>Sandbox</span> · SPACEWALL</p>
       <h1>Lisa's Sandbox</h1>
-      <p class="sub">Your sandbox on SPACEWALL — empty cards ready for pages. Copy <code style="color:#9eb0c8">page-template.html</code> for each new card.</p>
+      <p class="sub">Built for a franchise pro — warm ideas for the paperwork you skip, the trips you take, and the deals you close. Demo concepts only (labeled <span style="color:var(--gold)">idea</span>).</p>
+      <p class="assist-note">Looking for <strong>assistant help</strong> — actually <strong>three assistants</strong>. The Delegation Starter below sketches how each one could take a handoff.</p>
     </header>
-    <section class="grid" aria-label="Lisa's Sandbox pages">
-      <!-- Live pages land here as cards. Slots stay until filled. -->
-      <div class="card slot" aria-hidden="true">
-        <span class="k">Slot</span>
-        <span class="n">Ready for page one</span>
-        <span class="d">Franchise · industry · data</span>
+    <section class="grid" aria-label="Lisa's Sandbox ideas">
+      <div class="card idea">
+        <span class="k">Idea</span>
+        <span class="n">Denver Trip Expense Helper</span>
+        <span class="d">Snap receipts; get the expense report built. Meg’s hair payment tracked separately from the rest of the trip.</span>
+      </div>
+      <div class="card idea">
+        <span class="k">Idea</span>
+        <span class="n">Franchise Paperwork Assistant</span>
+        <span class="d">FDD review checklist, franchisee onboarding docs, royalty and fee tracker — so the forms don’t pile up.</span>
+      </div>
+      <div class="card idea">
+        <span class="k">Idea</span>
+        <span class="n">Franchise Deal Brief</span>
+        <span class="d">A one-page summary of a franchise opportunity — clear, warm, ready to share.</span>
+      </div>
+      <div class="card idea">
+        <span class="k">Idea · Delegation</span>
+        <span class="n">Delegation Starter</span>
+        <span class="d">Three assistants. Hand it off:</span>
+        <span class="hand"><em>Paperwork &amp; Expenses</em> — “Here’s a bag of receipts; file the report.”</span>
+        <span class="hand"><em>Franchise Deals</em> — “Read this FDD and flag what’s odd.”</span>
+        <span class="hand"><em>Travel &amp; Schedule</em> — “Denver in two weeks — hold the calendar.”</span>
       </div>
       <div class="card slot" aria-hidden="true">
         <span class="k">Slot</span>
-        <span class="n">Ready for page two</span>
-        <span class="d">Copy the template · link the card</span>
-      </div>
-      <div class="card slot" aria-hidden="true">
-        <span class="k">Slot</span>
-        <span class="n">Ready for page three</span>
-        <span class="d">OLED-safe · shared nav</span>
-      </div>
-      <div class="card slot" aria-hidden="true">
-        <span class="k">Slot</span>
-        <span class="n">Ready for page four</span>
-        <span class="d">Tonight's live add</span>
+        <span class="n">Open for the next real page</span>
+        <span class="d">When an idea graduates</span>
       </div>
     </section>
     <p class="foot">Lisa's Sandbox · <a href="../welcome-lisa.html">Back to Lisa's Page</a> · <a href="../">SPACEWALL home</a></p>
