@@ -20,15 +20,13 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # Skip failed Refresh X status runs
     if: >
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v4
 
-      # Stop legacy "Deploy from a branch" republishing the full repo (hub JSON,
-      # hub.html, etc.) onto github.io. Agent PATs lack pages:write; GITHUB_TOKEN has it.
+      # Best-effort: agent PATs and GITHUB_TOKEN both 403 on Pages settings today.
       - name: Switch Pages source to GitHub Actions only
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,40 +36,14 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -f build_type=workflow \
             && echo "Pages build_type set to workflow" \
-            || echo "WARN: could not set build_type=workflow (may already be workflow or token lacks pages:write)"
+            || echo "WARN: could not set build_type=workflow"
 
       - name: Stage stub only (no Hub data)
         run: |
           set -euo pipefail
           rm -rf site
           mkdir -p site
-          cat > site/index.html << 'HTML'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>Hub moved</title>
-            <style>
-              body { margin: 0; min-height: 100vh; display: grid; place-items: center;
-                     background: #0b0f14; color: #e8eef5; font: 16px/1.5 system-ui, sans-serif; }
-              main { max-width: 28rem; padding: 2rem; text-align: center; }
-              h1 { font-size: 1.5rem; font-weight: 600; margin: 0 0 0.75rem; }
-              p { margin: 0; opacity: 0.85; }
-            </style>
-          </head>
-          <body>
-            <main>
-              <h1>Hub moved</h1>
-              <p>This public GitHub Pages site no longer hosts the Hub.</p>
-            </main>
-          </body>
-          </html>
-          HTML
-          # Same body for 404 so unknown paths do not leak old paths or data
-          cp site/index.html site/404.html
-          # Tiny version stamp so caches can bust; no board/calendar/media
-          printf '%s\n' '{"v":"stub-hub-moved","built_at":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"}' > site/version.json
+          printf '%s\n' 'Moved.' > site/index.html
           echo "stub site contents:"
           find site -type f | sort
 

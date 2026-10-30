@@ -31,8 +31,13 @@ jobs:
           set -euo pipefail
           rm -rf site
           mkdir -p site
-          cp -a index.html wave.html hearth.html press.html hub.html reel.html rich.html deck.js .nojekyll x-status.json \
+          # Root index.html is the public github.io stub (Moved.). Real kiosk entry is spacewall.html.
+          cp -a spacewall.html wave.html hearth.html press.html hub.html reel.html rich.html deck.js x-status.json \
             press-feed.json hub-board.json hub-calendar.json hub-media spacewall.webmanifest hearth.webmanifest icons site/
+          cp site/spacewall.html site/index.html
+          rm -f site/spacewall.html
+          # Static host: skip Jekyll on CF
+          touch site/.nojekyll
           python3 scripts/write_version.py --out site/version.json
           python3 scripts/write_version.py --check --out site/version.json
           echo "artifact version.json:"
