@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-30T13:52:32Z",
+  "updated_at": "2026-10-30T13:59:19Z",
   "source": "hub-darken-air-jobs-oct30",
   "title": "HUB",
   "subtitle": "Personal OS · ops & notes",
@@ -76,8 +76,8 @@
           "id": "air-jobs",
           "title": "Air jobs",
           "status": "live",
-          "detail": "Overnight scene build nightly ~1 AM CT (first Oct 31 1:12 AM CT) — 3 scenes, self-deletes when verified. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. TV on 5:50 AM / off 11:45 PM. Chrome 156 update queued. On-screen learning only while Mark is at work. Air researches first; questions only when stuck.",
           "url": null,
+          "detail": "Overnight scene build nightly ~1 AM CT (first Oct 31 1:12 AM CT) — 3 scenes, self-deletes when verified. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. TV on 5:50 AM / off 11:45 PM. Chrome 156 update queued. On-screen learning only while Mark is at work. Air researches first; questions only when stuck.",
           "status_text": "Live. Next overnight scene build ~1:12 AM CT Oct 31. Screen work only at work hours; research-first."
         }
       ]

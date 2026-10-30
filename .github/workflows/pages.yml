@@ -3,17 +3,13 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # GITHUB_TOKEN commits from "Refresh X status" do not retrigger push workflows.
-  # Legacy "pages build and deployment" still runs while build_type stays legacy
-  # (GITHUB_TOKEN cannot PUT build_type=workflow — 403). Re-stub after it finishes.
   workflow_run:
-    workflows: ["Refresh X status", "pages build and deployment"]
+    workflows: ["Refresh X status"]
     types: [completed]
 permissions:
   contents: read
   pages: write
   id-token: write
-  actions: read
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -23,14 +19,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # Skip failed upstream workflow_run triggers
     if: >
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v4
 
-      # Best-effort: stop legacy branch publish if token ever gains pages:write admin.
       - name: Switch Pages source to GitHub Actions only
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,38 +34,14 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -f build_type=workflow \
             && echo "Pages build_type set to workflow" \
-            || echo "WARN: could not set build_type=workflow (expected 403 until Pages admin on token)"
+            || echo "WARN: could not set build_type=workflow"
 
       - name: Stage stub only (no Hub data)
         run: |
           set -euo pipefail
           rm -rf site
           mkdir -p site
-          cat > site/index.html << 'HTML'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>Hub moved</title>
-            <style>
-              body { margin: 0; min-height: 100vh; display: grid; place-items: center;
-                     background: #0b0f14; color: #e8eef5; font: 16px/1.5 system-ui, sans-serif; }
-              main { max-width: 28rem; padding: 2rem; text-align: center; }
-              h1 { font-size: 1.5rem; font-weight: 600; margin: 0 0 0.75rem; }
-              p { margin: 0; opacity: 0.85; }
-            </style>
-          </head>
-          <body>
-            <main>
-              <h1>Hub moved</h1>
-              <p>This public GitHub Pages site no longer hosts the Hub.</p>
-            </main>
-          </body>
-          </html>
-          HTML
-          cp site/index.html site/404.html
-          printf '%s\n' '{"v":"stub-hub-moved","built_at":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"}' > site/version.json
+          printf '%s\n' 'Moved.' > site/index.html
           echo "stub site contents:"
           find site -type f | sort
 

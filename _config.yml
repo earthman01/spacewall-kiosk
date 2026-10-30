@@ -1,0 +1,23 @@
+# GitHub Pages legacy builds use Jekyll. Keep only the stub index on github.io.
+# Full kiosk/Hub files stay in git for Cloudflare Pages (explicit copy list).
+exclude:
+  - spacewall.html
+  - wave.html
+  - hearth.html
+  - press.html
+  - hub.html
+  - reel.html
+  - rich.html
+  - deck.js
+  - x-status.json
+  - press-feed.json
+  - hub-board.json
+  - hub-calendar.json
+  - hub-media
+  - spacewall.webmanifest
+  - hearth.webmanifest
+  - icons
+  - scripts
+  - site
+  - "*.md"
+  - .github
