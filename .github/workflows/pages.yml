@@ -36,13 +36,20 @@ jobs:
             && echo "Pages build_type set to workflow" \
             || echo "WARN: could not set build_type=workflow"
 
-      - name: Stage stub only (no Hub data)
+      - name: Stage public SPACEWALL boards (no private hub JSON)
         run: |
           set -euo pipefail
           rm -rf site
           mkdir -p site
-          printf '%s\n' 'Moved.' > site/index.html
-          echo "stub site contents:"
+          # Index = real SPACEWALL ops board (one tap, no "Moved." / "Hub moved")
+          cp -a spacewall.html site/index.html
+          cp -a spacewall.html site/spacewall.html
+          cp -a welcome-lisa.html rich.html hearth.html wave.html press.html hub.html reel.html \
+            portal-home.html 404.html deck.js x-status.json \
+            spacewall.webmanifest hearth.webmanifest icons site/
+          # Intentionally omit hub-board.json / hub-calendar.json / press-feed.json (private-ish)
+          touch site/.nojekyll
+          echo "public site contents:"
           find site -type f | sort
 
       - uses: actions/configure-pages@v5

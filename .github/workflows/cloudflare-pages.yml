@@ -4,8 +4,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Keep CF Pages in sync when Refresh X status commits (push from GITHUB_TOKEN
-  # does not retrigger push workflows).
   workflow_run:
     workflows: ["Refresh X status"]
     types: [completed]
@@ -17,7 +15,6 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Skip failed Refresh X status runs
     if: >
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
@@ -29,16 +26,19 @@ jobs:
       - name: Stage site and write version.json
         run: |
           set -euo pipefail
+          # Stamp ROOT first so copied HTML carries matching deck.js ?h= and #ver labels.
+          python3 scripts/write_version.py --out version.json
+          python3 scripts/write_version.py --check --out version.json
           rm -rf site
           mkdir -p site
-          # Root index.html is the public github.io stub (Moved.). Real kiosk entry is spacewall.html.
-          cp -a spacewall.html wave.html hearth.html press.html hub.html reel.html rich.html deck.js x-status.json \
-            press-feed.json hub-board.json hub-calendar.json hub-media spacewall.webmanifest hearth.webmanifest icons site/
+          # Real kiosk entry is spacewall.html → site/index.html. Keep spacewall.html too.
+          cp -a spacewall.html wave.html hearth.html press.html hub.html reel.html rich.html \
+            welcome-lisa.html portal-home.html 404.html deck.js x-status.json \
+            press-feed.json hub-board.json hub-calendar.json hub-media \
+            spacewall.webmanifest hearth.webmanifest icons site/
           cp site/spacewall.html site/index.html
-          rm -f site/spacewall.html
+          cp version.json site/version.json
           touch site/.nojekyll
-          python3 scripts/write_version.py --out site/version.json
-          python3 scripts/write_version.py --check --out site/version.json
           echo "artifact version.json:"
           cat site/version.json
 

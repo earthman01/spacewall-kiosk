@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Write version.json for SPACEWALL kiosk auto-reload.
 
-`v` is a content hash of kiosk client assets (index.html, wave.html,
-hearth.html, press.html, hub.html, reel.html, rich.html, deck.js, and any other files
+`v` is a content hash of kiosk client assets (spacewall.html, wave.html,
+hearth.html, press.html, hub.html, reel.html, rich.html, welcome-lisa.html, deck.js, and any other files
 listed in SOURCES), not the latest git SHA. Pages also deploys when x-status.json,
 press-feed.json, hub-board.json, or hub-calendar.json refresh; hashing code
 means those data-only deploys do not bounce wall iPads.
@@ -34,23 +34,24 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 # Portal html that must load deck.js.
-HTML_SOURCES = ("index.html", "wave.html", "hearth.html", "press.html", "hub.html", "reel.html", "rich.html")
+HTML_SOURCES = ("spacewall.html", "wave.html", "hearth.html", "press.html", "hub.html", "reel.html", "rich.html", "welcome-lisa.html")
 SOURCES = HTML_SOURCES + ("deck.js",)
 PORTAL_BY_FILE = {
-    "index.html": "SPACEWALL",
+    "spacewall.html": "SPACEWALL",
     "hearth.html": "HEARTH",
     "wave.html": "WAVE",
     "press.html": "PRESS",
     "hub.html": "HUB",
     "reel.html": "REEL",
     "rich.html": "RICH",
+    "welcome-lisa.html": "LISA",
 }
 DEFAULT_OUT = ROOT / "version.json"
 DECK_SCRIPT_RE = re.compile(
     r'<script src="\./deck\.js(?:\?h=[a-f0-9]+)?" defer></script>'
 )
 VER_EL_RE = re.compile(
-    r'(<[^>]*\bid="ver"[^>]*>)(SPACEWALL|HEARTH|WAVE|PRESS|HUB|REEL|RICH) \d+\.\d+\.\d+(?:\.\d+)?(</)'
+    r'(<[^>]*\bid="ver"[^>]*>)(SPACEWALL|HEARTH|WAVE|PRESS|HUB|REEL|RICH|LISA) \d+\.\d+\.\d+(?:\.\d+)?(</)'
 )
 
 

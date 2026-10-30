@@ -1,1 +1,51 @@
-Hub moved
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <title>SPACEWALL</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; background: #000; color: #d8dce4;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif; }
+    body { min-height: 100dvh; padding: 28px; }
+    .brand { font-size: 11px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #4a5160; margin-bottom: 18px; }
+    h1 { font-size: 42px; font-weight: 600; color: #e8ecf2; margin-bottom: 8px; }
+    .sub { color: #8a929e; font-size: 14px; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; max-width: 900px; }
+    a.tile { display: flex; flex-direction: column; gap: 6px; padding: 18px 16px; background: #0a0c10; border: 1px solid #1a2030; border-radius: 12px; text-decoration: none; color: inherit; }
+    a.tile .k { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #4a5160; }
+    a.tile .n { font-size: 18px; font-weight: 600; color: #e4e8ee; }
+    a.tile.featured .n { color: #9eb0c8; }
+  </style>
+  <script>
+    // Prefer site-root links so this 404 works from any deep path on the project Pages site.
+    (function () {
+      var base = "/spacewall-kiosk/";
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("a[data-board]").forEach(function (a) {
+          a.href = base + a.getAttribute("data-board");
+        });
+      });
+    })();
+  </script>
+</head>
+<body>
+  <div class="brand">SPACEWALL</div>
+  <h1>SPACEWALL</h1>
+  <p class="sub">That path isn’t here. Pick a board:</p>
+  <div class="grid">
+    <a class="tile featured" data-board="welcome-lisa.html" href="/spacewall-kiosk/welcome-lisa.html"><span class="k">Guest</span><span class="n">Welcome, Lisa</span></a>
+    <a class="tile" data-board="" href="/spacewall-kiosk/"><span class="k">Home</span><span class="n">SPACEWALL</span></a>
+    <a class="tile" data-board="spacewall.html" href="/spacewall-kiosk/spacewall.html"><span class="k">Ops</span><span class="n">Ops board</span></a>
+    <a class="tile" data-board="hearth.html" href="/spacewall-kiosk/hearth.html"><span class="k">Room</span><span class="n">HEARTH</span></a>
+    <a class="tile" data-board="press.html" href="/spacewall-kiosk/press.html"><span class="k">Paper</span><span class="n">PRESS</span></a>
+    <a class="tile" data-board="hub.html" href="/spacewall-kiosk/hub.html"><span class="k">Plan</span><span class="n">HUB</span></a>
+    <a class="tile" data-board="reel.html" href="/spacewall-kiosk/reel.html"><span class="k">Cinema</span><span class="n">REEL</span></a>
+    <a class="tile" data-board="wave.html" href="/spacewall-kiosk/wave.html"><span class="k">Idle</span><span class="n">WAVE</span></a>
+    <a class="tile" data-board="rich.html" href="/spacewall-kiosk/rich.html"><span class="k">Guest</span><span class="n">Welcome, Rich</span></a>
+  </div>
+</body>
+</html>
