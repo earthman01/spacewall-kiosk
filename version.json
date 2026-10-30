@@ -1,11 +1,10 @@
 {
-  "v": "781a394a69c5e665",
-  "built_at": "2026-10-30T20:08:49Z",
+  "v": "0d33c1e25653fa35",
+  "built_at": "2026-10-30T20:23:53Z",
   "year": 26,
   "week": 44,
   "ship": 3,
-  "hotfix": 7,
-  "label": "oct30-lisa-sweet-wines",
-  "updated_at": "2026-10-30T20:08:49Z",
-  "built": ""
+  "hotfix": 8,
+  "label": "oct30-wine-lists-ntfy",
+  "updated_at": "2026-10-30T20:23:53Z"
 }
