@@ -41,7 +41,7 @@ jobs:
           set -euo pipefail
           rm -rf site
           mkdir -p site
-          printf '%s\n' 'Moved.' > site/index.html
+          printf '%s\n' 'Hub moved' > site/index.html
           echo "stub site contents:"
           find site -type f | sort
 
