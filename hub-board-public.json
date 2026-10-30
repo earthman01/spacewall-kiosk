@@ -1,0 +1,109 @@
+{
+  "updated_at": "2026-10-30T19:20:00Z",
+  "source": "public-portals",
+  "title": "HUB",
+  "subtitle": "SPACEWALL · boards",
+  "north_star": {
+    "headline": "Every board, one tap",
+    "body": "Guest welcome, ops wall, room portals, press, and reel — same nav on every page."
+  },
+  "columns": [
+    {
+      "id": "guest",
+      "label": "Guest",
+      "items": [
+        {
+          "id": "lisa",
+          "title": "Welcome, Lisa",
+          "status": "live",
+          "detail": "Tonight’s Dothan dinner menu, the bots, morning brief, wall boards.",
+          "url": "./welcome-lisa.html"
+        },
+        {
+          "id": "rich",
+          "title": "Welcome, Rich",
+          "status": "live",
+          "detail": "Cinematic guest welcome with live clock and gulf weather.",
+          "url": "./rich.html"
+        }
+      ]
+    },
+    {
+      "id": "walls",
+      "label": "Walls",
+      "items": [
+        {
+          "id": "spacewall",
+          "title": "SPACEWALL",
+          "status": "live",
+          "detail": "Ops status board — Cursor, GitHub, X, and the rest.",
+          "url": "./"
+        },
+        {
+          "id": "press",
+          "title": "PRESS",
+          "status": "live",
+          "detail": "Floating newspaper · morning brief texture.",
+          "url": "./press.html"
+        },
+        {
+          "id": "hub",
+          "title": "HUB",
+          "status": "live",
+          "detail": "This board — portal map for every SPACEWALL page.",
+          "url": "./hub.html"
+        }
+      ]
+    },
+    {
+      "id": "room",
+      "label": "Room",
+      "items": [
+        {
+          "id": "hearth",
+          "title": "HEARTH",
+          "status": "live",
+          "detail": "OLED room clock and ambient portal.",
+          "url": "./hearth.html"
+        },
+        {
+          "id": "wave",
+          "title": "WAVE",
+          "status": "live",
+          "detail": "Idle wave lab for the living-room glass.",
+          "url": "./wave.html"
+        },
+        {
+          "id": "reel",
+          "title": "REEL",
+          "status": "live",
+          "detail": "Cinema float packs — twilight, void, and friends.",
+          "url": "./reel.html"
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "label": "Home",
+      "items": [
+        {
+          "id": "portal-home",
+          "title": "Portal home",
+          "status": "live",
+          "detail": "Link list of every board — spare landing if you need it.",
+          "url": "./portal-home.html"
+        }
+      ]
+    }
+  ],
+  "watch": {
+    "title": "Portals",
+    "items": [
+      { "id": "w-lisa", "title": "Lisa", "status": "live", "detail": "Guest showcase", "url": "./welcome-lisa.html" },
+      { "id": "w-sw", "title": "SPACEWALL", "status": "live", "detail": "Ops", "url": "./" },
+      { "id": "w-hearth", "title": "HEARTH", "status": "live", "detail": "Room", "url": "./hearth.html" },
+      { "id": "w-press", "title": "PRESS", "status": "live", "detail": "Brief", "url": "./press.html" },
+      { "id": "w-reel", "title": "REEL", "status": "live", "detail": "Cinema", "url": "./reel.html" }
+    ]
+  }
+}

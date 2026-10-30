@@ -11,6 +11,7 @@
   <meta name="color-scheme" content="dark" />
   <title>HUB</title>
   <script src="./deck.js?h=fefd838ce500" defer></script>
+  <script src="./nav.js" defer></script>
   <style>
     :root {
       --bg: #070708;
@@ -960,19 +961,7 @@
         </div>
         <div class="tag" id="subtitle">personal os</div>
         <div class="board-stamp" id="board-stamp">board · —</div>
-        <div class="hint">
-          <a href="./">spacewall</a>
-          ·
-          <a href="./welcome-lisa.html">lisa</a>
-          ·
-          <a href="./hearth.html">hearth</a>
-          ·
-          <a href="./wave.html">wave</a>
-          ·
-          <a href="./press.html">press</a>
-          ·
-          <a href="./reel.html">reel</a>
-        </div>
+        <div class="hint"></div>
       </div>
     </header>
 
@@ -1025,7 +1014,7 @@
       </div>
     </div>
   </div>
-  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.3</div>
+  <div id="ver" class="ver" data-portal="HUB">HUB 26.44.3.1</div>
 
   <script>
 (function () {
@@ -1607,15 +1596,54 @@
     return "./hub-board.json?" + q.toString();
   }
 
+  const PORTALS_FALLBACK = {
+    updated_at: "2026-10-30T19:20:00Z",
+    source: "portals-fallback",
+    title: "HUB",
+    subtitle: "SPACEWALL · boards",
+    north_star: {
+      headline: "Every board, one tap",
+      body: "Guest welcome, ops wall, room portals, press, and reel — same nav on every page."
+    },
+    columns: [
+      { id: "guest", label: "Guest", items: [
+        { id: "lisa", title: "Welcome, Lisa", status: "live", detail: "Dinner menu, bots, brief, wall boards.", url: "./welcome-lisa.html" },
+        { id: "rich", title: "Welcome, Rich", status: "live", detail: "Guest welcome with live clock.", url: "./rich.html" }
+      ]},
+      { id: "walls", label: "Walls", items: [
+        { id: "spacewall", title: "SPACEWALL", status: "live", detail: "Ops status board.", url: "./" },
+        { id: "press", title: "PRESS", status: "live", detail: "Floating newspaper.", url: "./press.html" },
+        { id: "hub", title: "HUB", status: "live", detail: "This portal map.", url: "./hub.html" }
+      ]},
+      { id: "room", label: "Room", items: [
+        { id: "hearth", title: "HEARTH", status: "live", detail: "OLED room portal.", url: "./hearth.html" },
+        { id: "wave", title: "WAVE", status: "live", detail: "Idle wave lab.", url: "./wave.html" },
+        { id: "reel", title: "REEL", status: "live", detail: "Cinema float packs.", url: "./reel.html" }
+      ]},
+      { id: "home", label: "Home", items: [
+        { id: "portal-home", title: "Portal home", status: "live", detail: "Link list of every board.", url: "./portal-home.html" }
+      ]}
+    ],
+    watch: { title: "Portals", items: [
+      { id: "w-lisa", title: "Lisa", status: "live", detail: "Guest", url: "./welcome-lisa.html" },
+      { id: "w-sw", title: "SPACEWALL", status: "live", detail: "Ops", url: "./" },
+      { id: "w-press", title: "PRESS", status: "live", detail: "Brief", url: "./press.html" },
+      { id: "w-reel", title: "REEL", status: "live", detail: "Cinema", url: "./reel.html" }
+    ]}
+  };
+
   async function loadBoard() {
     if (!pageIsVisible()) return;
     try {
       const res = await fetch(boardUrl(), { cache: "no-store" });
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
-      if (!applyBoard(data) && lastGood) applyBoard(lastGood);
+      if (applyBoard(data)) return;
+      if (lastGood) { applyBoard(lastGood); return; }
+      applyBoard(PORTALS_FALLBACK);
     } catch (e) {
       if (lastGood) applyBoard(lastGood);
+      else applyBoard(PORTALS_FALLBACK);
     }
   }
 
