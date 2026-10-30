@@ -31,12 +31,12 @@ jobs:
           python3 scripts/write_version.py --check --out version.json
           rm -rf site
           mkdir -p site
-          # Real kiosk entry is spacewall.html → site/index.html. Keep spacewall.html too.
-          cp -a spacewall.html wave.html hearth.html press.html hub.html reel.html rich.html \
-            welcome-lisa.html portal-home.html 404.html deck.js x-status.json \
+          # index.html = THE public tile landing. spacewall.html = ops. hub stays its own page.
+          cp -a index.html spacewall.html wave.html hearth.html press.html hub.html reel.html rich.html \
+            welcome-lisa.html portal-home.html 404.html deck.js nav.js x-status.json \
             press-feed.json hub-board.json hub-calendar.json hub-media \
             spacewall.webmanifest hearth.webmanifest icons site/
-          cp site/spacewall.html site/index.html
+          cp -a lisa-projects site/
           cp version.json site/version.json
           touch site/.nojekyll
           echo "artifact version.json:"

@@ -41,13 +41,16 @@ jobs:
           set -euo pipefail
           rm -rf site
           mkdir -p site
-          # Index = real SPACEWALL ops board (one tap, no "Moved." / "Hub moved")
-          cp -a spacewall.html site/index.html
+          # index.html = THE public tile landing (one entry). spacewall.html = ops board.
+          # Never overwrite index with spacewall.
+          cp -a index.html site/index.html
           cp -a spacewall.html site/spacewall.html
           cp -a welcome-lisa.html rich.html hearth.html wave.html press.html hub.html reel.html \
-            portal-home.html 404.html deck.js x-status.json \
+            portal-home.html 404.html deck.js nav.js x-status.json \
             spacewall.webmanifest hearth.webmanifest icons site/
-          # Intentionally omit hub-board.json / hub-calendar.json / press-feed.json (private-ish)
+          # Public portal board only (not the private ops hub-board.json); hub.html stays its own page
+          cp -a hub-board-public.json site/hub-board.json
+          cp -a lisa-projects site/
           touch site/.nojekyll
           echo "public site contents:"
           find site -type f | sort
