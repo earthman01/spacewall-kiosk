@@ -47,7 +47,7 @@
       height: 100dvh;
       display: flex;
       flex-direction: column;
-      animation: pixel-orbit 220s ease-in-out infinite alternate;
+      animation: none;
     }
 
     header {
@@ -124,8 +124,13 @@
       border-radius: 2px;
       padding: 13px 14px 11px;
       opacity: 0;
-      transform: translate3d(0, 10px, 0) rotate(var(--rot, 0deg));
-      transition: opacity 2.4s ease, transform 2.4s ease, border-color 0.4s ease;
+      transform: rotate(var(--rot, 0deg));
+      transition: opacity 1.2s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+      --heat: 0;
+      --heat-accent: #6a6a74;
+      --heat-glow: transparent;
+      border-color: color-mix(in srgb, var(--heat-accent) 35%, var(--rule));
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38), 0 0 0 1px color-mix(in srgb, var(--heat-accent) 18%, transparent);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
       cursor: pointer;
     }
@@ -136,23 +141,42 @@
     }
 
     .card.in {
-      opacity: 0.92;
-      transform: translate3d(0, 0, 0) rotate(var(--rot, 0deg));
+      opacity: 0.94;
+      transform: rotate(var(--rot, 0deg));
     }
 
     .card.in.settled {
-      animation: paper-drift var(--drift, 56s) ease-in-out infinite alternate;
+      /* drift removed — cards sit still */
+      animation: none;
     }
 
     .card.held,
     body.reading .card.in.settled,
     body.reader-open .card.in.settled {
-      animation-play-state: paused;
+      animation: none;
     }
 
     .card.held {
       opacity: 1;
-      border-color: #2a2a32;
+      border-color: color-mix(in srgb, var(--heat-accent) 50%, #2a2a32);
+    }
+
+    .card .kicker { color: color-mix(in srgb, var(--heat-accent) 70%, #6a6a74); }
+    .card h2 {
+      color: color-mix(in srgb, var(--heat-accent) 55%, var(--title, #e4e4ea));
+      text-shadow: 0 0 18px var(--heat-glow);
+    }
+    .card[data-heat="0"] { --heat-accent: #6a6a74; --heat-glow: transparent; }
+    .card[data-heat="1"] { --heat-accent: #8a9aaa; --heat-glow: rgba(120,140,160,0.12); }
+    .card[data-heat="2"] { --heat-accent: #c4a060; --heat-glow: rgba(196,160,96,0.18); }
+    .card[data-heat="3"] { --heat-accent: #e08040; --heat-glow: rgba(224,128,64,0.22); }
+    .card[data-heat="4"] { --heat-accent: #e04848; --heat-glow: rgba(224,72,72,0.28); }
+    .card[data-heat="4"] { border-color: color-mix(in srgb, #e04848 55%, var(--rule)); }
+    .card[data-heat="3"] { border-color: color-mix(in srgb, #e08040 45%, var(--rule)); }
+    .card .heat-tag {
+      position: absolute; top: 10px; right: 12px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--heat-accent); opacity: 0.85;
     }
 
     .ph {
@@ -169,10 +193,10 @@
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: color-mix(in srgb, var(--heat-accent, #6a6a74) 65%, var(--muted, #6a6a74));
       margin-bottom: 9px;
       padding-bottom: 8px;
-      border-bottom: 1px solid #1a1a20;
+      border-bottom: 1px solid color-mix(in srgb, var(--heat-accent, #6a6a74) 28%, #1a1a20);
     }
 
     .card h2 {
@@ -180,7 +204,9 @@
       font-weight: 650;
       letter-spacing: -0.02em;
       line-height: 1.15;
-      color: #d8d8e0;
+      /* color comes from heat accent above */
+      color: color-mix(in srgb, var(--heat-accent, #6a6a74) 55%, #e4e4ea);
+      text-shadow: 0 0 18px var(--heat-glow, transparent);
     }
 
     .card p {
@@ -368,8 +394,8 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      #orbit { animation-duration: 400s; }
-      .card.in.settled { animation-duration: 120s; }
+      #orbit { animation: none; }
+      .card.in.settled { animation: none; }
     }
   </style>
 </head>
@@ -377,29 +403,29 @@
   <div id="orbit">
     <header>
       <div class="mast">
-        <div class="tag">floating newspaper</div>
+        <div class="tag">interest newspaper</div>
         <div class="stamp">placeholders · look only</div>
         <div class="hint"></div>
       </div>
     </header>
 
     <main id="field" aria-label="Newspaper wall">
-      <article class="card brief" style="--rot:-0.4deg; --drift:70s"><div class="ph">placeholder</div><div class="kicker">Brief · Morning</div><h2>Saturday in Chicago</h2><p>Cool start. The panel stays on. Glanceable subjects only.</p><div class="byline">placeholder · morning brief</div></article>
-      <article class="card post" style="--rot:0.35deg; --drift:78s"><div class="ph">placeholder</div><div class="kicker">Subject · Wall</div><h2>Float, don’t refresh</h2><p>Cards fade in, then sit. No rugpull while someone is reading.</p><div class="byline">placeholder · lead</div></article>
-      <article class="card post" style="--rot:0.3deg; --drift:64s"><div class="ph">placeholder</div><div class="kicker">Post · @desk</div><h2>Look first</h2><p>Substance later. Do not fetch until the TV is actually looking.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:-0.35deg; --drift:82s"><div class="ph">placeholder</div><div class="kicker">Post · @room</div><h2>Living room</h2><p>55" is a living room, not a SOC. iPads already have the ops grid.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:0.25deg; --drift:68s"><div class="ph">placeholder</div><div class="kicker">Subject · Care</div><h2>Do not dim to black</h2><p>Motion is the care strategy. Soft silver, near-black, sparse chrome.</p><div class="byline">placeholder · subject</div></article>
-      <article class="card brief" style="--rot:-0.3deg; --drift:76s"><div class="ph">placeholder</div><div class="kicker">Brief · Deck</div><h2>SPACEWALL · HEARTH · WAVE · PRESS</h2><p>Swipe on iPad. Pin the OLED if a swipe ever leaks.</p><div class="byline">placeholder · morning brief</div></article>
-      <article class="card post" style="--rot:0.4deg; --drift:60s"><div class="ph">placeholder</div><div class="kicker">Post · @mark</div><h2>Stable while focused</h2><p>Fade the ones he is not looking at.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:-0.25deg; --drift:84s"><div class="ph">placeholder</div><div class="kicker">Subject · Next</div><h2>Visibility-gated feed</h2><p>When this page is actually up on the TV — and only then — fetch.</p><div class="byline">placeholder · subject</div></article>
-      <article class="card brief" style="--rot:0.3deg; --drift:72s"><div class="ph">placeholder</div><div class="kicker">Brief · Mix</div><h2>Morning subjects + hot posts</h2><p>Two textures on one wall. Fill the glass.</p><div class="byline">placeholder · morning brief</div></article>
-      <article class="card post" style="--rot:-0.4deg; --drift:66s"><div class="ph">placeholder</div><div class="kicker">Post · @lot</div><h2>FSD · Unpark</h2><p>Home is easy. The tight lot still asks for a hand.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:0.35deg; --drift:80s"><div class="ph">placeholder</div><div class="kicker">Post · @cabin</div><h2>Cabin Grok</h2><p>Voice in the cabin is the product. The car is a room.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:-0.3deg; --drift:74s"><div class="ph">placeholder</div><div class="kicker">Post · @drive</div><h2>Idle compute</h2><p>Parked HW4 is a rack on a charger. Most of it idle.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:0.25deg; --drift:62s"><div class="ph">placeholder</div><div class="kicker">Post · @desk</div><h2>Grok Build desk</h2><p>Typed sentence → app with a URL. A workshop, not a reel.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:-0.35deg; --drift:88s"><div class="ph">placeholder</div><div class="kicker">Post · @curb</div><h2>Robotaxi watch</h2><p>Unsupervised miles and the last fifty feet to the curb.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card post" style="--rot:0.4deg; --drift:58s"><div class="ph">placeholder</div><div class="kicker">Post · @lane</div><h2>FSD v14</h2><p>Smooth on the arterial. Still a human for the stall.</p><div class="byline">placeholder · hot post</div></article>
-      <article class="card brief" style="--rot:-0.25deg; --drift:86s"><div class="ph">placeholder</div><div class="kicker">Brief · Evening</div><h2>Evening brief</h2><p>Keep the grid straight. Fill the glass.</p><div class="byline">placeholder · evening brief</div></article>
+      <article class="card brief" style="--rot:-0.4deg"><div class="ph">placeholder</div><div class="kicker">Brief · Morning</div><h2>Saturday in Chicago</h2><p>Cool start. The panel stays on. Glanceable subjects only.</p><div class="byline">placeholder · morning brief</div></article>
+      <article class="card post" style="--rot:0.35deg"><div class="ph">placeholder</div><div class="kicker">Subject · Wall</div><h2>Float, don’t refresh</h2><p>Cards fade in, then sit. No rugpull while someone is reading.</p><div class="byline">placeholder · lead</div></article>
+      <article class="card post" style="--rot:0.3deg"><div class="ph">placeholder</div><div class="kicker">Post · @desk</div><h2>Look first</h2><p>Substance later. Do not fetch until the TV is actually looking.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:-0.35deg"><div class="ph">placeholder</div><div class="kicker">Post · @room</div><h2>Living room</h2><p>55" is a living room, not a SOC. iPads already have the ops grid.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:0.25deg"><div class="ph">placeholder</div><div class="kicker">Subject · Care</div><h2>Do not dim to black</h2><p>Motion is the care strategy. Soft silver, near-black, sparse chrome.</p><div class="byline">placeholder · subject</div></article>
+      <article class="card brief" style="--rot:-0.3deg"><div class="ph">placeholder</div><div class="kicker">Brief · Deck</div><h2>SPACEWALL · HEARTH · WAVE · PRESS</h2><p>Swipe on iPad. Pin the OLED if a swipe ever leaks.</p><div class="byline">placeholder · morning brief</div></article>
+      <article class="card post" style="--rot:0.4deg"><div class="ph">placeholder</div><div class="kicker">Post · @mark</div><h2>Stable while focused</h2><p>Fade the ones he is not looking at.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:-0.25deg"><div class="ph">placeholder</div><div class="kicker">Subject · Next</div><h2>Visibility-gated feed</h2><p>When this page is actually up on the TV — and only then — fetch.</p><div class="byline">placeholder · subject</div></article>
+      <article class="card brief" style="--rot:0.3deg"><div class="ph">placeholder</div><div class="kicker">Brief · Mix</div><h2>Morning subjects + hot posts</h2><p>Two textures on one wall. Fill the glass.</p><div class="byline">placeholder · morning brief</div></article>
+      <article class="card post" style="--rot:-0.4deg"><div class="ph">placeholder</div><div class="kicker">Post · @lot</div><h2>FSD · Unpark</h2><p>Home is easy. The tight lot still asks for a hand.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:0.35deg"><div class="ph">placeholder</div><div class="kicker">Post · @cabin</div><h2>Cabin Grok</h2><p>Voice in the cabin is the product. The car is a room.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:-0.3deg"><div class="ph">placeholder</div><div class="kicker">Post · @drive</div><h2>Idle compute</h2><p>Parked HW4 is a rack on a charger. Most of it idle.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:0.25deg"><div class="ph">placeholder</div><div class="kicker">Post · @desk</div><h2>Grok Build desk</h2><p>Typed sentence → app with a URL. A workshop, not a reel.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:-0.35deg"><div class="ph">placeholder</div><div class="kicker">Post · @curb</div><h2>Robotaxi watch</h2><p>Unsupervised miles and the last fifty feet to the curb.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card post" style="--rot:0.4deg"><div class="ph">placeholder</div><div class="kicker">Post · @lane</div><h2>FSD v14</h2><p>Smooth on the arterial. Still a human for the stall.</p><div class="byline">placeholder · hot post</div></article>
+      <article class="card brief" style="--rot:-0.25deg"><div class="ph">placeholder</div><div class="kicker">Brief · Evening</div><h2>Evening brief</h2><p>Keep the grid straight. Fill the glass.</p><div class="byline">placeholder · evening brief</div></article>
     </main>
   </div>
   <div id="ver" class="ver" data-portal="PRESS">PRESS 26.44.3.1</div>
@@ -581,6 +607,44 @@
     };
   }
 
+  var INTEREST_KEYS = ["grok", "xai", "tesla", "spacex", "optimus", "robot", "florida", "cook", "food", "ai"];
+
+  function heatRaw(item) {
+    var m = item.metrics || {};
+    var likes = Number(m.likes) || 0;
+    var replies = Number(m.replies) || 0;
+    var imps = Number(m.impressions) || 0;
+    var s = likes * 40 + replies * 25 + Math.min(imps, 5000000) / 800;
+    var blob = ((item.subject || "") + " " + (item.text || "") + " " + (item.author || "")).toLowerCase();
+    INTEREST_KEYS.forEach(function (k, i) {
+      if (blob.indexOf(k) !== -1) s += 90 - i * 6;
+    });
+    if (item.kind === "brief") s += 12;
+    return s;
+  }
+
+  function assignHeat(items) {
+    if (!items.length) return;
+    var scores = items.map(heatRaw);
+    var max = Math.max.apply(null, scores.concat([1]));
+    var min = Math.min.apply(null, scores);
+    var span = Math.max(max - min, 1);
+    items.forEach(function (item, i) {
+      var norm = (scores[i] - min) / span;
+      var heat = 0;
+      if (norm >= 0.85) heat = 4;
+      else if (norm >= 0.65) heat = 3;
+      else if (norm >= 0.4) heat = 2;
+      else if (norm >= 0.2) heat = 1;
+      item.heat = heat;
+      item._heatScore = scores[i];
+    });
+  }
+
+  function heatLabel(h) {
+    return ["cool", "warm", "amber", "hot", "blaze"][h] || "cool";
+  }
+
   function excerpt(text, max) {
     const t = String(text || "").replace(/\s+/g, " ").trim();
     if (t.length <= max) return t;
@@ -625,12 +689,13 @@
   function renderWall(feed) {
     const items = (feed.cards || []).map(normalizeCard).filter(Boolean);
     if (!items.length) return false;
+    assignHeat(items);
     itemsById = new Map();
     items.forEach(function (item) { itemsById.set(item.id, item); });
     field.innerHTML = items.map(function (item, i) {
       const rot = ROT[i % ROT.length];
-      const drift = DRIFT[i % DRIFT.length];
       const kindClass = item.kind === "brief" ? "brief" : "post";
+      const heat = item.heat || 0;
       const kicker = item.kind === "brief"
         ? "Brief · " + item.subject
         : "Post · @" + (item.author || "press");
@@ -641,8 +706,9 @@
       const by = escapeHtml([who, when].filter(Boolean).join(" · "));
       return (
         '<article class="card ' + kindClass + '" style="--rot:' + rot +
-        "deg; --drift:" + drift + 's" data-id="' + escapeHtml(item.id) + '" data-kind="' +
-        item.kind + '">' +
+        'deg" data-id="' + escapeHtml(item.id) + '" data-kind="' +
+        item.kind + '" data-heat="' + heat + '">' +
+        '<div class="heat-tag" aria-hidden="true">' + heatLabel(heat) + "</div>" +
         '<div class="kicker">' + escapeHtml(kicker) + "</div>" +
         title + body +
         '<div class="byline">' + by + "</div>" +
