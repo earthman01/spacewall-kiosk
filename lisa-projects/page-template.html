@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Lisa's Projects" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <!-- 1. Rename this file (e.g. franchise-overview.html). -->
+  <!-- 2. Set <title> and the H1 below. -->
+  <!-- 3. On lisa-projects/index.html, replace a .card.slot with an <a class="card" href="./THIS-FILE.html">…</a>. -->
+  <title>Page title · Lisa's Projects</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="../icons/spacewall-192.png" />
+  <script src="../nav.js" defer></script>
+  <style>
+    :root {
+      --ink: #e4e8ee; --muted: #8a929e; --quiet: #4a5160;
+      --line: #1a2030; --accent: #9eb0c8; --soft: #c4a882;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100%; background: #000; color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body { min-height: 100dvh; }
+    .veil {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(55% 45% at 20% -5%, rgba(196, 168, 130, 0.12) 0%, transparent 55%),
+        #000;
+    }
+    .wrap {
+      position: relative; z-index: 1;
+      max-width: 820px;
+      padding:
+        calc(56px + env(safe-area-inset-top))
+        calc(28px + env(safe-area-inset-right))
+        calc(32px + env(safe-area-inset-bottom))
+        calc(28px + env(safe-area-inset-left));
+    }
+    .crumb {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--quiet); margin-bottom: 14px;
+    }
+    .crumb a { color: var(--soft); text-decoration: none; }
+    h1 {
+      font-size: clamp(32px, 6vw, 48px); font-weight: 600;
+      letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 14px;
+    }
+    .lede { font-size: 16px; line-height: 1.5; color: var(--muted); margin-bottom: 28px; }
+    .body { font-size: 15px; line-height: 1.6; color: var(--ink); }
+    .body p + p { margin-top: 1em; }
+    .foot {
+      margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--line);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--quiet);
+    }
+    .foot a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="veil" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="crumb"><a href="./">Lisa's Projects</a> · page</p>
+    <h1>Page title</h1>
+    <p class="lede">One-line pitch for this page — franchise, industry, or data story.</p>
+    <div class="body">
+      <p>Replace this body with tonight's content. Keep the OLED black field and shared nav.</p>
+      <p>Charts, tables, and image blocks can land below.</p>
+    </div>
+    <p class="foot"><a href="./">Back to Lisa's Projects</a> · <a href="../">SPACEWALL</a></p>
+  </div>
+</body>
+</html>

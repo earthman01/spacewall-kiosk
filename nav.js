@@ -1,37 +1,50 @@
-/* SPACEWALL shared nav — same fixed bar on every portal. */
+/* SPACEWALL shared nav — Home = Spacewall front (index). Works from root and subdirs. */
 (function () {
   if (window.__swNav) return;
   window.__swNav = true;
 
-  var LINKS = [
-    { href: "./", file: "index.html", label: "spacewall", match: ["", "index.html", "spacewall.html"] },
-    { href: "./welcome-lisa.html", file: "welcome-lisa.html", label: "lisa" },
-    { href: "./rich.html", file: "rich.html", label: "rich" },
-    { href: "./hearth.html", file: "hearth.html", label: "hearth" },
-    { href: "./wave.html", file: "wave.html", label: "wave" },
-    { href: "./press.html", file: "press.html", label: "press" },
-    { href: "./hub.html", file: "hub.html", label: "hub" },
-    { href: "./reel.html", file: "reel.html", label: "reel" }
-  ];
-
-  function pathFile() {
+  function pathParts() {
     try {
-      var p = (location.pathname || "").split("/").pop() || "";
-      return decodeURIComponent(p);
+      return (location.pathname || "").split("/").filter(Boolean);
     } catch (e) {
-      return "";
+      return [];
     }
   }
 
-  function isHere(link, file) {
-    var f = (file || "").toLowerCase();
-    if (link.match) {
-      for (var i = 0; i < link.match.length; i++) {
-        if (link.match[i].toLowerCase() === f) return true;
-      }
-      return false;
+  function inLisaProjects() {
+    return pathParts().indexOf("lisa-projects") !== -1;
+  }
+
+  /* Prefix so ./foo works from lisa-projects/* as ../foo */
+  var BASE = inLisaProjects() ? "../" : "./";
+
+  var LINKS = [
+    { href: BASE, file: "index.html", label: "home", home: true },
+    { href: BASE + "welcome-lisa.html", file: "welcome-lisa.html", label: "lisa" },
+    { href: BASE + "lisa-projects/", file: "lisa-projects", label: "projects", projects: true },
+    { href: BASE + "hub.html", file: "hub.html", label: "hub" },
+    { href: BASE + "spacewall.html", file: "spacewall.html", label: "grid" },
+    { href: BASE + "rich.html", file: "rich.html", label: "rich" },
+    { href: BASE + "hearth.html", file: "hearth.html", label: "hearth" },
+    { href: BASE + "wave.html", file: "wave.html", label: "wave" },
+    { href: BASE + "press.html", file: "press.html", label: "press" },
+    { href: BASE + "reel.html", file: "reel.html", label: "reel" }
+  ];
+
+  function pathFile() {
+    var parts = pathParts();
+    return parts.length ? decodeURIComponent(parts[parts.length - 1]) : "";
+  }
+
+  function isHere(link) {
+    if (link.projects) return inLisaProjects();
+    if (link.home) {
+      if (inLisaProjects()) return false;
+      var f = pathFile().toLowerCase();
+      return f === "" || f === "index.html";
     }
-    return (link.file || "").toLowerCase() === f;
+    if (inLisaProjects()) return false;
+    return pathFile().toLowerCase() === (link.file || "").toLowerCase();
   }
 
   var style = document.createElement("style");
@@ -47,35 +60,27 @@
     "#sw-nav a:hover,#sw-nav a:focus-visible{color:#9eb0c8;outline:none}",
     "#sw-nav a[aria-current=page]{color:#c8d0dc}",
     "#sw-nav .sw-brand{color:#3a404a;margin-right:6px;letter-spacing:.22em}",
-    "html.sw-nav-on{scroll-padding-top:48px}",
-    "html.sw-nav-on body{padding-top:0}",
-    /* Push common chrome below the bar without fighting full-bleed OLED stages */
-    "html.sw-nav-on #orbit > .stage,",
-    "html.sw-nav-on #orbit > header,",
-    "html.sw-nav-on body > header,",
-    "html.sw-nav-on #orbit > .topnav,",
-    "html.sw-nav-on .sw-nav-pad{padding-top:42px}",
-    "html.sw-nav-on body > .brand:first-child,",
-    "html.sw-nav-on body > div.brand{margin-top:42px}"
+    "html.sw-nav-on{scroll-padding-top:48px}"
   ].join("");
   document.documentElement.classList.add("sw-nav-on");
   (document.head || document.documentElement).appendChild(style);
 
   function mount() {
     if (document.getElementById("sw-nav")) return;
-    var file = pathFile();
     var nav = document.createElement("nav");
     nav.id = "sw-nav";
     nav.setAttribute("aria-label", "SPACEWALL");
-    var brand = document.createElement("span");
+    var brand = document.createElement("a");
     brand.className = "sw-brand";
+    brand.href = BASE;
     brand.textContent = "SPACEWALL";
+    brand.title = "SPACEWALL home";
     nav.appendChild(brand);
     LINKS.forEach(function (link) {
       var a = document.createElement("a");
       a.href = link.href;
       a.textContent = link.label;
-      if (isHere(link, file)) a.setAttribute("aria-current", "page");
+      if (isHere(link)) a.setAttribute("aria-current", "page");
       nav.appendChild(a);
     });
     (document.body || document.documentElement).appendChild(nav);

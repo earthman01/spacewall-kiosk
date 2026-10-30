@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Lisa's Projects" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <title>Lisa's Projects Demonstration · SPACEWALL</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="../icons/spacewall-192.png" />
+  <link rel="apple-touch-icon" href="../icons/spacewall-192.png" />
+  <script src="../nav.js" defer></script>
+  <style>
+    :root {
+      --ink: #e4e8ee;
+      --muted: #8a929e;
+      --quiet: #4a5160;
+      --line: #1a2030;
+      --card: #0a0c10;
+      --edge: #1c2433;
+      --accent: #9eb0c8;
+      --soft: #c4a882;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100%;
+      background: #000;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body { min-height: 100dvh; }
+    .veil {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(60% 50% at 18% -5%, rgba(196, 168, 130, 0.14) 0%, transparent 55%),
+        radial-gradient(55% 45% at 88% 0%, rgba(48, 62, 88, 0.28) 0%, transparent 50%),
+        #000;
+    }
+    .wrap {
+      position: relative; z-index: 1;
+      min-height: 100dvh;
+      display: flex; flex-direction: column; gap: 28px;
+      padding:
+        calc(56px + env(safe-area-inset-top))
+        calc(28px + env(safe-area-inset-right))
+        calc(32px + env(safe-area-inset-bottom))
+        calc(28px + env(safe-area-inset-left));
+      max-width: 1100px;
+    }
+    .kicker {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--quiet); margin-bottom: 10px;
+    }
+    .kicker span { color: var(--soft); }
+    h1 {
+      font-size: clamp(36px, 7vw, 64px); font-weight: 600;
+      letter-spacing: -0.03em; line-height: 1.02; color: #eef2f7;
+      margin-bottom: 12px;
+    }
+    .sub {
+      font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 40rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      flex: 1;
+      align-content: start;
+    }
+    a.card, .card.slot {
+      display: flex; flex-direction: column; gap: 10px;
+      min-height: 160px;
+      padding: 22px 20px 18px;
+      background: var(--card);
+      border: 1px solid var(--edge);
+      border-radius: 16px;
+      text-decoration: none; color: inherit;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+    a.card:hover, a.card:focus-visible {
+      border-color: #3a465c; background: #0c0f14; outline: none;
+      transform: translateY(-1px);
+    }
+    .card.slot {
+      border-style: dashed;
+      border-color: #252b38;
+      color: var(--quiet);
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .card .k {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--quiet);
+    }
+    a.card .k { color: var(--soft); }
+    .card .n {
+      font-size: clamp(20px, 3vw, 24px); font-weight: 600;
+      letter-spacing: -0.02em; color: #e8ecf2;
+    }
+    .card.slot .n { color: var(--quiet); font-weight: 500; font-size: 16px; }
+    .card .d {
+      font-size: 13px; line-height: 1.45; color: var(--muted); margin-top: auto;
+    }
+    .card.slot .d { color: #3a404a; }
+    .foot {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--quiet); padding-top: 8px; border-top: 1px solid var(--line);
+    }
+    .foot a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="veil" aria-hidden="true"></div>
+  <div class="wrap">
+    <header>
+      <p class="kicker"><span>Sandbox</span> · SPACEWALL</p>
+      <h1>Lisa's Projects Demonstration</h1>
+      <p class="sub">Empty stage ready for tonight — work, franchise, and industry data pages drop into the grid live. Copy <code style="color:#9eb0c8">page-template.html</code> for each new card.</p>
+    </header>
+    <section class="grid" aria-label="Lisa's project pages">
+      <!-- Live pages land here as cards. Slots stay until filled. -->
+      <div class="card slot" aria-hidden="true">
+        <span class="k">Slot</span>
+        <span class="n">Ready for page one</span>
+        <span class="d">Franchise · industry · data</span>
+      </div>
+      <div class="card slot" aria-hidden="true">
+        <span class="k">Slot</span>
+        <span class="n">Ready for page two</span>
+        <span class="d">Copy the template · link the card</span>
+      </div>
+      <div class="card slot" aria-hidden="true">
+        <span class="k">Slot</span>
+        <span class="n">Ready for page three</span>
+        <span class="d">OLED-safe · shared nav</span>
+      </div>
+      <div class="card slot" aria-hidden="true">
+        <span class="k">Slot</span>
+        <span class="n">Ready for page four</span>
+        <span class="d">Tonight's live add</span>
+      </div>
+    </section>
+    <p class="foot">Lisa's Projects · <a href="../">SPACEWALL home</a></p>
+  </div>
+</body>
+</html>

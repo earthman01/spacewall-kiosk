@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="SPACEWALL" />
+  <meta name="apple-mobile-web-app-title" content="Grid State" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#000000" />
   <meta name="color-scheme" content="dark" />
-  <title>SPACEWALL</title>
+  <title>Grid State · SPACEWALL</title>
   <link rel="manifest" href="./spacewall.webmanifest" />
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/spacewall-192.png" />
   <link rel="apple-touch-icon" href="./icons/spacewall-192.png" />
@@ -315,7 +315,7 @@
     </div>
   </header>
   <main id="board" aria-live="polite"></main>
-  <div id="ver" class="ver" data-portal="SPACEWALL">SPACEWALL 26.44.3.1</div>
+  <div id="ver" class="ver" data-portal="Grid State">Grid State</div>
   <script>
 (function () {
   const REFRESH_MS = 60000;
@@ -671,7 +671,7 @@
   function paintStamp(data) {
     const el = document.getElementById("ver");
     if (!el || !data || !data.label) return;
-    const name = el.getAttribute("data-portal") || "SPACEWALL";
+    const name = el.getAttribute("data-portal") || "Grid State";
     el.textContent = name + " " + data.label;
   }
 
