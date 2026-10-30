@@ -5,740 +5,439 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="Grid State" />
+  <meta name="apple-mobile-web-app-title" content="Grid" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#000000" />
   <meta name="color-scheme" content="dark" />
-  <title>Grid State · SPACEWALL</title>
-  <link rel="manifest" href="./spacewall.webmanifest" />
+  <title>Grid · uptime</title>
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/spacewall-192.png" />
-  <link rel="apple-touch-icon" href="./icons/spacewall-192.png" />
-  <script src="./deck.js?h=fefd838ce500" defer></script>
   <script src="./nav.js" defer></script>
-  <script>
-    (function () {
-      var path = location.pathname;
-      if (/\/index\.html$/i.test(path)) return;
-      var base = /\/$/.test(path) ? path : path + "/";
-      location.replace(base + "index.html" + location.search + location.hash);
-    })();
-  </script>
   <style>
     :root {
-      --bg: #070708;
-      --bg-tile: #0e0e11;
+      --ink: #e4e8ee;
+      --muted: #8a929e;
+      --quiet: #4a5160;
+      --line: #161b26;
+      --row: #0a0c10;
       --ok: #1aff6e;
-      --ok-dim: #0a3d22;
       --amber: #ffb020;
-      --amber-dim: #3d2a08;
-      --red: #ff1530;
-      --red-fierce: #ff0033;
-      --unknown: #3a3a42;
-      --text: #e8e8ec;
-      --muted: #6a6a74;
-      --header-h: 52px;
+      --red: #ff3344;
+      --unknown: #3a4250;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
+      min-height: 100%;
+      background: #000;
+      color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
-      overflow: hidden;
-      touch-action: manipulation;
-      user-select: none;
-      -webkit-user-select: none;
     }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100dvh;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    body { min-height: 100dvh; }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding:
+        calc(56px + env(safe-area-inset-top))
+        calc(20px + env(safe-area-inset-right))
+        calc(28px + env(safe-area-inset-bottom))
+        calc(20px + env(safe-area-inset-left));
     }
-
-    header {
-      height: var(--header-h);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      border-bottom: 1px solid #151518;
-      background: #050506;
+    .hero {
+      display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+      gap: 12px 24px; margin-bottom: 22px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--line);
     }
-
-    .brand {
-      font-weight: 800;
-      letter-spacing: 0.22em;
-      font-size: 15px;
-      color: #f2f2f5;
+    .kicker {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--quiet); margin-bottom: 8px;
     }
-
-    .brand span {
-      color: var(--red-fierce);
-      letter-spacing: 0.22em;
+    h1 {
+      font-size: clamp(32px, 6vw, 44px); font-weight: 600;
+      letter-spacing: -0.03em; line-height: 1;
     }
-
     .meta {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 12px;
-      color: var(--muted);
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.04em;
+      text-align: right; font-size: 12px; color: var(--muted); line-height: 1.5;
     }
-
-    #refresh {
-      color: #9a9aa4;
+    .meta #refresh { color: var(--quiet); letter-spacing: 0.06em; }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 14px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quiet);
     }
-
-    #refresh.updating {
-      color: #e8e8ec;
-      animation: version-flash 0.4s ease;
+    .legend span::before {
+      content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 2px;
+      margin-right: 6px; vertical-align: middle;
     }
+    .legend .ok::before { background: var(--ok); }
+    .legend .deg::before { background: var(--amber); }
+    .legend .down::before { background: var(--red); }
+    .legend .unk::before { background: var(--unknown); }
 
-    .ver {
-      position: fixed;
-      left: calc(12px + env(safe-area-inset-left));
-      bottom: calc(8px + env(safe-area-inset-bottom));
-      z-index: 6;
-      font-size: 10px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #8e8e98;
-      text-shadow: 0 1px 8px rgba(6, 6, 8, 0.9);
-      pointer-events: none;
-    }
-
-    @keyframes version-flash {
-      0% { opacity: 0.3; }
-      100% { opacity: 1; }
-    }
-
-    a.wave-link {
-      color: #3a3a42;
-      text-decoration: none;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    a.wave-link:hover { color: #8a8a94; }
-
-    button#demo {
-      appearance: none;
-      border: 1px solid #3a1018;
-      background: #1a080c;
-      color: var(--red);
-      font: inherit;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 7px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button#demo.on {
-      background: var(--red-fierce);
-      color: #fff;
-      border-color: var(--red-fierce);
-      box-shadow: 0 0 18px rgba(255, 0, 51, 0.45);
-    }
-
-    main {
-      flex: 1;
-      min-height: 0;
-      padding: 12px;
+    #board { display: flex; flex-direction: column; gap: 8px; }
+    .svc {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 12px;
+      grid-template-columns: minmax(120px, 180px) 88px 1fr;
+      gap: 12px 16px;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--row);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      text-decoration: none; color: inherit;
     }
-
-    @media (max-width: 1100px) and (orientation: portrait) {
-      main {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(5, 1fr);
+    .svc:hover, .svc:focus-visible { border-color: #2a3344; outline: none; }
+    .svc .name {
+      font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #e8ecf2;
+    }
+    .svc .detail {
+      grid-column: 1 / -1;
+      font-size: 12px; color: var(--muted); line-height: 1.35;
+      margin-top: -4px;
+    }
+    @media (min-width: 640px) {
+      .svc .detail { grid-column: auto; grid-row: 2; margin-top: 0; }
+      .svc {
+        grid-template-columns: minmax(140px, 200px) 100px 1fr;
+        grid-template-rows: auto auto;
       }
+      .svc .name { grid-row: 1; }
+      .svc .badge { grid-row: 1; }
+      .svc .bars { grid-row: 1 / span 2; align-self: center; }
+      .svc .detail { grid-column: 1 / 3; }
     }
-
-    .tile {
-      position: relative;
-      container-type: inline-size;
-      border-radius: 10px;
-      background: var(--bg-tile);
-      border: 1px solid #1a1a1f;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 18px 20px 16px;
-      overflow: hidden;
-      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .tile::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.55;
-      background: radial-gradient(120% 80% at 100% 0%, transparent 40%, rgba(0,0,0,0.55) 100%);
-    }
-
-    .tile .name {
-      position: relative;
-      font-size: clamp(14px, 1.45vw, 20px);
-      font-weight: 700;
-      letter-spacing: 0.03em;
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 72px; padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
       text-transform: uppercase;
-      z-index: 1;
-      line-height: 1.15;
-      max-height: 2.4em;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      border: 1px solid transparent;
     }
-
-    .tile[data-href] { cursor: pointer; }
-
-    .tile .status {
-      position: relative;
-      z-index: 1;
-      /* Scale to the tile so DEGRADED / UNKNOWN / CRITICAL stay on one line
-         inside the 5-col landscape grid — never truncate the word. */
-      font-size: clamp(20px, 2.6vw, 40px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      text-transform: uppercase;
-      white-space: nowrap;
-      max-width: 100%;
+    .badge.ok { color: var(--ok); border-color: rgba(26,255,110,0.25); background: rgba(26,255,110,0.06); }
+    .badge.degraded { color: var(--amber); border-color: rgba(255,176,32,0.3); background: rgba(255,176,32,0.07); }
+    .badge.major, .badge.critical, .badge.down {
+      color: var(--red); border-color: rgba(255,51,68,0.35); background: rgba(255,51,68,0.08);
     }
+    .badge.unknown { color: var(--quiet); border-color: #222832; background: #0c0e12; }
 
-    @supports (width: 1cqi) {
-      .tile .status {
-        /* cqi is the tile content box; ~17% fits UNKNOWN/DEGRADED with slack */
-        font-size: clamp(20px, 17cqi, 40px);
-      }
+    .bars {
+      display: flex; gap: 1px; height: 28px; align-items: stretch;
+      min-width: 0;
     }
-
-    @media (orientation: landscape) and (max-height: 850px) {
-      .tile { padding: 14px 14px 12px; }
-      .tile .name { font-size: clamp(13px, 1.4vw, 18px); }
-    }
-
-    .tile .detail {
-      position: relative;
-      z-index: 1;
-      margin-top: 8px;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.03em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-    }
-
-    .tile.ok {
-      background: linear-gradient(160deg, #0b1a12 0%, #0a0e0c 100%);
-      border-color: #143d24;
-      box-shadow: inset 0 0 40px rgba(26, 255, 110, 0.04);
-    }
-    .tile.ok .status { color: var(--ok); text-shadow: 0 0 28px rgba(26, 255, 110, 0.35); }
-
-    .tile.degraded {
-      background: linear-gradient(160deg, #1f1506 0%, #100e08 100%);
-      border-color: #5a3a0a;
-      box-shadow: inset 0 0 40px rgba(255, 176, 32, 0.08);
-    }
-    .tile.degraded .status { color: var(--amber); text-shadow: 0 0 28px rgba(255, 176, 32, 0.35); }
-
-    .tile.major, .tile.critical {
-      background: linear-gradient(160deg, #2a050c 0%, #120408 55%, #0a0506 100%);
-      border-color: #ff1530;
-      box-shadow:
-        0 0 0 1px rgba(255, 21, 48, 0.35),
-        inset 0 0 60px rgba(255, 0, 51, 0.18),
-        0 0 40px rgba(255, 0, 51, 0.15);
-      animation: pulse-red 1.6s ease-in-out infinite;
-    }
-    .tile.major .status, .tile.critical .status {
-      color: var(--red-fierce);
-      text-shadow: 0 0 36px rgba(255, 0, 51, 0.65);
-    }
-
-    .tile.unknown {
-      background: #0c0c0e;
-      border-color: #222228;
-      opacity: 0.72;
-    }
-    .tile.unknown .status { color: var(--unknown); }
-    .tile.unknown .name { color: #7a7a84; }
-
-    @keyframes pulse-red {
-      0%, 100% { box-shadow: 0 0 0 1px rgba(255, 21, 48, 0.35), inset 0 0 60px rgba(255, 0, 51, 0.18), 0 0 40px rgba(255, 0, 51, 0.12); }
-      50% { box-shadow: 0 0 0 1px rgba(255, 21, 48, 0.7), inset 0 0 80px rgba(255, 0, 51, 0.28), 0 0 55px rgba(255, 0, 51, 0.28); }
-    }
-
-    .dot {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
+    .bars i {
+      flex: 1; min-width: 2px; border-radius: 1px;
       background: var(--unknown);
-      z-index: 1;
     }
-    .tile.ok .dot { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
-    .tile.degraded .dot { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
-    .tile.major .dot, .tile.critical .dot { background: var(--red-fierce); box-shadow: 0 0 12px var(--red-fierce); }
+    .bars i.ok { background: var(--ok); opacity: 0.85; }
+    .bars i.degraded { background: var(--amber); }
+    .bars i.down, .bars i.major, .bars i.critical { background: var(--red); }
+    .bars i.unknown { background: #222832; }
+
+    .foot {
+      margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line);
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--quiet);
+    }
+    @media (max-width: 560px) {
+      .svc { grid-template-columns: 1fr auto; }
+      .svc .bars { grid-column: 1 / -1; height: 22px; }
+      .svc .detail { grid-column: 1 / -1; }
+      .meta { text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">SPACE<span>WALL</span></div>
-    <div class="meta">
-      <button type="button" id="demo" aria-pressed="false">Demo red</button>
-      <div id="refresh">—</div>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <p class="kicker">Uptime</p>
+        <h1>Grid</h1>
+      </div>
+      <div class="meta">
+        <div>Public status APIs · live poll</div>
+        <div id="refresh">—</div>
+      </div>
+    </header>
+    <div class="legend" aria-hidden="true">
+      <span class="ok">Up</span>
+      <span class="deg">Degraded</span>
+      <span class="down">Down</span>
+      <span class="unk">Unknown / blocked</span>
     </div>
-  </header>
-  <main id="board" aria-live="polite"></main>
-  <div id="ver" class="ver" data-portal="Grid State">Grid State</div>
+    <main id="board" aria-live="polite"></main>
+    <p class="foot">Grid · 90-day strip from incidents when the API allows · CORS fallback → unknown</p>
+  </div>
   <script>
 (function () {
   const REFRESH_MS = 60000;
-  const VERSION_CHECK_MS = 3 * 60 * 1000;
-  const DEMO_TILE = "cursor";
+  const DAYS = 90;
 
   const SERVICES = [
-    {
-      id: "cursor",
-      name: "Cursor",
-      url: "https://status.cursor.com/api/v2/summary.json",
-      parse: statuspage
-    },
-    {
-      id: "github",
-      name: "GitHub",
-      url: "https://www.githubstatus.com/api/v2/summary.json",
-      parse: statuspage
-    },
-    {
-      id: "cloudflare",
-      name: "Cloudflare",
-      url: "https://www.cloudflarestatus.com/api/v2/summary.json",
-      parse: statuspage
-    },
-    {
-      id: "openai",
-      name: "OpenAI",
-      url: "https://status.openai.com/api/v2/summary.json",
-      parse: statuspage
-    },
-    {
-      id: "discord",
-      name: "Discord",
-      url: "https://discordstatus.com/api/v2/summary.json",
-      parse: statuspage
-    },
-    {
-      id: "slack",
-      name: "Slack",
-      url: "https://slack-status.com/api/v2.0.0/current",
-      parse: slackStatus
-    },
-    {
-      id: "gws",
-      name: "Google Workspace",
-      url: "https://www.google.com/appsstatus/dashboard/incidents.json",
-      parse: googleIncidents
-    },
-    {
-      id: "gcp",
-      name: "Google Cloud",
-      url: "https://status.cloud.google.com/incidents.json",
-      parse: googleIncidents
-    },
-    {
-      id: "x",
-      name: "X",
-      url: "./x-status.json",
-      href: "https://developer.x.com/status",
-      bust: true,
-      parse: xProxy
-    },
-    {
-      id: "xai",
-      name: "xAI",
-      url: "https://status.x.ai/feed.xml",
-      href: "https://status.x.ai/",
-      format: "xml",
-      parse: xaiRss
-    }
+    { id: "cloudflare", name: "Cloudflare", url: "https://www.cloudflarestatus.com/api/v2/summary.json", href: "https://www.cloudflarestatus.com/", parse: "statuspage" },
+    { id: "github", name: "GitHub", url: "https://www.githubstatus.com/api/v2/summary.json", href: "https://www.githubstatus.com/", parse: "statuspage" },
+    { id: "gcp", name: "Google Cloud", url: "https://status.cloud.google.com/incidents.json", href: "https://status.cloud.google.com/", parse: "google" },
+    { id: "gws", name: "Google Workspace", url: "https://www.google.com/appsstatus/dashboard/incidents.json", href: "https://www.google.com/appsstatus/dashboard/", parse: "google" },
+    { id: "aws", name: "AWS", url: "https://health.aws.amazon.com/health/api/v1/public-service-events", href: "https://health.aws.amazon.com/health/status", parse: "aws" },
+    { id: "x", name: "X", url: "./x-status.json", href: "https://developer.x.com/status", parse: "xproxy", bust: true },
+    { id: "xai", name: "xAI", url: "https://status.x.ai/feed.xml", href: "https://status.x.ai/", parse: "xai", format: "xml" },
+    { id: "openai", name: "OpenAI", url: "https://status.openai.com/api/v2/summary.json", href: "https://status.openai.com/", parse: "statuspage" },
+    { id: "cursor", name: "Cursor", url: "https://status.cursor.com/api/v2/summary.json", href: "https://status.cursor.com/", parse: "statuspage" },
+    { id: "discord", name: "Discord", url: "https://discordstatus.com/api/v2/summary.json", href: "https://discordstatus.com/", parse: "statuspage" },
+    { id: "slack", name: "Slack", url: "https://slack-status.com/api/v2.0.0/current", href: "https://slack-status.com/", parse: "slack" }
   ];
 
-  const state = Object.fromEntries(
-    SERVICES.map((s) => [s.id, { level: "unknown", label: "…", detail: "loading" }])
-  );
-  let demoRed = false;
-  let loadedVersion = null;
-  let reloadArmed = false;
+  const state = {};
+  SERVICES.forEach(function (s) {
+    state[s.id] = { level: "unknown", label: "…", detail: "loading", days: null };
+  });
 
-  function clipDetail(text) {
-    const s = String(text || "").replace(/\s+/g, " ").trim();
-    const max = 72;
+  function clip(text, max) {
+    max = max || 96;
+    var s = String(text || "").replace(/\s+/g, " ").trim();
     if (s.length <= max) return s;
-    let cut = s.slice(0, max - 1);
-    const sp = cut.lastIndexOf(" ");
+    var cut = s.slice(0, max - 1);
+    var sp = cut.lastIndexOf(" ");
     if (sp >= 40) cut = cut.slice(0, sp);
     return cut.replace(/[\s,;:.–—-]+$/, "") + "…";
   }
 
-  function statuspageIncident(data) {
-    const list = data && Array.isArray(data.incidents) ? data.incidents : [];
-    for (let i = 0; i < list.length; i++) {
-      const inc = list[i] || {};
-      const st = String(inc.status || "").toLowerCase();
-      if (st === "resolved" || st === "postmortem" || st === "completed") continue;
-      const name = String(inc.name || "").replace(/\s+/g, " ").trim();
-      if (name) return clipDetail(name);
-    }
-    return "";
+  function dayKey(d) {
+    return d.toISOString().slice(0, 10);
   }
 
-  function statuspage(data) {
-    const ind = (data && data.status && data.status.indicator) || "none";
-    const desc = (data && data.status && data.status.description) || "";
-    if (ind === "none") return { level: "ok", label: "OK", detail: desc || "All systems operational" };
-    const detail = statuspageIncident(data) || desc;
-    if (ind === "minor") return { level: "degraded", label: "DEGRADED", detail: detail || "Minor issues" };
-    if (ind === "major") return { level: "major", label: "MAJOR", detail: detail || "Major outage" };
-    if (ind === "critical") return { level: "critical", label: "CRITICAL", detail: detail || "Critical outage" };
-    return { level: "degraded", label: String(ind).toUpperCase(), detail: detail };
+  function emptyDays() {
+    var out = [];
+    var now = new Date();
+    for (var i = DAYS - 1; i >= 0; i--) {
+      var d = new Date(now.getTime() - i * 86400000);
+      out.push({ key: dayKey(d), level: "ok" });
+    }
+    return out;
   }
 
-  function slackStatus(data) {
-    const active = (data && data.active_incidents) || [];
-    const st = (data && data.status) || "";
-    if (st === "ok" && active.length === 0) {
-      return { level: "ok", label: "OK", detail: "All systems operational" };
-    }
-    if (active.length) {
-      const worst = active.some((i) => /major|critical/i.test(JSON.stringify(i)))
-        ? "major"
-        : "degraded";
-      const title = active[0].title || active[0].name || "Active incident";
-      return {
-        level: worst,
-        label: worst === "major" ? "MAJOR" : "DEGRADED",
-        detail: title
-      };
-    }
-    if (st && st !== "ok") {
-      return { level: "degraded", label: "DEGRADED", detail: String(st) };
-    }
-    return { level: "ok", label: "OK", detail: "All systems operational" };
-  }
-
-  function googleBlurb(raw) {
-    const text = String(raw || "").replace(/\*/g, "");
-    const lines = text.split("\n");
-    const labelOnly = /^(title|summary|description|symptoms|workaround|customer symptoms)\s*:?\s*$/i;
-    const labelPrefix = /^(title|summary|description|symptoms|workaround|customer symptoms)\s*:\s*/i;
-    for (let i = 0; i < lines.length; i++) {
-      let line = lines[i].replace(/\s+/g, " ").trim();
-      if (!line || labelOnly.test(line)) continue;
-      line = line.replace(labelPrefix, "").trim();
-      if (line) return line;
-    }
-    return "";
-  }
-
-  function googleIncidents(data) {
-    if (!Array.isArray(data)) return { level: "unknown", label: "UNKNOWN", detail: "bad payload" };
-    const open = data.filter((inc) => !inc.end);
-    if (open.length === 0) {
-      return { level: "ok", label: "OK", detail: "No open incidents" };
-    }
-    const sev = (open[0].severity || open[0].status_impact || "").toLowerCase();
-    const title =
-      googleBlurb(open[0].external_desc) ||
-      open[0].service_name ||
-      "Open incident";
-    const short = clipDetail(title);
-    if (/high|critical/.test(sev)) {
-      return { level: "critical", label: "CRITICAL", detail: short };
-    }
-    if (/medium|low|minor/.test(sev)) {
-      return { level: "degraded", label: "DEGRADED", detail: short };
-    }
-    return { level: "major", label: "MAJOR", detail: short + " (" + open.length + " open)" };
-  }
-
-  function xProxy(data) {
-    const st = data && data.status;
-    const detail = (data && data.detail) || "";
-    if (st === "ok") {
-      return { level: "ok", label: "OK", detail: detail || "All systems operational" };
-    }
-    if (st === "degraded") {
-      return { level: "degraded", label: "DEGRADED", detail: detail || "Degraded" };
-    }
-    if (st === "outage") {
-      return { level: "major", label: "OUTAGE", detail: detail || "Outage" };
-    }
-    return { level: "unknown", label: "UNKNOWN", detail: detail || "no signal" };
-  }
-
-  function textOf(el, sel) {
-    const node = el.querySelector(sel);
-    return node ? (node.textContent || "").trim() : "";
-  }
-
-  function xaiRss(xmlText) {
-    if (typeof xmlText !== "string" || !xmlText.trim()) {
-      return { level: "unknown", label: "UNKNOWN", detail: "empty feed" };
-    }
-    const doc = new DOMParser().parseFromString(xmlText, "application/xml");
-    if (doc.querySelector("parsererror")) {
-      return { level: "unknown", label: "UNKNOWN", detail: "bad feed" };
-    }
-    const channel = doc.querySelector("channel, feed");
-    if (!channel) {
-      return { level: "unknown", label: "UNKNOWN", detail: "bad feed" };
-    }
-    const items = Array.from(doc.querySelectorAll("item, entry"));
-    const open = items.filter(function (item) {
-      const desc = textOf(item, "description") || textOf(item, "content") || textOf(item, "summary");
-      const title = textOf(item, "title");
-      const cats = Array.from(item.querySelectorAll("category")).map(function (c) {
-        return ((c.textContent || c.getAttribute("term") || "") + "").trim().toLowerCase();
+  function paintIncidents(days, incidents) {
+    if (!Array.isArray(incidents)) return days;
+    incidents.forEach(function (inc) {
+      var st = String(inc.status || "").toLowerCase();
+      var impact = String(inc.impact || inc.severity || "").toLowerCase();
+      var level = "degraded";
+      if (impact === "critical" || impact === "major" || st === "critical") level = "down";
+      else if (impact === "none" || impact === "maintenance") level = "degraded";
+      var start = Date.parse(inc.created_at || inc.started_at || "");
+      var end = Date.parse(inc.resolved_at || inc.updated_at || "") || Date.now();
+      if (!start) return;
+      days.forEach(function (day) {
+        var t0 = Date.parse(day.key + "T00:00:00Z");
+        var t1 = t0 + 86400000;
+        if (end >= t0 && start < t1) {
+          if (day.level === "ok" || (day.level === "degraded" && level === "down")) day.level = level;
+        }
       });
-      if (cats.indexOf("resolved") !== -1) return false;
-      if (/Status:\s*RESOLVED/i.test(desc)) return false;
-      if (/^\s*\[Resolved\]/i.test(title)) return false;
-      return true;
     });
-    if (open.length === 0) {
-      return { level: "ok", label: "OK", detail: "No open incidents" };
-    }
-    function severityOf(item) {
-      const desc = textOf(item, "description") || textOf(item, "content") || textOf(item, "summary");
-      const title = textOf(item, "title");
-      const cats = Array.from(item.querySelectorAll("category")).map(function (c) {
-        return ((c.textContent || c.getAttribute("term") || "") + "").trim().toLowerCase();
-      });
-      const sevMatch = desc.match(/Severity:\s*([A-Za-z0-9_-]+)/i);
-      return ((sevMatch && sevMatch[1]) || cats[0] || title || "").toLowerCase();
-    }
-    let worst = "degraded";
-    let title = textOf(open[0], "title") || "Open incident";
-    for (let i = 0; i < open.length; i++) {
-      const blob = severityOf(open[i]) + " " + textOf(open[i], "title");
-      if (/outage|unavailable|down|major|critical|high/.test(blob)) {
-        worst = "major";
-        title = textOf(open[i], "title") || title;
-        break;
-      }
-    }
-    const short = title.length > 72 ? title.slice(0, 69) + "…" : title;
-    if (worst === "major") {
-      return { level: "major", label: "OUTAGE", detail: short };
-    }
-    return { level: "degraded", label: "DEGRADED", detail: short };
+    return days;
   }
 
-  const board = document.getElementById("board");
-  const refreshEl = document.getElementById("refresh");
-  const demoBtn = document.getElementById("demo");
+  function fromStatuspage(data) {
+    var ind = (data && data.status && data.status.indicator) || "none";
+    var desc = (data && data.status && data.status.description) || "";
+    var level = "ok";
+    var label = "Up";
+    if (ind === "minor") { level = "degraded"; label = "Degraded"; }
+    else if (ind === "major") { level = "major"; label = "Major"; }
+    else if (ind === "critical") { level = "critical"; label = "Down"; }
+    else if (ind !== "none") { level = "degraded"; label = "Degraded"; }
+    var open = "";
+    var list = (data && data.incidents) || [];
+    for (var i = 0; i < list.length; i++) {
+      var st = String(list[i].status || "").toLowerCase();
+      if (st === "resolved" || st === "postmortem" || st === "completed") continue;
+      open = list[i].name || "";
+      break;
+    }
+    var days = paintIncidents(emptyDays(), list);
+    if (level === "ok") days[days.length - 1].level = "ok";
+    else days[days.length - 1].level = level === "critical" || level === "major" ? "down" : "degraded";
+    return {
+      level: level,
+      label: label,
+      detail: clip(open || desc || "All systems operational"),
+      days: days
+    };
+  }
+
+  function fromGoogle(data) {
+    var list = Array.isArray(data) ? data : [];
+    var open = list.filter(function (x) {
+      var s = String((x && (x.status || x.end)) || "").toLowerCase();
+      return !x.end && s !== "resolved" && !/Status:\s*RESOLVED/i.test(String(x.external_desc || x.text || ""));
+    });
+    var level = open.length ? "degraded" : "ok";
+    var label = open.length ? "Degraded" : "Up";
+    var detail = open.length
+      ? clip(open[0].external_desc || open[0].service_name || open[0].text || "Open incident")
+      : "No open incidents";
+    var days = emptyDays();
+    list.forEach(function (inc) {
+      var start = Date.parse(inc.begin || inc.created || inc.start || "");
+      var end = Date.parse(inc.end || "") || Date.now();
+      if (!start) return;
+      var sev = String(inc.severity || inc.status_impact || "").toLowerCase();
+      var lv = /high|critical|major/.test(sev) ? "down" : "degraded";
+      days.forEach(function (day) {
+        var t0 = Date.parse(day.key + "T00:00:00Z");
+        var t1 = t0 + 86400000;
+        if (end >= t0 && start < t1) {
+          if (day.level === "ok" || (day.level === "degraded" && lv === "down")) day.level = lv;
+        }
+      });
+    });
+    if (level !== "ok") days[days.length - 1].level = "degraded";
+    return { level: level, label: label, detail: detail, days: days };
+  }
+
+  function fromSlack(data) {
+    var st = String((data && data.status) || "").toLowerCase();
+    var level = "ok";
+    var label = "Up";
+    if (st && st !== "ok" && st !== "active" && st !== "none") {
+      level = /major|outage|fatal|critical/.test(st) ? "critical" : "degraded";
+      label = level === "critical" ? "Down" : "Degraded";
+    }
+    var detail = clip((data && (data.status_description || data.title)) || (level === "ok" ? "All systems operational" : st));
+    var days = emptyDays();
+    days[days.length - 1].level = level === "ok" ? "ok" : level === "critical" ? "down" : "degraded";
+    return { level: level, label: label, detail: detail, days: days };
+  }
+
+  function fromXProxy(data) {
+    var st = data && data.status;
+    var level = "unknown";
+    var label = "Unknown";
+    if (st === "ok" || st === "up" || st === "none") { level = "ok"; label = "Up"; }
+    else if (st === "degraded" || st === "minor") { level = "degraded"; label = "Degraded"; }
+    else if (st === "major" || st === "critical" || st === "down") { level = "critical"; label = "Down"; }
+    var detail = clip((data && (data.detail || data.description)) || (level === "ok" ? "Proxy snapshot" : "See developer.x.com/status"));
+    var days = emptyDays();
+    if (level === "ok") days[days.length - 1].level = "ok";
+    else if (level === "unknown") days[days.length - 1].level = "unknown";
+    else days[days.length - 1].level = level === "critical" ? "down" : "degraded";
+    return { level: level, label: label, detail: detail, days: days };
+  }
+
+  function fromXaiRss(text) {
+    var days = emptyDays();
+    var level = "ok";
+    var label = "Up";
+    var detail = "No recent incidents in feed";
+    try {
+      var doc = new DOMParser().parseFromString(text, "text/xml");
+      var items = doc.querySelectorAll("item");
+      if (items.length) {
+        var title = (items[0].querySelector("title") || {}).textContent || "";
+        var pub = (items[0].querySelector("pubDate") || {}).textContent || "";
+        if (/incident|outage|degraded|down/i.test(title)) {
+          level = /outage|down|critical/i.test(title) ? "critical" : "degraded";
+          label = level === "critical" ? "Down" : "Degraded";
+        }
+        detail = clip(title + (pub ? " · " + pub : ""));
+        var t = Date.parse(pub);
+        if (t) {
+          var key = dayKey(new Date(t));
+          days.forEach(function (d) {
+            if (d.key === key) d.level = level === "ok" ? "ok" : level === "critical" ? "down" : "degraded";
+          });
+        }
+      }
+    } catch (e) {}
+    days[days.length - 1].level = level === "ok" ? "ok" : level === "critical" ? "down" : "degraded";
+    return { level: level, label: label, detail: detail, days: days };
+  }
+
+  function fromAws(data) {
+    /* Most AWS health endpoints block browser CORS — treat payload if present. */
+    var level = "ok";
+    var label = "Up";
+    var detail = "No open public events";
+    var list = Array.isArray(data) ? data : (data && data.events) || [];
+    if (list.length) {
+      level = "degraded";
+      label = "Degraded";
+      detail = clip(list[0].title || list[0].arn || "Open AWS health event");
+    }
+    var days = emptyDays();
+    days[days.length - 1].level = level === "ok" ? "ok" : "degraded";
+    return { level: level, label: label, detail: detail, days: days };
+  }
+
+  function parsePayload(svc, payload) {
+    if (svc.parse === "statuspage") return fromStatuspage(payload);
+    if (svc.parse === "google") return fromGoogle(payload);
+    if (svc.parse === "slack") return fromSlack(payload);
+    if (svc.parse === "xproxy") return fromXProxy(payload);
+    if (svc.parse === "xai") return fromXaiRss(payload);
+    if (svc.parse === "aws") return fromAws(payload);
+    return { level: "unknown", label: "Unknown", detail: "No parser", days: emptyDays().map(function (d) { d.level = "unknown"; return d; }) };
+  }
+
+  function badgeClass(level) {
+    if (level === "ok") return "ok";
+    if (level === "degraded") return "degraded";
+    if (level === "major" || level === "critical" || level === "down") return "down";
+    return "unknown";
+  }
 
   function render() {
-    board.innerHTML = "";
-    for (const svc of SERVICES) {
-      let { level, label, detail } = state[svc.id];
-      if (demoRed && svc.id === DEMO_TILE) {
-        level = "critical";
-        label = "CRITICAL";
-        detail = "DEMO RED — forced for look check";
-      }
-      const tile = document.createElement("article");
-      tile.className = "tile " + level;
-      tile.dataset.id = svc.id;
-      tile.title = svc.name;
-      if (svc.href) {
-        tile.dataset.href = svc.href;
-        tile.setAttribute("role", "link");
-        tile.tabIndex = 0;
-      }
-      tile.innerHTML =
-        '<div class="dot" aria-hidden="true"></div>' +
-        '<div class="name">' +
-        escapeHtml(svc.name) +
-        "</div>" +
-        '<div><div class="status">' +
-        escapeHtml(label) +
-        '</div><div class="detail">' +
-        escapeHtml(detail || "") +
-        "</div></div>";
-      if (svc.href) {
-        tile.addEventListener("click", function () {
-          window.open(svc.href, "_blank", "noopener");
-        });
-        tile.addEventListener("keydown", function (ev) {
-          if (ev.key === "Enter" || ev.key === " ") {
-            ev.preventDefault();
-            window.open(svc.href, "_blank", "noopener");
-          }
-        });
-      }
-      board.appendChild(tile);
-    }
-  }
-
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
-
-  function formatTime(d) {
-    try {
-      return d.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-        timeZone: "America/Chicago",
-        hour12: true
-      }) + " CT";
-    } catch (e) {
-      return d.toISOString();
-    }
+    var board = document.getElementById("board");
+    var html = "";
+    SERVICES.forEach(function (svc) {
+      var st = state[svc.id];
+      var days = st.days || emptyDays().map(function (d) { d.level = "unknown"; return d; });
+      var bars = days.map(function (d) {
+        var lv = d.level === "major" || d.level === "critical" ? "down" : d.level;
+        return '<i class="' + lv + '" title="' + d.key + '"></i>';
+      }).join("");
+      var href = svc.href || svc.url || "#";
+      html += '<a class="svc" href="' + href + '" target="_blank" rel="noopener">' +
+        '<div class="name">' + svc.name + '</div>' +
+        '<div class="badge ' + badgeClass(st.level) + '">' + (st.label || "—") + '</div>' +
+        '<div class="bars" aria-hidden="true">' + bars + '</div>' +
+        '<div class="detail">' + (st.detail || "") + '</div>' +
+        "</a>";
+    });
+    board.innerHTML = html;
   }
 
   async function pollOne(svc) {
     try {
-      let url = svc.url;
-      if (svc.bust) {
-        url += (url.indexOf("?") === -1 ? "?" : "&") + "_=" + Date.now();
-      }
-      const res = await fetch(url, { cache: "no-store" });
+      var url = svc.url;
+      if (svc.bust) url += (url.indexOf("?") >= 0 ? "&" : "?") + "t=" + Date.now();
+      var res = await fetch(url, { cache: "no-store", mode: "cors" });
       if (!res.ok) throw new Error("HTTP " + res.status);
-      if (svc.format === "xml") {
-        const text = await res.text();
-        state[svc.id] = svc.parse(text);
-      } else {
-        const data = await res.json();
-        state[svc.id] = svc.parse(data);
-      }
-    } catch (err) {
+      var payload = svc.format === "xml" ? await res.text() : await res.json();
+      state[svc.id] = parsePayload(svc, payload);
+    } catch (e) {
       state[svc.id] = {
         level: "unknown",
-        label: "UNKNOWN",
-        detail: "fetch failed"
+        label: "Unknown",
+        detail: clip("Blocked or unreachable (" + (e && e.message ? e.message : "fetch") + ") — open status page"),
+        days: emptyDays().map(function (d) { d.level = "unknown"; return d; })
       };
+      state[svc.id].days[state[svc.id].days.length - 1].level = "unknown";
     }
   }
 
   async function refresh() {
     await Promise.all(SERVICES.map(pollOne));
-    refreshEl.textContent = "Updated " + formatTime(new Date());
     render();
-  }
-
-  function versionCheckMs() {
-    try {
-      const raw = new URLSearchParams(location.search).get("vcheck");
-      const n = raw ? Number(raw) : NaN;
-      if (Number.isFinite(n) && n >= 1000) return n;
-    } catch (e) {}
-    return VERSION_CHECK_MS;
-  }
-
-  function paintStamp(data) {
-    const el = document.getElementById("ver");
-    if (!el || !data || !data.label) return;
-    const name = el.getAttribute("data-portal") || "Grid State";
-    el.textContent = name + " " + data.label;
-  }
-
-  async function fetchVersion() {
-    const url = "./version.json?t=" + Date.now();
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    if (!data || typeof data.v !== "string" || !data.v) {
-      throw new Error("bad version");
-    }
-    paintStamp(data);
-    return data.v;
-  }
-
-  async function captureVersion() {
-    try {
-      loadedVersion = await fetchVersion();
-    } catch (e) {
-      loadedVersion = null;
+    var el = document.getElementById("refresh");
+    if (el) {
+      var d = new Date();
+      el.textContent = "Updated " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     }
   }
-
-  async function checkVersion() {
-    if (reloadArmed) return;
-    try {
-      const remote = await fetchVersion();
-      if (loadedVersion == null) {
-        loadedVersion = remote;
-        return;
-      }
-      if (remote !== loadedVersion) {
-        reloadArmed = true;
-        refreshEl.textContent = "Updating…";
-        refreshEl.classList.add("updating");
-        location.reload();
-      }
-    } catch (e) {
-      // Stay quiet on transient fetch errors — do not reload.
-    }
-  }
-
-  try {
-    if (new URLSearchParams(location.search).get("embed") === "1") {
-      document.querySelectorAll(".wave-link").forEach(function (el) {
-        el.hidden = true;
-      });
-      const ver = document.getElementById("ver");
-      if (ver) ver.hidden = true;
-    }
-  } catch (e) {}
-
-  demoBtn.addEventListener("click", function () {
-    demoRed = !demoRed;
-    demoBtn.classList.toggle("on", demoRed);
-    demoBtn.setAttribute("aria-pressed", demoRed ? "true" : "false");
-    render();
-  });
 
   render();
   refresh();
   setInterval(refresh, REFRESH_MS);
-  captureVersion();
-  setInterval(checkVersion, versionCheckMs());
 })();
   </script>
 </body>
 </html>
-
-<!-- merge-auth prove 2026-09-19T12:48Z -->
