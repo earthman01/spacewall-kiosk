@@ -1,4 +1,4 @@
-/* SPACEWALL shared nav — Home = Spacewall front (index). Works from root and subdirs. */
+/* SPACEWALL shared nav — Home/brand always load index.html (works from subdirs + same-page). */
 (function () {
   if (window.__swNav) return;
   window.__swNav = true;
@@ -15,20 +15,28 @@
     return pathParts().indexOf("lisa-projects") !== -1;
   }
 
-  /* Prefix so ./foo works from lisa-projects/* as ../foo */
-  var BASE = inLisaProjects() ? "../" : "./";
+  /* Absolute site root on github.io; relative fallback for file:// / other hosts */
+  function siteRoot() {
+    var parts = pathParts();
+    var i = parts.indexOf("spacewall-kiosk");
+    if (i >= 0) return "/" + parts.slice(0, i + 1).join("/") + "/";
+    if (inLisaProjects()) return "../";
+    return "./";
+  }
+
+  var ROOT = siteRoot();
+  var HOME = ROOT + "index.html";
 
   var LINKS = [
-    { href: BASE, file: "index.html", label: "home", home: true },
-    { href: BASE + "welcome-lisa.html", file: "welcome-lisa.html", label: "lisa" },
-    { href: BASE + "lisa-projects/", file: "lisa-projects", label: "projects", projects: true },
-    { href: BASE + "hub.html", file: "hub.html", label: "hub" },
-    { href: BASE + "spacewall.html", file: "spacewall.html", label: "grid" },
-    { href: BASE + "rich.html", file: "rich.html", label: "rich" },
-    { href: BASE + "hearth.html", file: "hearth.html", label: "hearth" },
-    { href: BASE + "wave.html", file: "wave.html", label: "wave" },
-    { href: BASE + "press.html", file: "press.html", label: "press" },
-    { href: BASE + "reel.html", file: "reel.html", label: "reel" }
+    { href: HOME, label: "home", home: true },
+    { href: ROOT + "welcome-lisa.html", label: "lisa's page", file: "welcome-lisa.html" },
+    { href: ROOT + "hub.html", label: "hub", file: "hub.html" },
+    { href: ROOT + "spacewall.html", label: "grid", file: "spacewall.html" },
+    { href: ROOT + "rich.html", label: "rich", file: "rich.html" },
+    { href: ROOT + "hearth.html", label: "hearth", file: "hearth.html" },
+    { href: ROOT + "wave.html", label: "wave", file: "wave.html" },
+    { href: ROOT + "press.html", label: "press", file: "press.html" },
+    { href: ROOT + "reel.html", label: "reel", file: "reel.html" }
   ];
 
   function pathFile() {
@@ -45,6 +53,19 @@
     }
     if (inLisaProjects()) return false;
     return pathFile().toLowerCase() === (link.file || "").toLowerCase();
+  }
+
+  function goHome(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    /* Force navigation even when already on the front page */
+    try {
+      location.assign(HOME + "?from=nav&t=" + Date.now());
+    } catch (err) {
+      location.href = HOME;
+    }
   }
 
   var style = document.createElement("style");
@@ -72,15 +93,17 @@
     nav.setAttribute("aria-label", "SPACEWALL");
     var brand = document.createElement("a");
     brand.className = "sw-brand";
-    brand.href = BASE;
+    brand.href = HOME;
     brand.textContent = "SPACEWALL";
     brand.title = "SPACEWALL home";
+    brand.addEventListener("click", goHome);
     nav.appendChild(brand);
     LINKS.forEach(function (link) {
       var a = document.createElement("a");
       a.href = link.href;
       a.textContent = link.label;
       if (isHere(link)) a.setAttribute("aria-current", "page");
+      if (link.home) a.addEventListener("click", goHome);
       nav.appendChild(a);
     });
     (document.body || document.documentElement).appendChild(nav);

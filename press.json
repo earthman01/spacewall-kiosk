@@ -1,0 +1,196 @@
+{
+  "updated_at": "2026-10-30T19:47:19.000Z",
+  "source": "x-news+interests-v1",
+  "interests": [
+    "AI",
+    "Grok",
+    "xAI",
+    "Tesla",
+    "SpaceX",
+    "robots",
+    "food/cooking",
+    "Florida"
+  ],
+  "cards": [
+    {
+      "id": "2116216131744624676",
+      "kind": "brief",
+      "subject": "Grok 4.8 \u00b7 real-world utility",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Elon Musk assured fans that Grok 4.8 won't disappoint \u2014 prioritizing practical usefulness over benchmark chases. 2.5T-param model on a new C++ stack for agentic tasks.",
+      "url": "https://x.com/i/trending/2116216131744624676",
+      "created_at": "2026-10-30T17:19:21.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2116054161686974585",
+      "kind": "brief",
+      "subject": "Grok Bot agents",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Musk says Grok 4.8 skips benchmark chasing for daily help. Users build Grok Bot agents for finance, video, playlists \u2014 hiring them like staff.",
+      "url": "https://x.com/i/trending/2116054161686974585",
+      "created_at": "2026-10-30T16:32:15.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2115642688208875679",
+      "kind": "brief",
+      "subject": "Grok Bot \u00b7 600k DAU",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Grok Bot daily active users topped 600,000 \u2014 more than 6\u00d7 two months ago. Shopping cards, subscription trackers, one-tap checkouts.",
+      "url": "https://x.com/i/trending/2115642688208875679",
+      "created_at": "2026-10-30T02:59:54.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2116086487347507520",
+      "kind": "brief",
+      "subject": "Tesla \u00b7 SpaceX growth",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Musk: 'Tesla will be very high too' after SpaceX's projected net-income growth. Special committees exploring deeper Tesla\u2013SpaceX ties.",
+      "url": "https://x.com/i/trending/2116086487347507520",
+      "created_at": "2026-10-30T08:40:13.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2115550069311304114",
+      "kind": "brief",
+      "subject": "Optimus \u00b7 human data",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Tesla launches intensive Optimus training \u2014 workers in sensor suits feed real-world chores and factory moves. Limited production-quality units at Fremont.",
+      "url": "https://x.com/i/trending/2115550069311304114",
+      "created_at": "2026-10-28T21:10:33.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2115883064291459268",
+      "kind": "brief",
+      "subject": "Tesla\u2013SpaceX merger odds",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Prediction markets ~65% on a Tesla\u2013SpaceX merger by May 2027. Musk called it a good idea; independent committees exploring.",
+      "url": "https://x.com/i/trending/2115883064291459268",
+      "created_at": "2026-10-30T02:06:48.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2116101778009932010",
+      "kind": "brief",
+      "subject": "Terafab chip project",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Musk updates Terafab \u2014 joint Tesla/SpaceX/xAI semiconductor fab in Texas aiming at a terawatt of AI compute for Optimus, FSD, space data centers.",
+      "url": "https://x.com/i/trending/2116101778009932010",
+      "created_at": "2026-10-30T12:42:24.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2116002830494683239",
+      "kind": "brief",
+      "subject": "Altman \u00b7 robot data centers",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Sam Altman sketches AI robots building self-replicating data centers \u2014 chip fabs, energy plants \u2014 on the Cheeky Pint podcast.",
+      "url": "https://x.com/i/trending/2116002830494683239",
+      "created_at": "2026-10-30T03:10:34.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2115715944316080573",
+      "kind": "brief",
+      "subject": "OpenAI \u00b7 GPT-6.2 whispers",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Leaks hint at OpenAI GPT-6.2 'Betelgeuse' and Image 2.6 markup overlays. Community watching celestial codenames.",
+      "url": "https://x.com/i/trending/2115715944316080573",
+      "created_at": "2026-10-30T10:37:33.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2114876093278634068",
+      "kind": "brief",
+      "subject": "Grok Bot as chief of staff",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Users praise Grok Bot scanning email/DMs/LinkedIn hourly \u2014 'like having a personal secretary.' Musk: incredibly competent chief of staff.",
+      "url": "https://x.com/i/trending/2114876093278634068",
+      "created_at": "2026-10-28T23:29:35.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "elon-neuralink",
+      "kind": "post",
+      "subject": "Neuralink \u00b7 video",
+      "author": "elonmusk",
+      "name": "Elon Musk",
+      "text": "Good video about @Neuralink",
+      "url": "https://x.com/elonmusk/status/2116242462582989090",
+      "created_at": "2026-10-30T18:54:55.000Z",
+      "metrics": {
+        "likes": 2001,
+        "replies": 312,
+        "impressions": 552841
+      }
+    },
+    {
+      "id": "trend-sam",
+      "kind": "brief",
+      "subject": "Trending \u00b7 Sam Altman",
+      "author": "trends-us",
+      "name": "US Trends",
+      "text": "Sam Altman is trending in the US right now \u2014 OpenAI robotics + model chatter in the same hour as Optimus and Grok Bot news.",
+      "url": "https://x.com/search?q=Sam%20Altman",
+      "created_at": "2026-10-30T19:47:19.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    }
+  ]
+}

@@ -1,182 +1,196 @@
 {
-  "updated_at": "2026-09-20T00:33:00Z",
-  "source": "x-seed-v1",
+  "updated_at": "2026-10-30T19:47:19.000Z",
+  "source": "x-news+interests-v1",
+  "interests": [
+    "AI",
+    "Grok",
+    "xAI",
+    "Tesla",
+    "SpaceX",
+    "robots",
+    "food/cooking",
+    "Florida"
+  ],
   "cards": [
     {
-      "id": "2101288384564240396",
-      "kind": "post",
-      "subject": "Tesla · xAI",
-      "author": "divyanshekha",
-      "name": "divyanshishekhawat",
-      "text": "Hey @elonmusk, greetings from Rajasthan, India! Had 2 futuristic business concepts built on First Principles for your ecosystem: (1.)Tesla Compute Marketplace: Monetize parked Tesla FSD chips at night to form a decentralized cloud network for training @xai Grok.",
-      "url": "https://x.com/divyanshekha/status/2101288384564240396",
-      "created_at": "2026-09-19T12:32:45.000Z",
-      "metrics": { "likes": 0, "replies": 1, "impressions": 3 }
-    },
-    {
-      "id": "2094544603060052243",
-      "kind": "post",
-      "subject": "FSD · Grok",
-      "author": "michaelxbloch",
-      "name": "Michael Bloch",
-      "text": "No one alive has done more for human productivity than @elonmusk. Right now I'm sitting in my Tesla. I haven't touched the wheel since I got in. FSD is driving me home. I'm having a voice discussion with Grok about quantum tech as it drives me. It’s seamless and near zero",
-      "url": "https://x.com/michaelxbloch/status/2094544603060052243",
-      "created_at": "2026-08-31T21:55:22.000Z",
-      "metrics": { "likes": 72, "replies": 4, "impressions": 4333 }
-    },
-    {
-      "id": "2094060066559152256",
-      "kind": "post",
-      "subject": "Grok in the car",
-      "author": "afrikha44",
-      "name": "Afrikha",
-      "text": "Tesla's Summer Update quietly handed Grok real control of the car: voice commands reach deeper vehicle functions in 2026.26.6.5, now merged with FSD v14.3.8. The xAI-Tesla integration is becoming a product, not a demo.",
-      "url": "https://x.com/afrikha44/status/2094060066559152256",
-      "created_at": "2026-08-30T13:50:00.000Z",
-      "metrics": { "likes": 1, "replies": 0, "impressions": 62 }
-    },
-    {
-      "id": "2090560754252759441",
-      "kind": "post",
-      "subject": "Grok Build",
-      "author": "Toshogu",
-      "name": "Toshogu | AI",
-      "text": "xAI makes Grok Build available to all paying Grok and X subscribers. The feature turns a typed sentence into a working app, game, or website, each with its own web address, on web, iPhone, and Android.",
-      "url": "https://x.com/Toshogu/status/2090560754252759441",
-      "created_at": "2026-08-20T22:04:59.000Z",
-      "metrics": { "likes": 2, "replies": 0, "impressions": 88 }
-    },
-    {
-      "id": "2093743040590393713",
-      "kind": "post",
-      "subject": "Grok Bot · Tesla",
-      "author": "TeslaJedi",
-      "name": "Aaron",
-      "text": "Grok Bot is coming to Teslas. Every HW4/AI5 car already has a supercomputer sitting there for FSD — most of it idle when parked or on charge. If owners can offload some Grok inference onto that hardware, do we get a block of free tokens for…",
-      "url": "https://x.com/TeslaJedi/status/2093743040590393713",
-      "created_at": "2026-08-29T16:50:15.000Z",
-      "metrics": { "likes": 0, "replies": 1, "impressions": 45 }
-    },
-    {
-      "id": "2093155487722148196",
-      "kind": "post",
-      "subject": "Grok Bot day",
-      "author": "1andypatterson",
-      "name": "Andy Patterson",
-      "text": "I’m not a content creator or a high-profile exec. I’m a dad of 7 running a small family-owned business the best I can every day. But today… today was different. Today my Grok Bot @bot worked all day for me and got more done than I ever could have all while my @Tesla on FSD",
-      "url": "https://x.com/1andypatterson/status/2093155487722148196",
-      "created_at": "2026-08-28T01:55:31.000Z",
-      "metrics": { "likes": 4, "replies": 0, "impressions": 34 }
-    },
-    {
-      "id": "brief-1",
+      "id": "2116216131744624676",
       "kind": "brief",
-      "subject": "Morning brief",
-      "author": "press",
-      "name": "PRESS",
-      "text": "Subjects to thicken later: FSD parking/micro-nav friction · Grok Build for all paid · Tesla idle-compute ideas · household FSD/Grok plans.",
-      "url": null,
-      "created_at": "2026-09-19T23:35:00Z",
-      "metrics": null
+      "subject": "Grok 4.8 \u00b7 real-world utility",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Elon Musk assured fans that Grok 4.8 won't disappoint \u2014 prioritizing practical usefulness over benchmark chases. 2.5T-param model on a new C++ stack for agentic tasks.",
+      "url": "https://x.com/i/trending/2116216131744624676",
+      "created_at": "2026-10-30T17:19:21.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
     },
     {
-      "id": "seed-fsd-unpark",
-      "kind": "post",
-      "subject": "FSD · Unpark",
-      "author": "lotnotes",
-      "name": "Lot Notes",
-      "text": "FSD can drive you home. Getting out of a tight Chicago lot still asks for a hand. Micro-nav and unpark are the next newspaper subjects — not a status tile.",
-      "url": null,
-      "created_at": "2026-09-18T14:10:00.000Z",
-      "metrics": { "likes": 3, "replies": 1, "impressions": 140 }
-    },
-    {
-      "id": "seed-cabin-voice",
-      "kind": "post",
-      "subject": "Cabin Grok",
-      "author": "cabinline",
-      "name": "Cabin Line",
-      "text": "Voice in the cabin is the product now. Climate, seat, nav, and a Grok thread while FSD holds the lane. The car is a room. The room has a desk.",
-      "url": null,
-      "created_at": "2026-09-17T19:22:00.000Z",
-      "metrics": { "likes": 6, "replies": 0, "impressions": 210 }
-    },
-    {
-      "id": "seed-idle-compute",
-      "kind": "post",
-      "subject": "Idle compute",
-      "author": "nightpack",
-      "name": "Night Pack",
-      "text": "Parked HW4 is a supercomputer on a charger. Most of it idle. If Grok inference can sit on that silicon at night, the driveway is a rack.",
-      "url": null,
-      "created_at": "2026-09-16T08:05:00.000Z",
-      "metrics": { "likes": 5, "replies": 2, "impressions": 188 }
-    },
-    {
-      "id": "seed-grok-build-desk",
-      "kind": "post",
-      "subject": "Grok Build desk",
-      "author": "desknote",
-      "name": "Desk Note",
-      "text": "Typed sentence → app with a URL. Grok Build on paid is a workshop, not a demo reel. The wall should carry the workshop, not a launch banner.",
-      "url": null,
-      "created_at": "2026-09-15T21:40:00.000Z",
-      "metrics": { "likes": 2, "replies": 0, "impressions": 96 }
-    },
-    {
-      "id": "brief-2",
+      "id": "2116054161686974585",
       "kind": "brief",
-      "subject": "Evening brief",
-      "author": "press",
-      "name": "PRESS",
-      "text": "Keep the grid straight. Fill the glass. Subjects: unpark friction · cabin voice · driveway inference · Grok Build workshop · household FSD plans.",
-      "url": null,
-      "created_at": "2026-09-20T00:33:00Z",
-      "metrics": null
+      "subject": "Grok Bot agents",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Musk says Grok 4.8 skips benchmark chasing for daily help. Users build Grok Bot agents for finance, video, playlists \u2014 hiring them like staff.",
+      "url": "https://x.com/i/trending/2116054161686974585",
+      "created_at": "2026-10-30T16:32:15.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
     },
     {
-      "id": "seed-robotaxi-watch",
-      "kind": "post",
-      "subject": "Robotaxi watch",
-      "author": "curbside",
-      "name": "Curbside",
-      "text": "Robotaxi talk belongs on PRESS as a subject, not a countdown. Watch unsupervised miles, parking, and the last fifty feet to the curb.",
-      "url": null,
-      "created_at": "2026-09-14T16:18:00.000Z",
-      "metrics": { "likes": 1, "replies": 1, "impressions": 74 }
+      "id": "2115642688208875679",
+      "kind": "brief",
+      "subject": "Grok Bot \u00b7 600k DAU",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Grok Bot daily active users topped 600,000 \u2014 more than 6\u00d7 two months ago. Shopping cards, subscription trackers, one-tap checkouts.",
+      "url": "https://x.com/i/trending/2115642688208875679",
+      "created_at": "2026-10-30T02:59:54.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
     },
     {
-      "id": "seed-fsd-v14",
-      "kind": "post",
-      "subject": "FSD v14",
-      "author": "lanekeep",
-      "name": "Lane Keep",
-      "text": "v14.3 is the one in the car tonight. Smooth on the arterial. Still a human for the garage door and the last turn into the stall.",
-      "url": null,
-      "created_at": "2026-09-13T11:02:00.000Z",
-      "metrics": { "likes": 8, "replies": 0, "impressions": 256 }
+      "id": "2116086487347507520",
+      "kind": "brief",
+      "subject": "Tesla \u00b7 SpaceX growth",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Musk: 'Tesla will be very high too' after SpaceX's projected net-income growth. Special committees exploring deeper Tesla\u2013SpaceX ties.",
+      "url": "https://x.com/i/trending/2116086487347507520",
+      "created_at": "2026-10-30T08:40:13.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
     },
     {
-      "id": "seed-xai-colossus",
-      "kind": "post",
-      "subject": "xAI · train",
-      "author": "rackrow",
-      "name": "Rack Row",
-      "text": "Training is a Memphis story. Inference may become a driveway story. PRESS keeps both on the same wall so the room can see the split.",
-      "url": null,
-      "created_at": "2026-09-12T09:30:00.000Z",
-      "metrics": { "likes": 4, "replies": 0, "impressions": 163 }
+      "id": "2115550069311304114",
+      "kind": "brief",
+      "subject": "Optimus \u00b7 human data",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Tesla launches intensive Optimus training \u2014 workers in sensor suits feed real-world chores and factory moves. Limited production-quality units at Fremont.",
+      "url": "https://x.com/i/trending/2115550069311304114",
+      "created_at": "2026-10-28T21:10:33.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
     },
     {
-      "id": "seed-household",
+      "id": "2115883064291459268",
+      "kind": "brief",
+      "subject": "Tesla\u2013SpaceX merger odds",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Prediction markets ~65% on a Tesla\u2013SpaceX merger by May 2027. Musk called it a good idea; independent committees exploring.",
+      "url": "https://x.com/i/trending/2115883064291459268",
+      "created_at": "2026-10-30T02:06:48.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2116101778009932010",
+      "kind": "brief",
+      "subject": "Terafab chip project",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Musk updates Terafab \u2014 joint Tesla/SpaceX/xAI semiconductor fab in Texas aiming at a terawatt of AI compute for Optimus, FSD, space data centers.",
+      "url": "https://x.com/i/trending/2116101778009932010",
+      "created_at": "2026-10-30T12:42:24.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2116002830494683239",
+      "kind": "brief",
+      "subject": "Altman \u00b7 robot data centers",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Sam Altman sketches AI robots building self-replicating data centers \u2014 chip fabs, energy plants \u2014 on the Cheeky Pint podcast.",
+      "url": "https://x.com/i/trending/2116002830494683239",
+      "created_at": "2026-10-30T03:10:34.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2115715944316080573",
+      "kind": "brief",
+      "subject": "OpenAI \u00b7 GPT-6.2 whispers",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Leaks hint at OpenAI GPT-6.2 'Betelgeuse' and Image 2.6 markup overlays. Community watching celestial codenames.",
+      "url": "https://x.com/i/trending/2115715944316080573",
+      "created_at": "2026-10-30T10:37:33.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "2114876093278634068",
+      "kind": "brief",
+      "subject": "Grok Bot as chief of staff",
+      "author": "x-news",
+      "name": "X Trending",
+      "text": "Users praise Grok Bot scanning email/DMs/LinkedIn hourly \u2014 'like having a personal secretary.' Musk: incredibly competent chief of staff.",
+      "url": "https://x.com/i/trending/2114876093278634068",
+      "created_at": "2026-10-28T23:29:35.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
+    },
+    {
+      "id": "elon-neuralink",
       "kind": "post",
-      "subject": "Household FSD",
-      "author": "kitchenpad",
-      "name": "Kitchen Pad",
-      "text": "Two cars, one Grok, a school run and a grocery loop. The household plan is the real product. The wall should make that glanceable.",
-      "url": null,
-      "created_at": "2026-09-11T22:15:00.000Z",
-      "metrics": { "likes": 3, "replies": 0, "impressions": 81 }
+      "subject": "Neuralink \u00b7 video",
+      "author": "elonmusk",
+      "name": "Elon Musk",
+      "text": "Good video about @Neuralink",
+      "url": "https://x.com/elonmusk/status/2116242462582989090",
+      "created_at": "2026-10-30T18:54:55.000Z",
+      "metrics": {
+        "likes": 2001,
+        "replies": 312,
+        "impressions": 552841
+      }
+    },
+    {
+      "id": "trend-sam",
+      "kind": "brief",
+      "subject": "Trending \u00b7 Sam Altman",
+      "author": "trends-us",
+      "name": "US Trends",
+      "text": "Sam Altman is trending in the US right now \u2014 OpenAI robotics + model chatter in the same hour as Optimus and Grok Bot news.",
+      "url": "https://x.com/search?q=Sam%20Altman",
+      "created_at": "2026-10-30T19:47:19.000Z",
+      "metrics": {
+        "likes": 0,
+        "replies": 0,
+        "impressions": 0
+      }
     }
   ]
 }

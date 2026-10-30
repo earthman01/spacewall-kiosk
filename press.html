@@ -12,6 +12,7 @@
   <title>PRESS</title>
   <script src="./deck.js?h=fefd838ce500" defer></script>
   <script src="./nav.js" defer></script>
+  <script>window.__PRESS_FEED__ = {"updated_at":"2026-10-30T19:47:19.000Z","source":"x-news+interests-v1","interests":["AI","Grok","xAI","Tesla","SpaceX","robots","food/cooking","Florida"],"cards":[{"id":"2116216131744624676","kind":"brief","subject":"Grok 4.8 · real-world utility","author":"x-news","name":"X Trending","text":"Elon Musk assured fans that Grok 4.8 won't disappoint — prioritizing practical usefulness over benchmark chases. 2.5T-param model on a new C++ stack for agentic tasks.","url":"https://x.com/i/trending/2116216131744624676","created_at":"2026-10-30T17:19:21.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2116054161686974585","kind":"brief","subject":"Grok Bot agents","author":"x-news","name":"X Trending","text":"Musk says Grok 4.8 skips benchmark chasing for daily help. Users build Grok Bot agents for finance, video, playlists — hiring them like staff.","url":"https://x.com/i/trending/2116054161686974585","created_at":"2026-10-30T16:32:15.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2115642688208875679","kind":"brief","subject":"Grok Bot · 600k DAU","author":"x-news","name":"X Trending","text":"Grok Bot daily active users topped 600,000 — more than 6× two months ago. Shopping cards, subscription trackers, one-tap checkouts.","url":"https://x.com/i/trending/2115642688208875679","created_at":"2026-10-30T02:59:54.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2116086487347507520","kind":"brief","subject":"Tesla · SpaceX growth","author":"x-news","name":"X Trending","text":"Musk: 'Tesla will be very high too' after SpaceX's projected net-income growth. Special committees exploring deeper Tesla–SpaceX ties.","url":"https://x.com/i/trending/2116086487347507520","created_at":"2026-10-30T08:40:13.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2115550069311304114","kind":"brief","subject":"Optimus · human data","author":"x-news","name":"X Trending","text":"Tesla launches intensive Optimus training — workers in sensor suits feed real-world chores and factory moves. Limited production-quality units at Fremont.","url":"https://x.com/i/trending/2115550069311304114","created_at":"2026-10-28T21:10:33.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2115883064291459268","kind":"brief","subject":"Tesla–SpaceX merger odds","author":"x-news","name":"X Trending","text":"Prediction markets ~65% on a Tesla–SpaceX merger by May 2027. Musk called it a good idea; independent committees exploring.","url":"https://x.com/i/trending/2115883064291459268","created_at":"2026-10-30T02:06:48.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2116101778009932010","kind":"brief","subject":"Terafab chip project","author":"x-news","name":"X Trending","text":"Musk updates Terafab — joint Tesla/SpaceX/xAI semiconductor fab in Texas aiming at a terawatt of AI compute for Optimus, FSD, space data centers.","url":"https://x.com/i/trending/2116101778009932010","created_at":"2026-10-30T12:42:24.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2116002830494683239","kind":"brief","subject":"Altman · robot data centers","author":"x-news","name":"X Trending","text":"Sam Altman sketches AI robots building self-replicating data centers — chip fabs, energy plants — on the Cheeky Pint podcast.","url":"https://x.com/i/trending/2116002830494683239","created_at":"2026-10-30T03:10:34.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2115715944316080573","kind":"brief","subject":"OpenAI · GPT-6.2 whispers","author":"x-news","name":"X Trending","text":"Leaks hint at OpenAI GPT-6.2 'Betelgeuse' and Image 2.6 markup overlays. Community watching celestial codenames.","url":"https://x.com/i/trending/2115715944316080573","created_at":"2026-10-30T10:37:33.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"2114876093278634068","kind":"brief","subject":"Grok Bot as chief of staff","author":"x-news","name":"X Trending","text":"Users praise Grok Bot scanning email/DMs/LinkedIn hourly — 'like having a personal secretary.' Musk: incredibly competent chief of staff.","url":"https://x.com/i/trending/2114876093278634068","created_at":"2026-10-28T23:29:35.000Z","metrics":{"likes":0,"replies":0,"impressions":0}},{"id":"elon-neuralink","kind":"post","subject":"Neuralink · video","author":"elonmusk","name":"Elon Musk","text":"Good video about @Neuralink","url":"https://x.com/elonmusk/status/2116242462582989090","created_at":"2026-10-30T18:54:55.000Z","metrics":{"likes":2001,"replies":312,"impressions":552841}},{"id":"trend-sam","kind":"brief","subject":"Trending · Sam Altman","author":"trends-us","name":"US Trends","text":"Sam Altman is trending in the US right now — OpenAI robotics + model chatter in the same hour as Optimus and Grok Bot news.","url":"https://x.com/search?q=Sam%20Altman","created_at":"2026-10-30T19:47:19.000Z","metrics":{"likes":0,"replies":0,"impressions":0}}]};</script>
   <style>
     :root {
       --bg: #070708;
@@ -787,11 +788,13 @@
     const q = new URLSearchParams();
     q.set("t", String(Date.now()));
     if (loadedVersion) q.set("v", loadedVersion);
-    return "./press-feed.json?" + q.toString();
+    return "./press.json?" + q.toString();
   }
 
   async function loadFeed() {
-    if (!pageIsVisible()) return;
+    if (!lastGoodFeed && window.__PRESS_FEED__) {
+      try { if (validFeed(window.__PRESS_FEED__)) applyFeed(window.__PRESS_FEED__); } catch (e) {}
+    }
     try {
       const res = await fetch(feedUrl(), { cache: "no-store" });
       if (!res.ok) throw new Error("HTTP " + res.status);
@@ -800,6 +803,7 @@
       applyFeed(data);
     } catch (e) {
       if (lastGoodFeed) applyFeed(lastGoodFeed);
+      else if (window.__PRESS_FEED__ && validFeed(window.__PRESS_FEED__)) applyFeed(window.__PRESS_FEED__);
     }
   }
 
@@ -831,10 +835,9 @@
     }
   });
 
-  if (pageIsVisible()) {
-    loadFeed();
-    armFeedRefresh();
-  }
+  if (window.__PRESS_FEED__ && validFeed(window.__PRESS_FEED__)) applyFeed(window.__PRESS_FEED__);
+  loadFeed();
+  if (pageIsVisible()) armFeedRefresh();
 
   function versionCheckMs() {
     try {

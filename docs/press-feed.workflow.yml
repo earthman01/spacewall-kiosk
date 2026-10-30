@@ -1,0 +1,130 @@
+name: Press feed (X interests)
+
+on:
+  schedule:
+    # ~every 6h (GitHub cron is UTC); also allow manual
+    - cron: "15 0,6,12,18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull X news / trends → press.json
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+        run: |
+          python3 << 'PY'
+          import json, os, urllib.request, urllib.parse, datetime
+          from pathlib import Path
+
+          interests = ["AI", "Grok", "xAI", "Tesla", "SpaceX", "Optimus", "robots", "cooking", "Florida"]
+          now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+          cards = []
+          token = (os.environ.get("X_BEARER_TOKEN") or "").strip()
+
+          def get(url):
+              req = urllib.request.Request(url, headers={
+                  "Authorization": "Bearer " + token,
+                  "User-Agent": "spacewall-press/1.0",
+              })
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  return json.loads(r.read().decode())
+
+          if token:
+              # Recent posts matching interest OR from seed accounts
+              q = "(Grok OR xAI OR Tesla OR SpaceX OR Optimus OR \"Grok Bot\") -is:retweet lang:en"
+              params = urllib.parse.urlencode({
+                  "query": q,
+                  "max_results": "20",
+                  "tweet.fields": "created_at,public_metrics,author_id,lang",
+                  "expansions": "author_id",
+                  "user.fields": "username,name",
+              })
+              try:
+                  data = get("https://api.x.com/2/tweets/search/recent?" + params)
+                  users = {u["id"]: u for u in (data.get("includes") or {}).get("users") or []}
+                  for tw in data.get("data") or []:
+                      u = users.get(tw.get("author_id") or "", {})
+                      m = tw.get("public_metrics") or {}
+                      cards.append({
+                          "id": tw["id"],
+                          "kind": "post",
+                          "subject": (tw.get("text") or "")[:72],
+                          "author": u.get("username") or "x",
+                          "name": u.get("name") or u.get("username") or "X",
+                          "text": tw.get("text") or "",
+                          "url": "https://x.com/i/status/" + tw["id"],
+                          "created_at": tw.get("created_at") or now,
+                          "metrics": {
+                              "likes": m.get("like_count") or 0,
+                              "replies": m.get("reply_count") or 0,
+                              "impressions": m.get("impression_count") or 0,
+                          },
+                      })
+              except Exception as e:
+                  print("X search failed:", e)
+
+              # WOEID 1 = worldwide trends (v1.1 — needs elevated/app access)
+              try:
+                  trends = get("https://api.x.com/1.1/trends/place.json?id=23424977")  # US
+                  for tr in (trends[0].get("trends") or [])[:8]:
+                      name = tr.get("name") or ""
+                      if not name:
+                          continue
+                      cards.append({
+                          "id": "trend-" + name.replace(" ", "-")[:40],
+                          "kind": "brief",
+                          "subject": "Trending · " + name,
+                          "author": "trends-us",
+                          "name": "US Trends",
+                          "text": name + " is trending in the US. Tuned for Mark interests: " + ", ".join(interests) + ".",
+                          "url": tr.get("url") or ("https://x.com/search?q=" + urllib.parse.quote(name)),
+                          "created_at": now,
+                          "metrics": {"likes": 0, "replies": 0, "impressions": int(tr.get("tweet_volume") or 0)},
+                      })
+              except Exception as e:
+                  print("X trends failed:", e)
+          else:
+              print("No X_BEARER_TOKEN — keeping existing press.json seed (set repo secret to enable live pull).")
+
+          path = Path("press.json")
+          if cards:
+              feed = {
+                  "updated_at": now,
+                  "source": "github-action-x-api",
+                  "interests": interests,
+                  "cards": cards[:24],
+              }
+              path.write_text(json.dumps(feed, indent=2) + "\n")
+              Path("press-feed.json").write_text(json.dumps(feed, indent=2) + "\n")
+              print("wrote", len(cards), "cards")
+          else:
+              # Touch stamp so page knows action ran; keep prior cards
+              if path.exists():
+                  feed = json.loads(path.read_text())
+                  feed["action_checked_at"] = now
+                  feed.setdefault("interests", interests)
+                  path.write_text(json.dumps(feed, indent=2) + "\n")
+                  Path("press-feed.json").write_text(json.dumps(feed, indent=2) + "\n")
+                  print("no new cards; stamped existing feed")
+              else:
+                  raise SystemExit("no token and no press.json")
+          PY
+
+      - name: Commit if changed
+        run: |
+          git config user.name "spacewall-press[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add press.json press-feed.json
+          if git diff --staged --quiet; then
+            echo "No press feed changes"
+          else
+            git commit -m "press: refresh X interest feed"
+            git push
+          fi
