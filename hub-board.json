@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-30T13:59:19Z",
+  "updated_at": "2026-10-30T14:04:36Z",
   "source": "hub-darken-air-jobs-oct30",
   "title": "HUB",
-  "subtitle": "Personal OS · ops & notes",
+  "subtitle": "Personal OS \u00b7 ops & notes",
   "north_star": {
     "headline": "Be a hub, not a leaf",
-    "body": "Type a note on any card and hit Send — it emails earthbot. Visibility into every live area of operation. Navy career pays the bills; this layer is life admin through one personal OS."
+    "body": "Type a note on any card and hit Send \u2014 it emails earthbot. Visibility into every live area of operation. Navy career pays the bills; this layer is life admin through one personal OS."
   },
   "columns": [
     {
@@ -77,8 +77,8 @@
           "title": "Air jobs",
           "status": "live",
           "url": null,
-          "detail": "Overnight scene build nightly ~1 AM CT (first Oct 31 1:12 AM CT) — 3 scenes, self-deletes when verified. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. TV on 5:50 AM / off 11:45 PM. Chrome 156 update queued. On-screen learning only while Mark is at work. Air researches first; questions only when stuck.",
-          "status_text": "Live. Next overnight scene build ~1:12 AM CT Oct 31. Screen work only at work hours; research-first."
+          "detail": "Overnight scene build nightly ~1 AM CT (first run 1:12 AM Oct 31 CT) \u2014 builds 3 scenes, background only, self-deletes when verified. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. TV on 5:50 AM / off 11:45 PM. Chrome 156 update queued. On-screen play/learning on the Air only while Mark is at work or overnight \u2014 never while he's using it. Air researches first; batched questions come back only when it cannot answer itself.",
+          "status_text": "Live. Overnight + at-work window only. Research-first; questions batched for Mark."
         }
       ]
     },
@@ -90,14 +90,14 @@
           "id": "hub-portal",
           "title": "HUB portal (this board)",
           "status": "building",
-          "detail": "Per-item notes → earthbot. Expand visibility; keep the dark UI.",
+          "detail": "Per-item notes \u2192 earthbot. Expand visibility; keep the dark UI.",
           "url": null
         },
         {
           "id": "air-winddown",
           "title": "Air Winddown / Normal scenes",
           "status": "live",
-          "detail": "Morning-restore baseline locked Oct 30 (baseline-2026-10-30.json). Purple Light deep purple at 5%; Kitchen 1–3 amber 10%; Hall amber 2%; Bathroom 3 amber 5%; Guest Bedroom on today at dark orange 4%. Audit passed 7:27 AM CT. Air runs Apple Home with the screen closed (sleep disabled). Next: 8 PM whole-house dim to 2–5%, lights-out tonight, then 6 AM restore tomorrow. Beautiful and Extra Room 1/2 still unreachable — retrying.",
+          "detail": "Morning-restore baseline locked Oct 30 (baseline-2026-10-30.json). Purple Light deep purple at 5%; Kitchen 1\u20133 amber 10%; Hall amber 2%; Bathroom 3 amber 5%; Guest Bedroom on today at dark orange 4%. Audit passed 7:27 AM CT. Air runs Apple Home with the screen closed (sleep disabled). Next: 8 PM whole-house dim to 2\u20135%, lights-out tonight, then 6 AM restore tomorrow. Beautiful and Extra Room 1/2 still unreachable \u2014 retrying.",
           "url": null,
           "status_text": "Baseline live. Tonight: 8 PM dim + lights-out. Tomorrow: 6 AM restore. Retrying Beautiful and Extra Room 1/2."
         },
@@ -105,7 +105,7 @@
           "id": "house-wake",
           "title": "House wake MVP",
           "status": "building",
-          "detail": "Kitchen dock Air + openWakeWord → voice handoff.",
+          "detail": "Kitchen dock Air + openWakeWord \u2192 voice handoff.",
           "url": null
         }
       ]
@@ -245,7 +245,7 @@
           "id": "heart-cac",
           "title": "Heart / CAC briefing",
           "status": "next",
-          "detail": "Before the Jan Mullis visit. CVI January booking — nudge Nov 17.",
+          "detail": "Before the Jan Mullis visit. CVI January booking \u2014 nudge Nov 17.",
           "url": null
         },
         {
@@ -301,7 +301,7 @@
           "id": "lab112",
           "title": "Lab 112 hangup-first",
           "status": "mark",
-          "detail": "PhoneEve retest when Mark says dial — callee hangs up first.",
+          "detail": "PhoneEve retest when Mark says dial \u2014 callee hangs up first.",
           "url": null
         },
         {
@@ -315,7 +315,7 @@
           "id": "tesla",
           "title": "Tesla",
           "status": "next",
-          "detail": "Keep Climate Bluetooth automations — webhook later.",
+          "detail": "Keep Climate Bluetooth automations \u2014 webhook later.",
           "url": null
         },
         {
@@ -391,14 +391,14 @@
           "id": "neo-body",
           "title": "NEO / body later",
           "status": "seed",
-          "detail": "1X NEO pre-order — house cameras + wake first.",
+          "detail": "1X NEO pre-order \u2014 house cameras + wake first.",
           "url": null
         },
         {
           "id": "ascension-fund",
           "title": "Ascension funding assist",
           "status": "parked",
-          "detail": "Sacred Heart Emerald Funding — no submit unless asked.",
+          "detail": "Sacred Heart Emerald Funding \u2014 no submit unless asked.",
           "url": null
         }
       ]
@@ -419,7 +419,7 @@
         "id": "cashflow",
         "title": "Money / Cashflow",
         "status": "live",
-        "detail": "Daily fold, lanes, budget cushion, transfers — first working proof.",
+        "detail": "Daily fold, lanes, budget cushion, transfers \u2014 first working proof.",
         "url": null
       },
       {
@@ -440,7 +440,7 @@
         "id": "house-air",
         "title": "House / lights / TV",
         "status": "live",
-        "detail": "All lights via air on MacBook Air — never phone. Wind-down + scenes.",
+        "detail": "All lights via air on MacBook Air \u2014 never phone. Wind-down + scenes.",
         "url": null
       },
       {
@@ -468,14 +468,14 @@
         "id": "cos-team",
         "title": "CoS team",
         "status": "live",
-        "detail": "earthbot + CFO + admin + explorer + air — density, not five apps.",
+        "detail": "earthbot + CFO + admin + explorer + air \u2014 density, not five apps.",
         "url": null
       },
       {
         "id": "spacewall",
         "title": "SPACEWALL / HEARTH",
         "status": "live",
-        "detail": "House display platform — iPads + 55″ OLED.",
+        "detail": "House display platform \u2014 iPads + 55\u2033 OLED.",
         "url": "https://earthman01.github.io/spacewall-kiosk/"
       },
       {
@@ -489,14 +489,14 @@
         "id": "reel",
         "title": "REEL",
         "status": "live",
-        "detail": "Slow cinema float — original mood packs.",
+        "detail": "Slow cinema float \u2014 original mood packs.",
         "url": "https://earthman01.github.io/spacewall-kiosk/reel.html"
       },
       {
         "id": "voice-ingest",
         "title": "Voice hang-up ingest",
         "status": "live",
-        "detail": "Transcripts on disk; skill locked so hang-ups don’t go blank.",
+        "detail": "Transcripts on disk; skill locked so hang-ups don\u2019t go blank.",
         "url": null
       },
       {
