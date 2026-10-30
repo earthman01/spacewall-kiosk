@@ -73,7 +73,7 @@
     "#sw-nav{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;",
     "padding:10px 18px;padding-top:calc(10px + env(safe-area-inset-top,0px));padding-left:calc(18px + env(safe-area-inset-left,0px));",
     "padding-right:calc(18px + env(safe-area-inset-right,0px));",
-    "background:linear-gradient(180deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.72) 70%,transparent 100%);",
+    "background:rgba(0,0,0,.94);",
     "pointer-events:none;font-family:-apple-system,BlinkMacSystemFont,\"SF Pro Display\",\"Segoe UI\",Helvetica,Arial,sans-serif;",
     "-webkit-font-smoothing:antialiased}",
     "#sw-nav a{pointer-events:auto;color:#5a6270;text-decoration:none;font-size:11px;font-weight:600;",
@@ -81,7 +81,19 @@
     "#sw-nav a:hover,#sw-nav a:focus-visible{color:#9eb0c8;outline:none}",
     "#sw-nav a[aria-current=page]{color:#c8d0dc}",
     "#sw-nav .sw-brand{color:#3a404a;margin-right:6px;letter-spacing:.22em}",
-    "html.sw-nav-on{scroll-padding-top:48px}"
+    "html.sw-nav-on{scroll-padding-top:52px}",
+    /* Kill leftover per-page topnav/brands that ghost under SPACEWALL / REEL on Tesla */
+    "html.sw-nav-on .topnav,",
+    "html.sw-nav-on .sw-nav-pad,",
+    "html.sw-nav-on #orbit > header > .brand,",
+    "html.sw-nav-on #orbit > header.top > .brand,",
+    "html.sw-nav-on #orbit header .brand,",
+    "html.sw-nav-on #orbit > .brand{",
+    "display:none!important;visibility:hidden!important;pointer-events:none!important}",
+    /* Drop page chrome below the fixed shared nav so BOARD/HUB/etc. cannot sit behind REEL */
+    "html.sw-nav-on #orbit{padding-top:48px;box-sizing:border-box}",
+    "html.sw-nav-on body > .wrap,",
+    "html.sw-nav-on body > .veil + .wrap{padding-top:calc(56px + env(safe-area-inset-top,0px))}"
   ].join("");
   document.documentElement.classList.add("sw-nav-on");
   (document.head || document.documentElement).appendChild(style);
