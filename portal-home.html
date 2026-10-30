@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <title>SPACEWALL</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; background: #000; color: #d8dce4;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased; }
+    body { min-height: 100dvh; padding: calc(28px + env(safe-area-inset-top)) calc(28px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(28px + env(safe-area-inset-left)); }
+    .brand { font-size: 11px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #4a5160; margin-bottom: 18px; }
+    .brand span { color: #8a929e; }
+    h1 { font-size: clamp(40px, 8vw, 72px); font-weight: 600; letter-spacing: -0.03em; color: #e8ecf2; margin-bottom: 8px; }
+    .sub { color: #8a929e; font-size: 14px; margin-bottom: 28px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; max-width: 900px; }
+    a.tile { display: flex; flex-direction: column; gap: 6px; padding: 18px 16px; background: #0a0c10; border: 1px solid #1a2030; border-radius: 12px; text-decoration: none; color: inherit; min-height: 96px; }
+    a.tile:hover { border-color: #2a3548; }
+    a.tile .k { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #4a5160; }
+    a.tile .n { font-size: 18px; font-weight: 600; color: #e4e8ee; }
+    a.tile.featured { border-color: #2a3548; background: #0c0f14; }
+    a.tile.featured .n { color: #9eb0c8; }
+  </style>
+</head>
+<body>
+  <div class="brand">SPACE<span>WALL</span></div>
+  <h1>SPACEWALL</h1>
+  <p class="sub">Boards · one tap · no login</p>
+  <div class="grid" aria-label="Boards">
+    <a class="tile featured" href="./welcome-lisa.html"><span class="k">Guest</span><span class="n">Welcome, Lisa</span></a>
+    <a class="tile" href="./spacewall.html"><span class="k">Ops</span><span class="n">SPACEWALL</span></a>
+    <a class="tile" href="./hearth.html"><span class="k">Room</span><span class="n">HEARTH</span></a>
+    <a class="tile" href="./wave.html"><span class="k">Idle</span><span class="n">WAVE</span></a>
+    <a class="tile" href="./press.html"><span class="k">Paper</span><span class="n">PRESS</span></a>
+    <a class="tile" href="./hub.html"><span class="k">Plan</span><span class="n">HUB</span></a>
+    <a class="tile" href="./reel.html"><span class="k">Cinema</span><span class="n">REEL</span></a>
+    <a class="tile" href="./rich.html"><span class="k">Guest</span><span class="n">Welcome, Rich</span></a>
+  </div>
+</body>
+</html>

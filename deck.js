@@ -1,10 +1,10 @@
 /* SPACEWALL portal deck — iPad swipe across same-origin pages.
  *
  * Order (left → right):
- *   SPACEWALL  ↔  HEARTH  ↔  WAVE  ↔  PRESS  ↔  HUB  ↔  REEL  ↔  RICH
+ *   SPACEWALL  ↔  HEARTH  ↔  WAVE  ↔  PRESS  ↔  HUB  ↔  REEL  ↔  RICH  ↔  LISA
  *
  * A new portal: append a row to PAGES, add the html to write_version.py
- * HTML_SOURCES and PORTAL_BY_FILE, the pages.yml copy list, and this
+ * HTML_SOURCES and PORTAL_BY_FILE, the cloudflare-pages.yml copy list, and this
  * script tag on that page:  <script src="./deck.js" defer></script>
  * Then run:  python3 scripts/write_version.py --bump-ship
  *
@@ -21,7 +21,8 @@
     { id: "press", file: "press.html", label: "PRESS" },
     { id: "hub", file: "hub.html", label: "HUB" },
     { id: "reel", file: "reel.html", label: "REEL" },
-    { id: "rich", file: "rich.html", label: "RICH" }
+    { id: "rich", file: "rich.html", label: "RICH" },
+    { id: "lisa", file: "welcome-lisa.html", label: "LISA" }
   ];
 
   const STORE_DIR = "spacewall-deck-dir";
