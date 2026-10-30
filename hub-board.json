@@ -78,7 +78,8 @@
           "status": "live",
           "url": null,
           "detail": "Overnight scene build nightly ~1 AM CT (first run 1:12 AM Oct 31 CT) \u2014 builds 3 scenes, background only, self-deletes when verified. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. TV on 5:50 AM / off 11:45 PM. Chrome 156 update queued. On-screen play/learning on the Air only while Mark is at work or overnight \u2014 never while he's using it. Air researches first; batched questions come back only when it cannot answer itself.",
-          "status_text": "Live. Overnight + at-work window only. Research-first; questions batched for Mark."
+          "status_text": "Live. Overnight + at-work window only. Research-first; questions batched for Mark.",
+          "updated_at": "2026-10-30T09:06:08-05:00"
         }
       ]
     },
