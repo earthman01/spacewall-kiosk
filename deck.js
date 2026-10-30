@@ -199,6 +199,11 @@
   live = chrome.querySelector("#deck-live");
 
   function mountChrome() {
+    /* Shared #sw-nav replaces edge labels — never paint leftover HUB/BOARD chrome. */
+    if (document.documentElement.classList.contains("sw-nav-on")) {
+      if (chrome.isConnected) chrome.remove();
+      return;
+    }
     if (!chrome.isConnected) document.body.appendChild(chrome);
   }
 

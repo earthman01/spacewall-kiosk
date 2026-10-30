@@ -83,7 +83,7 @@
     "#sw-nav .sw-brand{color:#3a404a;margin-right:6px;letter-spacing:.22em}",
     "html.sw-nav-on{scroll-padding-top:52px}",
     /* Kill leftover per-page topnav/brands that ghost under SPACEWALL / REEL on Tesla */
-    "html.sw-nav-on .topnav,",
+    ""#deck-chrome{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}",html.sw-nav-on .topnav,",
     "html.sw-nav-on .sw-nav-pad,",
     "html.sw-nav-on #orbit > header > .brand,",
     "html.sw-nav-on #orbit > header.top > .brand,",
