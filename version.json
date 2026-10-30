@@ -1,10 +1,10 @@
 {
-  "v": "0d33c1e25653fa35",
-  "built_at": "2026-10-30T20:23:53Z",
+  "v": "fb00419e87f7b532",
+  "built_at": "2026-10-30T20:31:22Z",
   "year": 26,
   "week": 44,
   "ship": 3,
-  "hotfix": 9,
-  "label": "oct30-wine-lists-ntfy-e2e",
-  "updated_at": "2026-10-30T20:26:42Z"
+  "hotfix": 10,
+  "label": "oct30-wine-in-cards",
+  "updated_at": "2026-10-30T20:31:22Z"
 }
