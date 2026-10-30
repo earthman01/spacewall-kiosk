@@ -48,8 +48,8 @@ jobs:
           cp -a welcome-lisa.html rich.html hearth.html wave.html press.html hub.html reel.html \
             portal-home.html 404.html deck.js nav.js x-status.json \
             spacewall.webmanifest hearth.webmanifest icons site/
-          # Public portal board only (not the private ops hub-board.json); hub.html stays its own page
-          cp -a hub-board-public.json site/hub-board.json
+          # Desk dashboard board (Mark+earthbot work) — not the Spacewall portals mirror
+          cp -a hub-board.json site/hub-board.json
           cp -a lisa-projects site/
           touch site/.nojekyll
           echo "public site contents:"
