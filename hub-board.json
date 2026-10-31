@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-30T20:03:00Z",
-  "source": "hub-notes-calendar-dinner-oct30",
+  "updated_at": "2026-10-31T14:44:00Z",
+  "source": "health-pipe-round1-hub-sweep-oct31",
   "title": "HUB",
-  "subtitle": "Personal OS \u00b7 ops & notes",
+  "subtitle": "Personal OS · ops & notes",
   "north_star": {
     "headline": "Be a hub, not a leaf",
-    "body": "Type a note on any card and hit Send \u2014 it emails earthbot. Visibility into every live area of operation. Navy career pays the bills; this layer is life admin through one personal OS."
+    "body": "Type a note on any card and hit Send — it emails earthbot. Visibility into every live area of operation. Navy career pays the bills; this layer is life admin through one personal OS."
   },
   "columns": [
     {
@@ -77,9 +77,9 @@
           "title": "Air jobs",
           "status": "live",
           "url": null,
-          "detail": "Overnight scene build nightly ~1 AM CT (first run 1:12 AM Oct 31 CT) \u2014 builds 3 scenes, background only, self-deletes when verified. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. TV on 5:50 AM / off 11:45 PM. Chrome 156 update queued. On-screen play/learning on the Air only while Mark is at work or overnight \u2014 never while he's using it. Air researches first; batched questions come back only when it cannot answer itself.",
+          "detail": "Overnight scene build nightly ~1 AM CT (first run 1:12 AM Oct 31 CT) — builds 3 scenes, background only, self-deletes when verified. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. TV on 5:50 AM / off 11:45 PM. Chrome 156 update queued. On-screen play/learning on the Air only while Mark is at work or overnight — never while he's using it. Air researches first; batched questions come back only when it cannot answer itself.",
           "status_text": "Live. Overnight + at-work window only. Research-first; questions batched for Mark.",
-          "updated_at": "2026-10-30T09:06:08-05:00"
+          "updated_at": "2026-10-31T09:44:00-05:00"
         }
       ]
     },
@@ -91,22 +91,23 @@
           "id": "hub-portal",
           "title": "HUB portal (this board)",
           "status": "building",
-          "detail": "Per-item notes \u2192 earthbot. Expand visibility; keep the dark UI.",
+          "detail": "Per-item notes → earthbot. Expand visibility; keep the dark UI.",
           "url": null
         },
         {
           "id": "air-winddown",
           "title": "Air Winddown / Normal scenes",
           "status": "live",
-          "detail": "Morning-restore baseline locked Oct 30 (baseline-2026-10-30.json). Purple Light deep purple at 5%; Kitchen 1\u20133 amber 10%; Hall amber 2%; Bathroom 3 amber 5%; Guest Bedroom on today at dark orange 4%. Audit passed 7:27 AM CT. Air runs Apple Home with the screen closed (sleep disabled). Next: 8 PM whole-house dim to 2\u20135%, lights-out tonight, then 6 AM restore tomorrow. Beautiful and Extra Room 1/2 still unreachable \u2014 retrying.",
+          "detail": "Morning-restore baseline locked Oct 30 (baseline-2026-10-30.json). Purple Light deep purple at 5%; Kitchen 1–3 amber 10%; Hall amber 2%; Bathroom 3 amber 5%. Evening dim 8 PM; lights-out at bed; morning restore 6 AM. Overnight scene build runs nightly ~1 AM CT. Beautiful and Extra Room 1/2 still unreachable — retrying.",
           "url": null,
-          "status_text": "Baseline live. Tonight: 8 PM dim + lights-out. Tomorrow: 6 AM restore. Retrying Beautiful and Extra Room 1/2."
+          "status_text": "Baseline live. Dim 8 PM / lights-out / 6 AM restore. Overnight build nightly. Retrying Beautiful and Extra Room 1/2.",
+          "updated_at": "2026-10-31T09:44:00-05:00"
         },
         {
           "id": "house-wake",
           "title": "House wake MVP",
           "status": "building",
-          "detail": "Kitchen dock Air + openWakeWord \u2192 voice handoff.",
+          "detail": "Kitchen dock Air + openWakeWord → voice handoff.",
           "url": null
         }
       ]
@@ -116,18 +117,13 @@
       "label": "This week",
       "items": [
         {
-          "id": "carmax-dothan",
-          "title": "CarMax Dothan",
-          "status": "next",
-          "detail": "Tesla recheck Oct 30.",
-          "url": null
-        },
-        {
           "id": "plan-gates",
           "title": "Plan gates",
           "status": "next",
-          "detail": "Oct 31 stability check. Feb 2027 gate. ~Jul 27 2027 normalize TSP, Honda, cash.",
-          "url": null
+          "detail": "Oct 31 stability check: done, stable. Still open: Feb 2027 gate; ~Jul 27 2027 normalize TSP, Honda, cash.",
+          "url": null,
+          "status_text": "Oct 31 check done. Next gates: Feb 2027, ~Jul 27 2027.",
+          "updated_at": "2026-10-31T09:44:00-05:00"
         },
         {
           "id": "cashflow-end",
@@ -145,31 +141,53 @@
         },
         {
           "id": "health-auto-export",
-          "title": "Health Auto Export: one-time phone fix",
-          "status": "mark",
-          "status_text": "Waiting on Mark's one phone sitting.",
-          "detail": "",
+          "title": "Health data pipe (Health Auto Export → iCloud → Air)",
+          "status": "live",
+          "status_text": "Round 1 live. Week test through ~Nov 7. Day parser/sheet next.",
+          "detail": "Sleep to iCloud (6 sleep metrics, hourly) lands on the Air in iCloud~com~ifunography~HealthExport/Documents/Sleep to iCloud/. Daily 9 AM sleep ingest reads from there — no more Google reconnect alarms. Sleep log complete Oct 24–31 (Oct 25 6.9 h, Oct 27 8.5 h backfilled). Day to iCloud (steps, distance, flights, walking speed/step length/asymmetry/double support/steadiness, weight, heart rate, breathing disturbances, AFib) exported Jan 1 2025–Oct 31 2026 (~669 files); Air downloading and copying to ~/HealthExports/day. Next: one-week hands-free daily files through ~Nov 7; Day parser + sheet tab; Home Screen widget later; round 2 = export everything, keep what has data.",
           "url": null,
+          "updated_at": "2026-10-31T09:44:00-05:00",
           "steps": [
             {
-              "id": "icloud-destination",
-              "label": "Switch the export destination from Google Drive to iCloud Drive, sleep metrics only, daily",
-              "status": "mark"
+              "id": "sleep-icloud",
+              "label": "Sleep to iCloud automation + Air copy + ingest re-point",
+              "status": "done",
+              "done": true,
+              "show": true
+            },
+            {
+              "id": "sleep-backfill",
+              "label": "Sleep log backfill Oct 24–31",
+              "status": "done",
+              "done": true,
+              "show": true
+            },
+            {
+              "id": "day-icloud",
+              "label": "Day to iCloud automation + historical export Jan 2025–now",
+              "status": "done",
+              "done": true,
+              "show": true
+            },
+            {
+              "id": "week-test",
+              "label": "One-week hands-free daily files test (through ~Nov 7)",
+              "status": "next"
+            },
+            {
+              "id": "day-parser",
+              "label": "Day data parser + sheet tab",
+              "status": "next"
             },
             {
               "id": "hae-widget",
-              "label": "Add the HAE Automations widget to the first Home Screen",
-              "status": "mark"
+              "label": "Home Screen widget (later)",
+              "status": "waiting"
             },
             {
-              "id": "shortcuts-845",
-              "label": "Add one Shortcuts automation at ~8:45 AM, Run After Confirmation, that runs the export",
-              "status": "mark"
-            },
-            {
-              "id": "ingest-icloud",
-              "label": "earthbot re-points sleep ingest to iCloud Drive/AutoExport",
-              "status": "next"
+              "id": "round-2",
+              "label": "Round 2: export everything, keep what has data",
+              "status": "waiting"
             }
           ]
         },
@@ -246,7 +264,7 @@
           "id": "heart-cac",
           "title": "Heart / CAC briefing",
           "status": "next",
-          "detail": "Before the Jan Mullis visit. CVI January booking \u2014 nudge Nov 17.",
+          "detail": "Before the Jan Mullis visit. CVI January booking — nudge Nov 17.",
           "url": null
         },
         {
@@ -302,7 +320,7 @@
           "id": "lab112",
           "title": "Lab 112 hangup-first",
           "status": "mark",
-          "detail": "PhoneEve retest when Mark says dial \u2014 callee hangs up first.",
+          "detail": "PhoneEve retest when Mark says dial — callee hangs up first.",
           "url": null
         },
         {
@@ -316,15 +334,8 @@
           "id": "tesla",
           "title": "Tesla",
           "status": "next",
-          "detail": "Keep Climate Bluetooth automations \u2014 webhook later.",
+          "detail": "Keep Climate Bluetooth automations — webhook later.",
           "url": null
-        },
-        {
-          "id": "boat-maint-2026",
-          "title": "Boat trailer 2026 maintenance",
-          "status": "done",
-          "archived": true,
-          "detail": "Done. The trailer was overhauled about a month before Nov 2026. Next dates are on Everything we oversee."
         }
       ]
     },
@@ -392,14 +403,14 @@
           "id": "neo-body",
           "title": "NEO / body later",
           "status": "seed",
-          "detail": "1X NEO pre-order \u2014 house cameras + wake first.",
+          "detail": "1X NEO pre-order — house cameras + wake first.",
           "url": null
         },
         {
           "id": "ascension-fund",
           "title": "Ascension funding assist",
           "status": "parked",
-          "detail": "Sacred Heart Emerald Funding \u2014 no submit unless asked.",
+          "detail": "Sacred Heart Emerald Funding — no submit unless asked.",
           "url": null
         }
       ]
@@ -420,7 +431,7 @@
         "id": "cashflow",
         "title": "Money / Cashflow",
         "status": "live",
-        "detail": "Daily fold, lanes, budget cushion, transfers \u2014 first working proof.",
+        "detail": "Daily fold, lanes, budget cushion, transfers — first working proof.",
         "url": null
       },
       {
@@ -434,14 +445,14 @@
         "id": "health-med",
         "title": "Health / medical",
         "status": "live",
-        "detail": "Sleep/vitals ingest, B12, General Medicine portal parked, visit prep.",
+        "detail": "Sleep/Day HAE iCloud pipe (Round 1), B12, General Medicine portal parked, visit prep.",
         "url": null
       },
       {
         "id": "house-air",
         "title": "House / lights / TV",
         "status": "live",
-        "detail": "All lights via air on MacBook Air \u2014 never phone. Wind-down + scenes.",
+        "detail": "All lights via air on MacBook Air — never phone. Wind-down + scenes; overnight build nightly.",
         "url": null
       },
       {
@@ -469,14 +480,14 @@
         "id": "cos-team",
         "title": "CoS team",
         "status": "live",
-        "detail": "earthbot + CFO + admin + explorer + air \u2014 density, not five apps.",
+        "detail": "earthbot + CFO + admin + explorer + air — density, not five apps.",
         "url": null
       },
       {
         "id": "spacewall",
         "title": "SPACEWALL / HEARTH",
         "status": "live",
-        "detail": "House display platform \u2014 iPads + 55\u2033 OLED.",
+        "detail": "House display platform — iPads + 55″ OLED.",
         "url": "https://earthman01.github.io/spacewall-kiosk/"
       },
       {
@@ -490,14 +501,14 @@
         "id": "reel",
         "title": "REEL",
         "status": "live",
-        "detail": "Slow cinema float \u2014 original mood packs.",
+        "detail": "Slow cinema float — original mood packs.",
         "url": "https://earthman01.github.io/spacewall-kiosk/reel.html"
       },
       {
         "id": "voice-ingest",
         "title": "Voice hang-up ingest",
         "status": "live",
-        "detail": "Transcripts on disk; skill locked so hang-ups don\u2019t go blank.",
+        "detail": "Transcripts on disk; skill locked so hang-ups don’t go blank.",
         "url": null
       },
       {
@@ -511,8 +522,9 @@
         "id": "sleep-walk",
         "title": "Sleep / walk",
         "status": "live",
-        "detail": "Sleep email ingest, lights-out cues, walk logging.",
-        "url": null
+        "detail": "Sleep via iCloud HAE → Air (Round 1 live); lights-out cues; walk logging.",
+        "url": null,
+        "status_text": "iCloud pipe live; week test through ~Nov 7"
       }
     ]
   }
