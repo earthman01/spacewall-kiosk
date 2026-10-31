@@ -1,10 +1,11 @@
 {
-  "updatedAt": "2026-10-30T20:22:00-05:00",
+  "updatedAt": "2026-10-30T20:32:34-05:00",
   "sheetUrl": "https://docs.google.com/spreadsheets/d/1z88ksImHApBwkwHg6PoBbJOLkUn6cLUWSakQvc97BfU/edit",
   "sheetTitle": "Lisa \u2013 Trip Expense Helper",
   "thisWeekTotal": 0,
   "thisWeekStart": "2026-10-26",
-  "grandTotal": 0,
+  "grandTotal": 5981.72,
+  "expenseCount": 51,
   "trips": [
     {
       "num": 1,
@@ -17,30 +18,30 @@
     },
     {
       "num": 2,
-      "name": "",
-      "start": "",
-      "end": "",
-      "purpose": "",
-      "status": "",
-      "total": 0
+      "name": "New Orleans",
+      "start": "2026-08-21",
+      "end": "2026-08-24",
+      "purpose": "School of Rock Summer Music Festival",
+      "status": "Complete",
+      "total": 1634.4
     },
     {
       "num": 3,
-      "name": "",
-      "start": "",
-      "end": "",
-      "purpose": "",
-      "status": "",
-      "total": 0
+      "name": "Virginia Beach",
+      "start": "2023-02-19",
+      "end": "2023-03-04",
+      "purpose": "Oceanfront stay \u2014 Fairfield + Budget car",
+      "status": "Complete",
+      "total": 2749.94
     },
     {
       "num": 4,
-      "name": "",
-      "start": "",
-      "end": "",
-      "purpose": "",
-      "status": "",
-      "total": 0
+      "name": "Los Angeles",
+      "start": "2024-07-24",
+      "end": "2024-07-31",
+      "purpose": "ECP\u2194LAX + Turo Tesla week",
+      "status": "Complete",
+      "total": 1597.38
     },
     {
       "num": 5,
@@ -115,47 +116,17 @@
       "total": 0
     }
   ],
-  "byCategory": [
-    {
-      "category": "Airfare",
-      "total": 0
-    },
-    {
-      "category": "Lodging",
-      "total": 0
-    },
-    {
-      "category": "Meals",
-      "total": 0
-    },
-    {
-      "category": "Ground transport",
-      "total": 0
-    },
-    {
-      "category": "Rideshare",
-      "total": 0
-    },
-    {
-      "category": "Parking",
-      "total": 0
-    },
-    {
-      "category": "Fuel",
-      "total": 0
-    },
-    {
-      "category": "Hair & personal",
-      "total": 0
-    },
-    {
-      "category": "Supplies",
-      "total": 0
-    },
-    {
-      "category": "Other",
-      "total": 0
-    }
-  ],
-  "recentExpenses": []
+  "categories": {
+    "Airfare": 494.95,
+    "Lodging": 3167.42,
+    "Meals": 754.51,
+    "Ground transport": 1139.23,
+    "Rideshare": 229.0,
+    "Parking": 15.68,
+    "Fuel": 137.66,
+    "Hair & personal": 0,
+    "Supplies": 20.53,
+    "Other": 22.74
+  },
+  "demoNote": "Demo populated from Mark's real receipts (Gmail + Apple Card + Marriott folio). No invented amounts."
 }
