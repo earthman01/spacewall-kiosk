@@ -1,10 +1,10 @@
 {
-  "v": "fb00419e87f7b532",
-  "built_at": "2026-10-30T21:11:03Z",
+  "v": "bc190c19f222e78f",
+  "built_at": "2026-10-31T15:08:53Z",
   "year": 26,
   "week": 44,
-  "ship": 3,
-  "hotfix": 12,
-  "label": "oct30-five-restaurants-restored",
-  "updated_at": "2026-10-30T21:11:03Z"
+  "ship": 4,
+  "hotfix": 2,
+  "label": "oct31-calendar-audit-demos-priority",
+  "updated_at": "2026-10-31T15:08:53Z"
 }

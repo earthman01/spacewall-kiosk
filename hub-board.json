@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-31T15:05:00Z",
-  "source": "health-day-activity-tab-live-oct31",
+  "updated_at": "2026-10-31T15:08:53Z",
+  "source": "hub-calendar-audit-demos-priority-oct31",
   "title": "HUB",
   "subtitle": "Personal OS \u00b7 ops & notes",
   "north_star": {
@@ -87,6 +87,15 @@
       "id": "building",
       "label": "Building",
       "items": [
+        {
+          "id": "hub-priority-taps",
+          "title": "Hub upgrade: priority taps",
+          "status": "live",
+          "status_text": "Built Oct 31. High/Medium/Low on each card; High floats to the top. Saves in this browser + Export.",
+          "detail": "Tap High, Medium, or Low on any task card. High cards float to the top of their column, then Medium, then Low/unset. Picks persist in localStorage on this device. Use Export priorities to copy JSON for earthbot.",
+          "url": null,
+          "updated_at": "2026-10-31T10:08-05:00"
+        },
         {
           "id": "hub-portal",
           "title": "HUB portal (this board)",
@@ -353,15 +362,6 @@
       "label": "Parked / later",
       "items": [
         {
-          "id": "hub-priority-taps",
-          "title": "Hub upgrade: priority taps",
-          "status": "parked",
-          "status_text": "Parked idea. Build when Mark is ready.",
-          "detail": "Mark taps High, Medium, or Low on each card; High cards float to the top so he can see what to handle first.",
-          "url": null,
-          "updated_at": "2026-10-31T09:49:00-05:00"
-        },
-        {
           "id": "site-domain",
           "title": "Site domain",
           "status": "parked",
@@ -543,6 +543,27 @@
         "detail": "Sleep via iCloud HAE \u2192 Air (Round 1 live); lights-out cues; walk logging.",
         "url": null,
         "status_text": "iCloud pipe live; week test through ~Nov 7"
+      }
+    ]
+  },
+  "demos": {
+    "title": "Demos",
+    "items": [
+      {
+        "id": "demo-lisa",
+        "title": "Welcome, Lisa",
+        "status": "live",
+        "status_text": "Lisa's Page \u2014 Sandbox + dinner menu.",
+        "detail": "Guest welcome for Lisa. Sandbox projects and tonight's dinner menu.",
+        "url": "./welcome-lisa.html"
+      },
+      {
+        "id": "demo-rich",
+        "title": "Welcome, Rich",
+        "status": "live",
+        "status_text": "Cinematic demo page for Rich.",
+        "detail": "Night-sky welcome with live clock and gulf weather. Kept as a demonstration.",
+        "url": "./rich.html"
       }
     ]
   }

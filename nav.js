@@ -29,10 +29,9 @@
 
   var LINKS = [
     { href: HOME, label: "home", home: true },
-    { href: ROOT + "welcome-lisa.html", label: "lisa's page", file: "welcome-lisa.html" },
     { href: ROOT + "hub.html", label: "hub", file: "hub.html" },
+    { href: ROOT + "hub.html?view=demos", label: "demos", file: "hub.html", demos: true },
     { href: ROOT + "spacewall.html", label: "grid", file: "spacewall.html" },
-    { href: ROOT + "rich.html", label: "rich", file: "rich.html" },
     { href: ROOT + "hearth.html", label: "hearth", file: "hearth.html" },
     { href: ROOT + "wave.html", label: "wave", file: "wave.html" },
     { href: ROOT + "press.html", label: "press", file: "press.html" },
@@ -52,6 +51,11 @@
       return f === "" || f === "index.html";
     }
     if (inLisaProjects()) return false;
+    var onHub = pathFile().toLowerCase() === "hub.html";
+    var view = "";
+    try { view = String(new URLSearchParams(location.search).get("view") || "").toLowerCase(); } catch (e) {}
+    if (link.demos) return onHub && view === "demos";
+    if ((link.file || "").toLowerCase() === "hub.html") return onHub && view !== "demos";
     return pathFile().toLowerCase() === (link.file || "").toLowerCase();
   }
 
