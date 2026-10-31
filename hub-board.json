@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-31T14:44:00Z",
-  "source": "health-pipe-round1-hub-sweep-oct31",
+  "updated_at": "2026-10-31T14:49:00Z",
+  "source": "hub-priority-taps-parked-oct31",
   "title": "HUB",
   "subtitle": "Personal OS · ops & notes",
   "north_star": {
@@ -343,6 +343,15 @@
       "id": "parked",
       "label": "Parked / later",
       "items": [
+        {
+          "id": "hub-priority-taps",
+          "title": "Hub upgrade: priority taps",
+          "status": "parked",
+          "status_text": "Parked idea. Build when Mark is ready.",
+          "detail": "Mark taps High, Medium, or Low on each card; High cards float to the top so he can see what to handle first.",
+          "url": null,
+          "updated_at": "2026-10-31T09:49:00-05:00"
+        },
         {
           "id": "site-domain",
           "title": "Site domain",
