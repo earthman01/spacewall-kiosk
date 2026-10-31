@@ -1,35 +1,169 @@
 {
-  "updatedAt": "2026-10-30T20:20:00-05:00",
+  "updatedAt": "2026-10-30T20:17:40-05:00",
   "sheetUrl": "https://docs.google.com/spreadsheets/d/1z88ksImHApBwkwHg6PoBbJOLkUn6cLUWSakQvc97BfU/edit",
-  "sheetTitle": "Laura – Trip Expense Helper",
-  "thisWeekTotal": 0,
-  "thisWeekStart": "2026-10-27",
-  "grandTotal": 0,
+  "sheetTitle": "Laura \u2013 Trip Expense Helper",
+  "thisWeekTotal": 12.34,
+  "thisWeekStart": "2026-10-26",
+  "grandTotal": 12.34,
   "trips": [
-    {"num": 1, "name": "Denver", "start": "2026-11-15", "end": "2026-11-18", "purpose": "Hair work", "status": "Ready to populate", "total": 0},
-    {"num": 2, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 3, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 4, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 5, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 6, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 7, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 8, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 9, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 10, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 11, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0},
-    {"num": 12, "name": "", "start": "", "end": "", "purpose": "", "status": "", "total": 0}
+    {
+      "num": 1,
+      "name": "Denver",
+      "start": "2026-11-15",
+      "end": "2026-11-18",
+      "purpose": "Hair work",
+      "status": "Ready to populate",
+      "total": 12.34
+    },
+    {
+      "num": 2,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 3,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 4,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 5,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 6,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 7,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 8,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 9,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 10,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 11,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    },
+    {
+      "num": 12,
+      "name": "",
+      "start": "",
+      "end": "",
+      "purpose": "",
+      "status": "",
+      "total": 0
+    }
   ],
   "byCategory": [
-    {"category": "Airfare", "total": 0},
-    {"category": "Lodging", "total": 0},
-    {"category": "Meals", "total": 0},
-    {"category": "Ground transport", "total": 0},
-    {"category": "Rideshare", "total": 0},
-    {"category": "Parking", "total": 0},
-    {"category": "Fuel", "total": 0},
-    {"category": "Hair & personal", "total": 0},
-    {"category": "Supplies", "total": 0},
-    {"category": "Other", "total": 0}
+    {
+      "category": "Airfare",
+      "total": 0
+    },
+    {
+      "category": "Lodging",
+      "total": 0
+    },
+    {
+      "category": "Meals",
+      "total": 12.34
+    },
+    {
+      "category": "Ground transport",
+      "total": 0
+    },
+    {
+      "category": "Rideshare",
+      "total": 0
+    },
+    {
+      "category": "Parking",
+      "total": 0
+    },
+    {
+      "category": "Fuel",
+      "total": 0
+    },
+    {
+      "category": "Hair & personal",
+      "total": 0
+    },
+    {
+      "category": "Supplies",
+      "total": 0
+    },
+    {
+      "category": "Other",
+      "total": 0
+    }
   ],
-  "recentExpenses": []
+  "recentExpenses": [
+    {
+      "date": "2026-10-30",
+      "trip": "Denver",
+      "category": "Meals",
+      "vendor": "TEST VENDOR",
+      "amount": 12.34
+    }
+  ]
 }
